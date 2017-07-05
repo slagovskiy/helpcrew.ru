@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html lang="ru" class="lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if IE 7]><html lang="ru" class="lt-ie9 lt-ie8"><![endif]-->
+<!--[if IE 8]><html lang="ru" class="lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="ru">
+<!--<![endif]-->
+<head>
+	<meta charset="utf-8" />
+	<title>{% block ext_title %}{% endblock %}Help Crew</title>
+	<meta name="author" content="Sergey Lagovskiy">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block ext_meta %}
+    {% endblock %}
+	<link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
+	<link rel="stylesheet" href="{% static 'css/normalize.min.css' %}" />
+	<link rel="stylesheet" href="{% static 'libs/bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" />
+	<link rel="stylesheet" href="{% static 'libs/font-awesome-4.7.0/css/font-awesome.min.css' %}" />
+
+	<link rel="stylesheet" href="{% static 'css/fonts.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/main.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/media.css' %}" />
+    {% block ext_css %}
+    {% endblock %}
+</head>
+<body>
+	<script src="{% static 'libs/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'libs/bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'libs/momentsjs 2.18.1/moment.min.js' %}"></script>
+
+	<script src="{% static 'js/main.js' %}"></script>
+    {% block ext_js %}
+    {% endblock %}
+
+	<a href="/"><img src="{% static 'img/logo.png' %}"></a>
+    <script>
+        $(document).ready(function() {
+        });
+    </script>
+</body>
+</html>

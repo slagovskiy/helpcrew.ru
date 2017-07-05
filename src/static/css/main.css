@@ -1,0 +1,72 @@
+/* helpcrew.ru */
+body{
+
+}
+
+.fl-left{
+    float: left;
+}
+
+.fl-right{
+    float: right;
+}
+
+.fl-clear{
+    clear: both;
+}
+
+.item-right {
+    margin-left: auto;
+}
+
+a {
+    text-decoration: none;
+    color: #000000;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #f52a0e;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:not(:hover) {
+    transition: 1s;
+    color: #000000;
+}
+
+a.active {
+    text-decoration: none;
+    color: #f52a0e;
+}
+
+a.activeBlue {
+    text-decoration: none;
+    color: #006ED2;
+}
+
+/* input active */
+input, textarea
+{
+    outline:none;
+    border-color: transparent;
+}
+
+input:active, textarea:active
+{
+    outline:none;
+}
+
+input:focus, textarea:focus {
+    outline:none;
+}
+
+button {
+    text-transform: uppercase;
+    padding-left: 2em !important;
+    padding-right: 2em !important;
+}
+
