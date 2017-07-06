@@ -1,6 +1,16 @@
 /* helpcrew.ru */
-body{
 
+/* colors
+#FFC811 - желтый
+#3AA4A4 - голубой
+#EA7128 - оранжевый
+#B3B31C - зеленый
+#45737E - синий
+ */
+
+body{
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 1.3em;
 }
 
 .fl-left{
@@ -26,7 +36,7 @@ a {
 
 a:hover {
     text-decoration: none;
-    color: #f52a0e;
+    color: #45737E;
 }
 
 a:visited {
@@ -40,7 +50,7 @@ a:not(:hover) {
 
 a.active {
     text-decoration: none;
-    color: #f52a0e;
+    color: #45737E;
 }
 
 a.activeBlue {
@@ -70,12 +80,14 @@ button {
     padding-right: 2em !important;
 }
 
-/* start header */
+/* header */
 /**********************************************************************************************************************/
 
 .head-row{
+    font-size: 1.5em;
     padding: 1.3em;
-    font-size: 1.3em;
+    font-family: "RobotoMedium", sans-serif;
+    text-transform: uppercase;
 }
 
 .head-logo img {
@@ -86,8 +98,6 @@ button {
 
 .head-menu {
     text-align: right;
-    font-family: "RobotoMedium", sans-serif;
-    text-transform: uppercase;
 }
 
 .head-menu-line{
@@ -107,7 +117,7 @@ button {
 }
 
 .head-menu-line li a:hover{
-    color: #f52a0e;
+    color: #45737E;
     opacity: 1;
 }
 
@@ -116,17 +126,85 @@ button {
     border: none;
     background-color: transparent;
     opacity: 0.7;
-    font-size: 1.6em;
     padding-top: 0.2em;
 }
 
 .head-menu-link:hover{
     opacity: 1;
 }
-/* end header */
 /**********************************************************************************************************************/
 
-/* start footer */
+/* menu */
+/**********************************************************************************************************************/
+.right-menu {
+
+}
+
+.right-menu section {
+    padding-top: 2em;
+    padding-bottom: 0.5em;
+}
+
+.right-menu section h2 {
+    margin: 0;
+    font-family: RobotoRegular, sans-serif;
+    font-size: 1.8em;
+    padding-bottom: 0.3em;
+    text-transform: uppercase;
+}
+
+.right-menu section ul {
+    list-style: none;
+    padding-left: 1em;
+    font-family: RobotoRegular, sans-serif;
+    font-size: 1.2em;
+    line-height: 1.7em;
+}
+
+.right-menu section ul.tag li {
+    padding: 0.1em;
+    line-height: 2em;
+}
+.right-menu section ul.tag li {
+    display: inline;
+}
+
+.right-menu section ul.tag li a span{
+    position: relative;
+    top: -5px;
+    font-size: .6em;
+    vertical-align: top;
+    padding-left: 2px;
+    color: #AAAAAA;
+}
+/**********************************************************************************************************************/
+
+
+/* content */
+/**********************************************************************************************************************/
+.content {
+    font-size: 1.5em;
+    line-height: 1.6em;
+}
+
+/**********************************************************************************************************************/
+
+/* form */
+/**********************************************************************************************************************/
+form .col-md-1, form .col-md-2, form .col-md-3, form .col-md-4, form .col-md-5, form .col-md-6,
+form .col-md-7, form .col-md-8, form .col-md-9, form .col-md-10, form .col-md-11, form .col-md-12
+{
+    padding: 3px;
+}
+
+form input[type=text], form input[type=password]
+{
+}
+
+/**********************************************************************************************************************/
+
+
+/* footer */
 /**********************************************************************************************************************/
 .footer{
     text-align: center;
@@ -148,5 +226,4 @@ button {
 .footer .admin-link a:hover{
     color: #CCCCCC;
 }
-/* end footer */
 /**********************************************************************************************************************/
