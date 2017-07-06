@@ -70,3 +70,83 @@ button {
     padding-right: 2em !important;
 }
 
+/* start header */
+/**********************************************************************************************************************/
+
+.head-row{
+    padding: 1.3em;
+    font-size: 1.3em;
+}
+
+.head-logo img {
+    width: 100%;
+    max-width: 550px;
+    height: auto;
+}
+
+.head-menu {
+    text-align: right;
+    font-family: "RobotoMedium", sans-serif;
+    text-transform: uppercase;
+}
+
+.head-menu-line{
+    list-style: none;
+    padding-left: 0;
+    padding-top: 10px;
+}
+
+.head-menu-line li{
+    display: inline;
+    letter-spacing: 1px;
+    padding-left: 1.5em;
+}
+
+.head-menu-line li a{
+    opacity: 0.8;
+}
+
+.head-menu-line li a:hover{
+    color: #f52a0e;
+    opacity: 1;
+}
+
+
+.head-menu-link{
+    border: none;
+    background-color: transparent;
+    opacity: 0.7;
+    font-size: 1.6em;
+    padding-top: 0.2em;
+}
+
+.head-menu-link:hover{
+    opacity: 1;
+}
+/* end header */
+/**********************************************************************************************************************/
+
+/* start footer */
+/**********************************************************************************************************************/
+.footer{
+    text-align: center;
+    font-family: "RobotoMedium", sans-serif;
+    font-size: 0.8em;
+    padding: 2em 0em 2em 0em;
+    border-top: 1px solid #DDDDDD;
+    margin-top: 4em;
+}
+
+.footer .admin-link {
+    text-align: right;
+}
+
+.footer .admin-link a{
+    color: transparent;
+}
+
+.footer .admin-link a:hover{
+    color: #CCCCCC;
+}
+/* end footer */
+/**********************************************************************************************************************/
