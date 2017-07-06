@@ -13,7 +13,8 @@ INSTALLED_APPS = [
     # 3rd party apps
 
     # my apps
-    'helpcrew.userext'
+    'helpcrew.userext',
+    'helpcrew.toolbox'
 ]
 
 MIDDLEWARE = [
@@ -74,7 +75,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-#SENDFILE_BACKEND = 'sendfile.backends.simple'
+SENDFILE_BACKEND = 'sendfile.backends.simple'
 
 LOGIN_URL = r'/admin/login/'
 
