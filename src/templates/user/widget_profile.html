@@ -1,0 +1,4 @@
+{% if not request.user.is_anonymous %}
+    {{ request.user.firstname }} {{ request.user.lastname }}<br>
+    <a href="{% url 'user_logout' %}">выйти</a>
+{% endif %}

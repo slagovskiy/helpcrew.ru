@@ -63,9 +63,9 @@
                 <li><a href="#">возможности</a></li>
                 <li><a href="#">документация</a></li>
                 {% if not request.user.is_anonymous %}
-                <li><a href="#">выйти</a></li>
+                <li>{% include 'user/widget_profile.html' %}</li>
                 {% else %}
-                <li><a href="#">войти</a></li>
+                <li><a href="{% url 'user_login' %}">войти</a></li>
                 {% endif %}
             </ul>
         </nav>

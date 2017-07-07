@@ -11,6 +11,7 @@
 body{
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     font-size: 1.3em;
+    background-image: url("/static/img/grid.png");
 }
 
 .fl-left{
@@ -107,9 +108,9 @@ button {
 }
 
 .head-menu-line li{
-    display: inline;
+    display: inline-block;
     letter-spacing: 1px;
-    padding-left: 1.5em;
+    padding-left: 1.1em;
 }
 
 .head-menu-line li a{
