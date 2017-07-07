@@ -11,10 +11,14 @@
 <aside class="col-md-4 right-menu" id="right-menu">
     {% block right_menu %}
     <form>
-        <div class="col-md-6"><input type="text" class="form-control" placeholder="Имя"></div>
-        <div class="col-md-6"><input type="text" class="form-control" placeholder="Фамилия"></div>
-        <div class="col-md-6"><input type="text" class="form-control" placeholder="Эл. почта"></div>
-        <div class="col-md-6"><input type="text" class="form-control" placeholder="Пароль"></div>
+        <div class="col-md-6"><input type="text" class="form-control" id="fname" name="fname" placeholder="Имя" /></div>
+        <div class="col-md-6"><input type="text" class="form-control" id="sname" name="sname" placeholder="Фамилия" /></div>
+        <div class="col-md-6"><input type="text" class="form-control" id="email" name="email" placeholder="Эл. почта" /></div>
+        <div class="col-md-6"><input type="text" class="form-control" id="password" name="password" placeholder="Пароль" /></div>
+        <div class="col-md-12">
+            <input type="checkbox" id="agree" name="agree" class="css-checkbox lrg" />
+            <label for="agree" class="css-label lrg web-two-style">Принимаю условия обслуживания</label>
+        </div>
         <div class="col-md-12"><button class="form-control btn btn-primary">зарегистрироваться</button></div>
     </form>
     {% endblock %}
