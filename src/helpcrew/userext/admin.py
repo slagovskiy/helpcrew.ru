@@ -27,6 +27,7 @@ class UserAdmin(UserAdmin):
             'classes': ('',),
             'fields': (
                 'email',
+                'uuid',
                 'password'
             )}),
         ('info', {

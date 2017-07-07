@@ -33,6 +33,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         filename = '{}.{}'.format(str(uuid.uuid1()), ext)
         return os.path.join(os.path.join(instance.email, 'avatar'), filename)
 
+    uuid = models.CharField(
+        'UUID',
+        max_length=255,
+        default=''
+    )
     email = models.EmailField(
         'Email',
         max_length=255,
@@ -69,6 +74,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         'is admin',
         default=False
     )
+    is_checked = models.BooleanField(
+        'is checked',
+        default=False
+    )
 
     def avatar_preview(self):
         if self.avatar:
@@ -81,6 +90,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_full_name(self):
         return self.email
+
+    def save(self, *args, **kwargs):
+        if not self.uuid:
+            self.uuid = uuid.uuid1()
+        super(User, self).save(*args, **kwargs)
 
     @property
     def is_staff(self):
