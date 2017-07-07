@@ -10,7 +10,11 @@
 </section>
 <aside class="col-md-4 right-menu" id="right-menu">
     {% block right_menu %}
-    {% include 'user/form_register.html' %}
+        {% if request.user.is_anonymous %}
+            {% include 'user/form_register.html' %}
+        {% else %}
+            crews
+        {% endif %}
     {% endblock %}
 </aside>
 {% endblock %}

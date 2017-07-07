@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>register</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block content %}
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <h2>Регистрация</h2>
+        {% include 'user/form_register.html' %}
+    </div>
+    <div class="col-md-4"></div>
+{% endblock %}
