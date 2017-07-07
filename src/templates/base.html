@@ -54,20 +54,17 @@
 {% endblock %}
 <header class="head-row">
     <div class="container clearfix">
-        <div class="head-logo fl-left">
+        <div class="col-md-6">
             <a href="/"><img src="{% static 'img/logo.png' %}"></a>
         </div>
-        <nav role="navigation" class="head-menu fl-right">
-            <button class="hidden-lg hidden-md head-menu-link" id="head-menu-link"><i class="fa fa-bars"></i></button>
-            <ul class="head-menu-line" id="head-menu-line">
-                <li><a href="#">возможности</a></li>
-                <li><a href="#">документация</a></li>
-                {% if not request.user.is_anonymous %}
-                <li>{% include 'user/widget_profile.html' %}</li>
-                {% else %}
-                <li><a href="{% url 'user_login' %}">войти</a></li>
-                {% endif %}
-            </ul>
+        <nav class="col-md-6">
+            <div class="col-md-4"><a href="#">возможности</a></div>
+            <div class="col-md-4"><a href="#">документация</a></div>
+            {% if not request.user.is_anonymous %}
+                <div class="col-md-4">{% include 'user/widget_profile.html' %}</div>
+            {% else %}
+                <div class="col-md-4"><a href="{% url 'user_login' %}">войти</a></div>
+            {% endif %}
         </nav>
     </div>
 </header>

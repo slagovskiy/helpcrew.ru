@@ -11,7 +11,7 @@
 body{
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     font-size: 1.3em;
-    background-image: url("/static/img/grid.png");
+    /*background-image: url("/static/img/grid.png");*/
 }
 
 .fl-left{
@@ -84,11 +84,42 @@ button {
 /* header */
 /**********************************************************************************************************************/
 
-.head-row{
+.head-row {
     font-size: 1.5em;
     padding: 1.3em;
     font-family: "RobotoMedium", sans-serif;
     text-transform: uppercase;
+}
+
+.head-row .col-md-1, .head-row .col-md-2, .head-row .col-md-3,
+.head-row .col-md-4, .head-row .col-md-5, .head-row .col-md-6,
+.head-row .col-md-7, .head-row .col-md-8, .head-row .col-md-9,
+.head-row .col-md-10, .head-row .col-md-11, .head-row .col-md-12
+{
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.head-row .container {
+}
+
+.head-row nav {
+}
+
+.head-row nav div {
+    height: 100px;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    text-align: right;
+}
+
+.head-row .widget {
+    font-size: .6em;
+    text-align: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .head-logo img {
