@@ -27,5 +27,11 @@ def user_logout(request):
 
 
 def user_register(request):
-    content = {}
-    return render(request, 'user/register.html', content)
+    if request.method == 'GET':
+        return redirect(reverse('user_login'))
+    elif request.method == 'POST':
+        firstname = request.POST['fname']
+        lastname = request.POST['lname']
+        username = request.POST['email']
+        password = request.POST['password']
+        return redirect(reverse('user_login'))

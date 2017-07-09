@@ -1,10 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="col-md-4"></div>
+<div class="col-md-1"></div>
 <div class="col-md-4">
     <h2>Вход</h2>
     {% include 'user/form_login.html' %}
 </div>
-<div class="col-md-4"></div>
+<div class="col-md-1"></div>
+<div class="col-md-5">
+    <h2>Регистрация</h2>
+    {% include 'user/form_register.html' %}
+</div>
+<div class="col-md-1"></div>
 {% endblock %}

@@ -11,9 +11,9 @@
 <aside class="col-md-4 right-menu" id="right-menu">
     {% block right_menu %}
         {% if request.user.is_anonymous %}
-            {% include 'user/form_register.html' %}
+
         {% else %}
-            crews
+
         {% endif %}
     {% endblock %}
 </aside>

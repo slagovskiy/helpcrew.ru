@@ -1,4 +1,4 @@
-<form>
+<form action="/u/register/" method="post">
     {% csrf_token %}
     <div class="col-md-6"><input type="text" class="form-control" id="fname" name="fname" placeholder="Имя" /></div>
     <div class="col-md-6"><input type="text" class="form-control" id="sname" name="sname" placeholder="Фамилия" /></div>
@@ -8,5 +8,5 @@
         <input type="checkbox" id="agree" name="agree" class="css-checkbox lrg" />
         <label for="agree" class="css-label lrg web-two-style">Принимаю условия обслуживания</label>
     </div>
-    <div class="col-md-12"><button class="form-control btn btn-primary">зарегистрироваться</button></div>
+    <div class="col-md-12"><button type="submit" class="form-control btn btn-primary">зарегистрироваться</button></div>
 </form>
