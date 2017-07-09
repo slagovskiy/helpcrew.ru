@@ -101,6 +101,17 @@ DEBUG = True
 SECRET_KEY = '-vop18rtmr(sy-1f)74-5@=mv(_9zl@xa$7=7mw4&nsq^jo)sy'
 ALLOWED_HOSTS = []
 
+# email
+DEFAULT_FROM_EMAIL = 'noreply@helpcrew.ru'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'noreply@helpcrew.ru'
+EMAIL_HOST_PASSWORD = ''
+EMAIL_SUBJECT_PREFIX = '[helpcrew]'
+
 STATIC_URL = '/static/'
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (
