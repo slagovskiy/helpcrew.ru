@@ -1,6 +1,12 @@
 <form action="/u/login/" method="post">
     {% csrf_token %}
-    <div class="col-md-12"><input type="text" class="form-control" id="email" name="email" placeholder="Эл. почта" /></div>
-    <div class="col-md-12"><input type="password" class="form-control" id="password" name="password" placeholder="Пароль" /></div>
+    <div class="col-md-12"><input type="text" class="form-control" id="email" name="email" placeholder="Эл. почта"
+                                  data-validation="email"
+                                  data-validation-error-msg="Введите верный электронный адрес"
+    /></div>
+    <div class="col-md-12"><input type="password" class="form-control" id="password" name="password" placeholder="Пароль"
+                                  data-validation="required"
+                                  data-validation-error-msg="Введите свой пароль"
+    /></div>
     <div class="col-md-12"><button class="form-control btn btn-primary" type="submit">войти</button></div>
 </form>

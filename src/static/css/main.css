@@ -233,6 +233,22 @@ form input[type=text], form input[type=password]
 {
 }
 
+.form-error
+{
+    font-size: .6em;
+    line-height: .7em;
+}
+
+.form-top
+{
+    height: 100px;
+}
+
+.form-bottom
+{
+    height: 100px;
+}
+
 /**********************************************************************************************************************/
 
 

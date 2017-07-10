@@ -46,6 +46,10 @@
 </head>
 <body>
 <script src="{% static 'libs/jquery-3.2.1.min.js' %}"></script>
+
+<script src="{% static 'libs/form-validator/jquery.form-validator.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'libs/form-validator/theme-default.min.css' %}" />
+
 <script src="{% static 'libs/bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'libs/momentsjs 2.18.1/moment.min.js' %}"></script>
 
@@ -83,6 +87,9 @@
 
 <script>
     $(document).ready(function() {
+        $.validate({
+            modules : 'location, date, security, file'
+        });
     });
 </script>
 </body>
