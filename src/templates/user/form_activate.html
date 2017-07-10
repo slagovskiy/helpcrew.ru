@@ -1,0 +1,10 @@
+<form action="/u/activate/" method="post" id="form-activate">
+    {% csrf_token %}
+    <div class="col-md-12">
+        <input type="text" class="form-control" id="code" name="code" placeholder="Ключ активации" value="{{ form.code }}"
+               data-validation="length" data-validation-length="36-36"
+               data-validation-error-msg="Введите ключ, полученный по электронной почте."
+        />
+    </div>
+    <div class="col-md-12"><input type="submit" class="form-control btn btn-primary" value="активировать"></div>
+</form>

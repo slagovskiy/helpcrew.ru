@@ -27,7 +27,6 @@ def user_logout(request):
     logout(request)
     return redirect('/')
 
-
 def user_register(request):
     if request.method == 'GET':
         return redirect(reverse('user_login'))
@@ -59,3 +58,24 @@ def user_register(request):
                 }
             }
             return render(request, 'user/login.html', content)
+
+
+
+def user_activate(request):
+    if request.method == 'GET':
+        return redirect(reverse('user_profile'))
+    elif request.method == 'POST':
+        code = request.POST['code']
+        user = User.objects.filter(uuid=code)
+        if not user:
+            content = {'error': u'Ошибка активации'}
+            return render(request, 'user/profile.html', content)
+        else:
+            if user[0].email == request.user.email:
+                user[0].is_checked = True
+                user[0].save()
+                request.user.is_checked = True
+                return render(request, 'user/profile.html', {})
+            else:
+                content = {'error': u'Ошибка активации'}
+                return render(request, 'user/profile.html', content)
