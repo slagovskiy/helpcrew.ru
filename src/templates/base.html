@@ -74,6 +74,12 @@
 </header>
 
 <div class="container clearfix content">
+{% if error %}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        {{ error }}
+    </div>
+{% endif %}
     {% block content %}
     {% endblock %}
 </div>

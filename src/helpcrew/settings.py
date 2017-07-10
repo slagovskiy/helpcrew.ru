@@ -27,6 +27,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     # my middleware
+    'helpcrew.toolbox.middleware.ClearTempMiddleware',
 ]
 
 ROOT_URLCONF = 'helpcrew.urls'

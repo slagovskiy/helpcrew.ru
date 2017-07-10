@@ -1,19 +1,19 @@
 <form action="/u/register/" method="post" id="form-register">
     {% csrf_token %}
     <div class="col-md-12">
-        <input type="text" class="form-control" id="fname" name="fname" placeholder="Имя"
+        <input type="text" class="form-control" id="fname" name="fname" placeholder="Имя" value="{{ form.fname }}"
                data-validation="length" data-validation-length="2-50"
                data-validation-error-msg="Введите свое имя"
         />
     </div>
     <div class="col-md-12">
-        <input type="text" class="form-control" id="sname" name="lname" placeholder="Фамилия"
+        <input type="text" class="form-control" id="sname" name="lname" placeholder="Фамилия" value="{{ form.lname }}"
                data-validation="length" data-validation-length="2-50"
                data-validation-error-msg="Введите свою фамилию"
         />
     </div>
     <div class="col-md-12">
-        <input type="text" class="form-control" id="email" name="email" placeholder="Эл. почта"
+        <input type="text" class="form-control" id="email" name="email" placeholder="Эл. почта" value="{{ form.email }}"
                data-validation="email"
                data-validation-error-msg="Введите верный электронный адрес"
         />
@@ -22,6 +22,11 @@
         <input type="password" class="form-control" id="password" name="password" placeholder="Пароль"
                data-validation="strength" data-validation-strength="1"
                data-validation-error-msg="Пароль не должен быть простым"
+        />
+    </div>
+    <div class="col-md-12">
+        <input data-validation="recaptcha" data-validation-recaptcha-sitekey="6LeweigUAAAAAGtLk6_KNKOc9d2GmYLQczN1-O5e"
+               data-validation-error-msg="Пожалуйста, подтвердите, что вы не бот"
         />
     </div>
     <div class="col-md-12">
