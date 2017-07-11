@@ -27,7 +27,12 @@
                 <div class="profile-btn"><button class="btn btn-primary" onclick="$('#profile-edit').show();$('#profile-info').hide();">изменить</button></div>
             </div>
             <div class="col-md-10" id="profile-edit">
-                {% include 'user/form_useredit.html' %}
+                <div class="col-md-6">
+                    {% include 'user/form_useredit.html' %}
+                </div>
+                <div class="col-md-6">
+                    {% include 'user/form_changepassword.html' %}
+                </div>
             </div>
         </div>
         <div class="col-md-12 profile-data">

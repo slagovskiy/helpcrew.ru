@@ -93,20 +93,39 @@ def user_save(request):
             content = {'error': u'Пользователь не найден'}
             return render(request, 'user/profile.html', content)
         else:
-            if 'avatar' in request.FILES:
-                up_file = request.FILES['avatar']
-                file = os.path.join(UPLOAD_DIR, User.avatar_path(user, up_file.name))
-                filename = os.path.basename(file)
-                destination = open(file, 'wb+')
-                for chunk in up_file.chunks():
-                    destination.write(chunk)
-                user.avatar.save(filename, destination, save=False)
-                destination.close()
+            try:
+                if request.POST['type'] == 'info':
+                    if 'avatar' in request.FILES:
+                        up_file = request.FILES['avatar']
+                        file = os.path.join(UPLOAD_DIR, User.avatar_path(user, up_file.name))
+                        filename = os.path.basename(file)
+                        destination = open(file, 'wb+')
+                        for chunk in up_file.chunks():
+                            destination.write(chunk)
+                        user.avatar.save(filename, destination, save=False)
+                        destination.close()
 
-            firstname = request.POST['fname']
-            lastname = request.POST['lname']
-            user.firstname = firstname
-            user.lastname = lastname
-            user.save()
-
-            return redirect(reverse('user_profile'))
+                    firstname = request.POST['fname']
+                    lastname = request.POST['lname']
+                    user.firstname = firstname
+                    user.lastname = lastname
+                    user.save()
+                    return redirect(reverse('user_profile'))
+                elif request.POST['type'] == 'password':
+                    password1 = request.POST['password1']
+                    password2 = request.POST['password2']
+                    if password1 == password2:
+                        user.set_password(password1)
+                        user.save()
+                        user = authenticate(request, username=user.email, password=password1)
+                        if user is not None:
+                            login(request, user)
+                    else:
+                        content = {'error': u'Пароли не совпадают'}
+                        return render(request, 'user/profile.html', content)
+                    return redirect(reverse('user_profile'))
+                else:
+                    return redirect(reverse('user_profile'))
+            except:
+                content = {'error': u'Ошибка сохранения'}
+                return render(request, 'user/profile.html', content)
