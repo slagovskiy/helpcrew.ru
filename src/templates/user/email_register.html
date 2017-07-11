@@ -1,0 +1,42 @@
+<div style="
+        font-size: 18px;
+        font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+        height: 50px;
+        text-align: center;
+        background-color: #CCCCCC;
+        border: 1px solid #999999;
+        padding-top: 20px;">Код подтверждения для аккаунта helpcrew.ru</div>
+<div style="
+        font-size: 16px;
+        font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+        border-left: 1px solid #999999;
+        border-right: 1px solid #999999;
+        padding: 10px;
+">Уважаемый {{ user.firstname }} {{ user.lastname }}, Вы зарегистрировались на сервисе helpcrew.ru, для завершения регистрации необходимо ввести код активации.</div>
+<div style="
+        font-size: 16px;
+        font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+        border-left: 1px solid #999999;
+        border-right: 1px solid #999999;
+        padding: 10px;
+">Ваш код активации:</div>
+<div style="
+        font-size: 20px;
+        font-weight: bold;
+        font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+        text-align: center;
+        border-left: 1px solid #999999;
+        border-right: 1px solid #999999;
+        padding: 10px;
+">{{ user.uuid }}</div>
+<div style="
+        font-size: 14px;
+        font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+        border-left: 1px solid #999999;
+        border-right: 1px solid #999999;
+        border-bottom: 1px solid #999999;
+        padding: 10px;
+">
+    с уважением,<br>
+    Комманада helpcrew.ru
+</div>

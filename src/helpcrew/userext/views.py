@@ -2,10 +2,13 @@ from django.core.files import File
 from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout, authenticate, login
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
 import os
 
 from .models import User
 from ..settings import UPLOAD_DIR
+from ..settings import EMAIL_SUBJECT_PREFIX, DEFAULT_FROM_EMAIL
 
 def user_profile(request):
     content = {}
@@ -47,6 +50,24 @@ def user_register(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
+
+                try:
+                    msg = EmailMultiAlternatives()
+                    msg.subject = '[' + EMAIL_SUBJECT_PREFIX + u'] Код подтверждения регистрации'
+                    msg.body = render_to_string('user/email_register_text.html', {'user': user})
+                    msg.from_email = EMAIL_SUBJECT_PREFIX + ' <' + DEFAULT_FROM_EMAIL + '>'
+                    msg.to = [user.email]
+                    msg.bcc = [DEFAULT_FROM_EMAIL]
+                    msg.attach_alternative(
+                        render_to_string('user/email_register.html', {'user': user})
+                        , "text/html"
+                    )
+                    msg.content_subtype = 'text/html'
+                    msg.send()
+                except:
+                    pass
+
+
                 return redirect(reverse('user_profile'))
             else:
                 content = {'error': u'Ошибка авторизации'}
@@ -99,6 +120,8 @@ def user_save(request):
                         up_file = request.FILES['avatar']
                         file = os.path.join(UPLOAD_DIR, User.avatar_path(user, up_file.name))
                         filename = os.path.basename(file)
+                        if not os.path.exists(os.path.dirname(file)):
+                            os.makedirs(os.path.dirname(file))
                         destination = open(file, 'wb+')
                         for chunk in up_file.chunks():
                             destination.write(chunk)
