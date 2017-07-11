@@ -1,4 +1,4 @@
-<form action="/u/activate/" method="post" id="form-activate">
+<form action="{% url 'user_activate' %}" method="post" id="form-activate">
     {% csrf_token %}
     <div class="col-md-12">
         <input type="text" class="form-control" id="code" name="code" placeholder="Ключ активации" value="{{ form.code }}"

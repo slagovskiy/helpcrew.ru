@@ -1,4 +1,4 @@
-<form action="/u/register/" method="post" id="form-register">
+<form action="{% url 'user_register' %}" method="post" id="form-register">
     {% csrf_token %}
     <div class="col-md-12">
         <input type="text" class="form-control" id="fname" name="fname" placeholder="Имя" value="{{ form.fname }}"

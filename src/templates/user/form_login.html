@@ -1,4 +1,4 @@
-<form action="/u/login/" method="post" id="form-login">
+<form action="{% url 'user_login' %}" method="post" id="form-login">
     {% csrf_token %}
     <div class="col-md-12"><input type="text" class="form-control" id="email" name="email" placeholder="Эл. почта"
                                   data-validation="email"
