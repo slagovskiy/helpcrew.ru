@@ -270,6 +270,10 @@ form input[type=text], form input[type=password]
 {
 }
 
+.btn {
+    text-transform: uppercase;
+}
+
 .form-error
 {
     font-size: .6em;
