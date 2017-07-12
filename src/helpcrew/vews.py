@@ -17,12 +17,12 @@ def index(request):
 
 
 def test(request):
-    '''
+
     msg = EmailMultiAlternatives(
         EMAIL_SUBJECT_PREFIX + u' Код подтверждения регистрации',
         render_to_string('user/email_register_text.html', {'user': request.user}),
         EMAIL_SUBJECT_PREFIX + ' <' + DEFAULT_FROM_EMAIL + '>',
-        ['slagovskiy@gmail.com']
+        ['odyssey.2033@gmail.com']
     )
     msg.bcc = [DEFAULT_FROM_EMAIL]
     msg.attach_alternative(
@@ -32,7 +32,9 @@ def test(request):
     msg.content_subtype = 'text/html'
     msg.send()
 
+    return HttpResponse('test!')
 
+'''
     from email.mime.multipart import MIMEMultipart
 
 message = MIMEMultipart('alternative')
@@ -50,7 +52,7 @@ part2 = MIMEText(html, 'html')
 # the HTML message, is best and preferred.
 message.attach(part1)
 message.attach(part2)
-    '''
+    
     import smtplib
     from email.mime.text import MIMEText
 
@@ -72,7 +74,7 @@ message.attach(part2)
                     msg_full)
     server.quit()
     return HttpResponse('test!')
-
+'''
 
 #def captcha(request):
 #    request.session['CAPTCHA_CODE'] = captcha_code(4)
