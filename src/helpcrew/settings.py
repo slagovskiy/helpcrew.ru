@@ -14,7 +14,8 @@ INSTALLED_APPS = [
 
     # my apps
     'helpcrew.userext',
-    'helpcrew.toolbox'
+    'helpcrew.toolbox',
+    'helpcrew.taskqueue',
 ]
 
 MIDDLEWARE = [
