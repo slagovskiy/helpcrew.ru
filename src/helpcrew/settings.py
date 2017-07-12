@@ -126,6 +126,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 UPLOAD_URL = '/media/'
 UPLOAD_DIR = os.path.join(BASE_DIR, 'media')
 
+WORKER_PID = os.path.join(BASE_DIR, 'worker.pid')
+
 SITE_URL = 'http://127.0.0.1:8000'
 
 DATABASES = {
