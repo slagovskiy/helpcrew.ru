@@ -31,6 +31,25 @@ def test(request):
     )
     msg.content_subtype = 'text/html'
     msg.send()
+
+
+    from email.mime.multipart import MIMEMultipart
+
+message = MIMEMultipart('alternative')
+message['From'] = 'Sender Name <sender@server>'
+message['To'] = 'Receiver Name <receiver@server>'
+message['Cc'] = 'Receiver2 Name <receiver2@server>'
+message['Subject'] = 'Any subject'
+
+# Record the MIME types of both parts - text/plain and text/html.
+part1 = MIMEText(text, 'plain')
+part2 = MIMEText(html, 'html')
+
+# Attach parts into message container.
+# According to RFC 2046, the last part of a multipart message, in this case
+# the HTML message, is best and preferred.
+message.attach(part1)
+message.attach(part2)
     '''
     import smtplib
     from email.mime.text import MIMEText
@@ -45,7 +64,7 @@ def test(request):
 
     msg_full = message.as_string()
 
-    server = smtplib.SMTP(EMAIL_HOST + ':' + str(EMAIL_PORT))
+    server = smtplib.SMTP_SSL(EMAIL_HOST + ':' + str(EMAIL_PORT))
     server.starttls()
     server.login(EMAIL_HOST_USER, EMAIL_HOST_PASSWORD)
     server.sendmail(message['From'],
