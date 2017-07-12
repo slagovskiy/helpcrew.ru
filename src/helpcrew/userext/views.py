@@ -1,14 +1,14 @@
-from django.core.files import File
 from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout, authenticate, login
 from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
 import os
 
 from .models import User
+from ..taskqueue.models import Email
 from ..settings import UPLOAD_DIR
 from ..settings import EMAIL_SUBJECT_PREFIX, DEFAULT_FROM_EMAIL
+
 
 def user_profile(request):
     content = {}
@@ -52,22 +52,17 @@ def user_register(request):
                 login(request, user)
 
                 try:
-                    msg = EmailMultiAlternatives()
-                    msg.subject = '[' + EMAIL_SUBJECT_PREFIX + u'] Код подтверждения регистрации'
-                    msg.body = render_to_string('user/email_register_text.html', {'user': user})
-                    msg.from_email = EMAIL_SUBJECT_PREFIX + ' <' + DEFAULT_FROM_EMAIL + '>'
-                    msg.to = [user.email]
-                    msg.bcc = [DEFAULT_FROM_EMAIL]
-                    msg.attach_alternative(
-                        render_to_string('user/email_register.html', {'user': user})
-                        , "text/html"
+                    msg = Email.objects.create(
+                        msg_to=user.email,
+                        msg_from=EMAIL_SUBJECT_PREFIX + ' <' + DEFAULT_FROM_EMAIL + '>',
+                        msg_bcc=DEFAULT_FROM_EMAIL,
+                        subject='[' + EMAIL_SUBJECT_PREFIX + u'] Код подтверждения регистрации',
+                        body=render_to_string('user/email_register_text.html', {'user': user}),
+                        body_alternative=render_to_string('user/email_register.html', {'user': user})
                     )
-                    msg.content_subtype = 'text/html'
-                    msg.send()
+                    msg.save()
                 except:
                     pass
-
-
                 return redirect(reverse('user_profile'))
             else:
                 content = {'error': u'Ошибка авторизации'}
