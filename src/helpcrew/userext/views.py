@@ -54,7 +54,7 @@ def user_register(request):
                 try:
                     msg = Email.objects.create(
                         msg_to=user.email,
-                        msg_from=EMAIL_SUBJECT_PREFIX + ' <' + DEFAULT_FROM_EMAIL + '>',
+                        msg_from=DEFAULT_FROM_EMAIL,
                         msg_bcc=DEFAULT_FROM_EMAIL,
                         subject='[' + EMAIL_SUBJECT_PREFIX + u'] Код подтверждения регистрации',
                         body=render_to_string('user/email_register_text.html', {'user': user}),
