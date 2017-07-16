@@ -7,7 +7,7 @@ import os
 from .models import User
 from ..taskqueue.models import Email
 from ..settings import UPLOAD_DIR
-from ..settings import EMAIL_SUBJECT_PREFIX, DEFAULT_FROM_EMAIL
+from ..taskqueue.utils import add_email
 
 
 def user_profile(request):
@@ -52,15 +52,12 @@ def user_register(request):
                 login(request, user)
 
                 try:
-                    msg = Email.objects.create(
+                    add_email(
                         msg_to=user.email,
-                        msg_from=DEFAULT_FROM_EMAIL,
-                        msg_bcc=DEFAULT_FROM_EMAIL,
-                        subject='[' + EMAIL_SUBJECT_PREFIX + u'] Код подтверждения регистрации',
+                        subject=u'Код подтверждения регистрации',
                         body=render_to_string('user/email_register_text.html', {'user': user}),
                         body_alternative=render_to_string('user/email_register.html', {'user': user})
                     )
-                    msg.save()
                 except:
                     pass
                 return redirect(reverse('user_profile'))
