@@ -5,7 +5,6 @@ from django.template.loader import render_to_string
 import os
 
 from .models import User
-from ..taskqueue.models import Email
 from ..settings import UPLOAD_DIR
 from ..taskqueue.utils import add_email
 
@@ -50,16 +49,12 @@ def user_register(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-
-                try:
-                    add_email(
-                        msg_to=user.email,
-                        subject=u'Код подтверждения регистрации',
-                        body=render_to_string('user/email_register_text.html', {'user': user}),
-                        body_alternative=render_to_string('user/email_register.html', {'user': user})
-                    )
-                except:
-                    pass
+                add_email(
+                    msg_to=user.email,
+                    subject=u'Код подтверждения регистрации',
+                    body=render_to_string('user/email_register_text.html', {'user': user}),
+                    body_alternative=render_to_string('user/email_register.html', {'user': user})
+                )
                 return redirect(reverse('user_profile'))
             else:
                 content = {'error': u'Ошибка авторизации'}
@@ -135,6 +130,12 @@ def user_save(request):
                         user = authenticate(request, username=user.email, password=password1)
                         if user is not None:
                             login(request, user)
+                            add_email(
+                                msg_to=user.email,
+                                subject=u'Изменение пароля',
+                                body=render_to_string('user/email_password_text.html', {'user': user}),
+                                body_alternative=render_to_string('user/email_password.html', {'user': user})
+                            )
                     else:
                         content = {'error': u'Пароли не совпадают'}
                         return render(request, 'user/profile.html', content)
