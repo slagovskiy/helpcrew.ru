@@ -1,1 +1,1 @@
-default_app_config = 'toolbox.apps.ToolboxConfig'
+default_app_config = 'helpcrew.toolbox.apps.ToolboxConfig'

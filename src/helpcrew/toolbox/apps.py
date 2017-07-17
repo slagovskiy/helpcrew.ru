@@ -2,10 +2,10 @@ from django.apps import AppConfig
 
 
 class ToolboxConfig(AppConfig):
-    name = 'toolbox'
+    name = 'helpcrew.toolbox'
 
     def ready(self):
-        from toolbox.models import Global
+        from .models import Global
         Global.add_not_exist('user-crew-limit', '3')    # ограничение на количество команд у пользователя
         Global.add_not_exist('crew-user-limit', '10')   # ограничение на пользователей в команде
         Global.add_not_exist('start-task', '15')        # начало работ по новой заявке
