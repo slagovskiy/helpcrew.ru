@@ -3,6 +3,7 @@ django_markdown
 django-sendfile
 django-mptt
 user_agents
+html2text
 pillow
 faker
 gunicorn
