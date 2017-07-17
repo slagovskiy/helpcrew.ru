@@ -52,8 +52,7 @@ def user_register(request):
                 add_email(
                     msg_to=user.email,
                     subject=u'Код подтверждения регистрации',
-                    body=render_to_string('user/email_register_text.html', {'user': user}),
-                    body_alternative=render_to_string('user/email_register.html', {'user': user})
+                    body=render_to_string('user/email_register.html', {'user': user})
                 )
                 return redirect(reverse('user_profile'))
             else:
@@ -133,8 +132,7 @@ def user_save(request):
                             add_email(
                                 msg_to=user.email,
                                 subject=u'Изменение пароля',
-                                body=render_to_string('user/email_password_text.html', {'user': user}),
-                                body_alternative=render_to_string('user/email_password.html', {'user': user})
+                                body=render_to_string('user/email_password.html', {'user': user})
                             )
                     else:
                         content = {'error': u'Пароли не совпадают'}

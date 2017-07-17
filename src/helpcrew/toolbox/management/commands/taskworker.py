@@ -5,6 +5,7 @@ from datetime import datetime
 from django.core.mail import EmailMultiAlternatives
 from django.utils import timezone
 from django.core.management.base import BaseCommand
+from html2text import html2text
 
 from ....taskqueue.models import Email
 from ....settings import WORKER_PID
@@ -45,8 +46,8 @@ class Command(BaseCommand):
                     _msg.from_email = msg.msg_from
                     _msg.to = [msg.msg_to]
                     _msg.bcc = [msg.msg_bcc]
-                    _msg.body = msg.body
-                    _msg.attach_alternative(msg.body_alternative, 'text/html')
+                    _msg.body = html2text(msg.body)
+                    _msg.attach_alternative(msg.body, 'text/html')
                     _msg.content_subtype = 'text/html'
                     _msg.send()
                     print('[' + str(datetime.now()) + '] email to ' + msg.msg_to + ' - ok')

@@ -21,9 +21,6 @@ class Email(models.Model):
     body = models.TextField(
         default=''
     )
-    body_alternative = models.TextField(
-        default=''
-    )
     subject = models.CharField(
         max_length=255,
         default=''
