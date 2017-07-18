@@ -1,13 +1,16 @@
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.views.generic import RedirectView
 
 from .media.views import media
-from .vews import index, test
+from .views import index, test, go_crew
 
 urlpatterns = [
     url(r'^$', index, name='home'),
     url(r'^test/$', test, name='test'),
     url(r'^u/', include('helpcrew.userext.urls')),
+    url(r'^p/(?P<url>[-\w]+)/$', go_crew, name='crew_view_redirect'),
+    url(r'^c/', include('helpcrew.helpdesk.urls')),
 
     url(r'^media/(?P<path>.*)$', media),
     url(r'^admin/', admin.site.urls),
