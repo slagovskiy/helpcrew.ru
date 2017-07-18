@@ -52,12 +52,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     firstname = models.CharField(
         'First name',
+        default='',
         max_length=40,
         null=True,
         blank=True
     )
     lastname = models.CharField(
         'Last name',
+        default='',
         max_length=40,
         null=True,
         blank=True
@@ -111,6 +113,12 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def has_module_perms(self, app_label):
         return True
+
+    def name(self):
+        if self.firstname or self.lastname:
+            return '%s %s' % (self.firstname, self.lastname)
+        else:
+            return self.email
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

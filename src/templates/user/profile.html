@@ -21,7 +21,7 @@
                 {% if request.user.avatar %}<img src="{{ request.user.avatar.url }}?s=150">{% endif %}
             </div>
             <div class="col-md-10" id="profile-info">
-                <div class="profile-name">{{ request.user.firstname }} {{ request.user.lastname }}</div>
+                <div class="profile-name">{{ request.user.name }}</div>
                 <div class="profile-email">{{ request.user.email }}</div>
                 <div class="profile-date">Зарегистрирован {{ request.user.register_date|date_from_now|safe }}, последний вход {{ request.user.last_login|date_from_now|safe }}</div>
                 <div class="profile-btn"><button class="btn btn-primary" onclick="$('#profile-edit').show();$('#profile-info').hide();">изменить</button></div>
