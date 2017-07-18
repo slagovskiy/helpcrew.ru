@@ -13,6 +13,10 @@ class Crew(models.Model):
         default='',
         max_length=255
     )
+    url = models.CharField(
+        default='',
+        max_length=255
+    )
     user = models.ForeignKey(User)
     added = models.DateTimeField(
         auto_now_add=True
@@ -40,11 +44,15 @@ class Crew(models.Model):
             self.request_time_one = Global.get('request_time_one')
             self.request_time_two = Global.get('request_time_two')
         super(Crew, self).save(*args, **kwargs)
-        cu = CrewUsers.objects.create(
-            crew=self,
-            user=self.user,
-            type=CrewUsers.ADMINISTRATOR_TYPE
-        ).save()
+
+    @staticmethod
+    def exist_url(url):
+        c = Crew.objects.filter(url=url)
+        if c:
+            return True
+        else:
+            return False
+
 
     class Meta:
         ordering = ['name']
