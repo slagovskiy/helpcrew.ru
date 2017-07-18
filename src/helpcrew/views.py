@@ -1,6 +1,8 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import logging
+
+from django.urls import reverse
 
 log = logging.getLogger(__name__)
 
@@ -8,6 +10,10 @@ log = logging.getLogger(__name__)
 def index(request):
     content = {}
     return render(request, 'index.html', content)
+
+
+def go_crew(request, url=None):
+    return redirect(reverse('crew_view', kwargs={'url': url}))
 
 
 def test(request):
