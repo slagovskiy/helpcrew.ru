@@ -1,5 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {{ crew.name }}
+    <div class="col-md-12">{{ crew.name }}</div>
+    <div class="col-md-3">
+        <div>Участники</div>
+        <div>
+            {% for cu in crew.crewusers_set.all %}
+                <div>{{ cu.user.name }}</div>
+            {% endfor %}
+        </div>
+        <hr>
+        <div>Базы знаний</div>
+    </div>
+    <div class="col-md-9">
+        <div>Заявки</div>
+        <div></div>
+    </div>
 {% endblock %}
