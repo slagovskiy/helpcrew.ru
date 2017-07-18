@@ -1,0 +1,15 @@
+{% if not crews.crews_a and not crews.crews_d and not crews.crews_o  %}
+<div class="profile-data-text">нет команд в которых вы учавствуете</div>
+{% else %}
+<ul class="col-md-12 menu-list">
+{% for crew in crews.crews_a %}
+    <li><i class="fa fa-user-circle-o color-b" aria-hidden="true" title="Администратор"></i> <a href="{% url 'crew_view' crew.url %}">{{ crew.name }}</a></li>
+{% endfor %}
+{% for crew in crews.crews_d %}
+    <li><i class="fa fa-user-circle-o color-o" aria-hidden="true" title="Диспетчер"></i> <a href="{% url 'crew_view' crew.url %}">{{ crew.name }}</a></li>
+{% endfor %}
+{% for crew in crews.crews_o %}
+    <li><i class="fa fa-user-circle-o color-y" aria-hidden="true" title="Оператор"></i> <a href="{% url 'crew_view' crew.url %}">{{ crew.name }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}

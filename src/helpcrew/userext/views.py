@@ -7,10 +7,27 @@ import os
 from .models import User
 from ..settings import UPLOAD_DIR
 from ..taskqueue.utils import add_email
+from ..helpdesk.models import Crew, CrewUsers
 
 
 def user_profile(request):
-    content = {}
+    crews_a = Crew.objects.filter(
+        id__in=CrewUsers.objects.filter(user=request.user, type=CrewUsers.ADMINISTRATOR_TYPE).values_list('crew', flat=True)
+    )
+    crews_d = Crew.objects.filter(
+        id__in=CrewUsers.objects.filter(user=request.user, type=CrewUsers.DISPATCHER_TYPE).values_list('crew', flat=True)
+    )
+    crews_o = Crew.objects.filter(
+        id__in=CrewUsers.objects.filter(user=request.user, type=CrewUsers.OPERATOR_TYPE).values_list('crew', flat=True)
+    )
+    content = {
+        'crews':
+            {
+                'crews_a': crews_a,
+                'crews_d': crews_d,
+                'crews_o': crews_o
+            }
+        }
     return render(request, 'user/profile.html', content)
 
 

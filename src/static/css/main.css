@@ -87,6 +87,12 @@ button {
 
 .text-center { text-align: center; }
 
+.color-y { color: #FFC811; }
+.color-lb { color: #3AA4A4; }
+.color-o { color: #EA7128; }
+.color-g { color: #B3B31C; }
+.color-b { color: #45737E; }
+
 /* header */
 /**********************************************************************************************************************/
 
@@ -256,6 +262,12 @@ button {
     padding-bottom: 10px;
 }
 
+.menu-list {
+    list-style: none;
+    padding-left: 5px;
+    font-size: .8em;
+}
+
 /**********************************************************************************************************************/
 
 /* form */
@@ -272,6 +284,10 @@ form input[type=text], form input[type=password]
 
 .btn {
     text-transform: uppercase;
+}
+
+a.btn {
+    color: #FFFFFF;
 }
 
 .form-error
