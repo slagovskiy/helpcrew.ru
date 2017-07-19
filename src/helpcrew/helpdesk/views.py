@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
 from .models import Crew, CrewUsers
+from .utils import get_crews_list
 from .decorators import crew_member_check
 from ..userext.decoretors import authenticate_check
 
@@ -66,7 +67,8 @@ def crew_view(request, url=None):
     if crew:
         if request.user.id in CrewUsers.objects.filter(crew=crew).values_list('user', flat=True):
             content = {
-                'crew': crew[0]
+                'crew': crew[0],
+                'crews': get_crews_list(request.user, flat=True)
             }
             return render(request, 'helpdesk/crew_view.html', content)
         else:
