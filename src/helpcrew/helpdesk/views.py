@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
 from .models import Crew, CrewUsers
+from .decorators import crew_member_check
 
 
 def crew_edit(request, slug=None):
@@ -58,6 +59,7 @@ def crew_edit(request, slug=None):
         return render(request, 'helpdesk/crew_edit.html', {})
 
 
+@crew_member_check
 def crew_view(request, url=None):
     crew = Crew.objects.filter(url=url)
     if crew:
