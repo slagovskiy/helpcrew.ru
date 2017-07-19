@@ -76,6 +76,6 @@ class CrewUsers(models.Model):
     type = models.IntegerField(choices=USER_TYPE_CHOICES, default=OPERATOR_TYPE)
 
     class Meta:
-        ordering = ['crew', 'user']
+        ordering = ['type', 'user']
         verbose_name = 'Crew user'
         verbose_name_plural = 'Crew users'
