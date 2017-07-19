@@ -5,11 +5,13 @@ from django.template.loader import render_to_string
 import os
 
 from .models import User
+from .decoretors import authenticate_check
 from ..settings import UPLOAD_DIR
 from ..taskqueue.utils import add_email
 from ..helpdesk.models import Crew, CrewUsers
 
 
+@authenticate_check
 def user_profile(request):
     crews_a = Crew.objects.filter(
         id__in=CrewUsers.objects.filter(user=request.user, type=CrewUsers.ADMINISTRATOR_TYPE).values_list('crew', flat=True)
@@ -49,6 +51,7 @@ def user_logout(request):
     logout(request)
     return redirect('/')
 
+
 def user_register(request):
     if request.method == 'GET':
         return redirect(reverse('user_login'))
@@ -87,6 +90,7 @@ def user_register(request):
             return render(request, 'user/login.html', content)
 
 
+@authenticate_check
 def user_activate(request):
     if request.method == 'GET':
         return redirect(reverse('user_profile'))
