@@ -6,6 +6,7 @@ from django.http import JsonResponse
 
 from .models import Crew, CrewUsers
 from .decorators import crew_member_check
+from ..userext.decoretors import authenticate_check
 
 
 def crew_edit(request, slug=None):
@@ -59,14 +60,17 @@ def crew_edit(request, slug=None):
         return render(request, 'helpdesk/crew_edit.html', {})
 
 
-@crew_member_check
+@authenticate_check
 def crew_view(request, url=None):
     crew = Crew.objects.filter(url=url)
     if crew:
-        content = {
-            'crew': crew[0]
-        }
-        return render(request, 'helpdesk/crew_view.html', content)
+        if request.user.id in CrewUsers.objects.filter(crew=crew).values_list('user', flat=True):
+            content = {
+                'crew': crew[0]
+            }
+            return render(request, 'helpdesk/crew_view.html', content)
+        else:
+            return redirect(reverse('user_profile'))
     else:
         return redirect(reverse('user_profile'))
 
