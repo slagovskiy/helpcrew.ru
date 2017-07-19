@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load tags %}
 {% load widgets %}
 
@@ -19,7 +20,7 @@
     {% else %}
         <div class="col-md-12">
             <div class="col-md-2">
-                {% if request.user.avatar %}<img src="{{ request.user.avatar.url }}?s=150">{% endif %}
+                {% if request.user.avatar %}<img src="{{ request.user.avatar.url }}?s=150">{% else %}<img src="{% static 'img/icon-user-150.png' %}">{% endif %}
             </div>
             <div class="col-md-10" id="profile-info">
                 <div class="profile-name">{{ request.user.name }}</div>

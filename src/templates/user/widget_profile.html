@@ -1,3 +1,4 @@
+{% load static %}
 {% if not request.user.is_anonymous %}
     <span class="widget">
         <span class="col-md-11">
@@ -7,6 +8,8 @@
         <span class="col-md-1">
             {% if request.user.avatar %}
                 <img src="{{ request.user.avatar.url }}?s=32" />
+            {% else %}
+                <img src="{% static 'img/icon-user-32.png' %}" />
             {% endif %}
         </span>
     </span>
