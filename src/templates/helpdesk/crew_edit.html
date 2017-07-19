@@ -6,7 +6,7 @@
     <div class="col-md-8">
         {% if not crew %}
         <h2>Новая команда</h2>
-        <form action="{% url 'crew_edit' %}" method="post" id="form-useredit" enctype="multipart/form-data">
+        <form action="{% url 'crew_edit' %}" method="post" id="form-crewedit" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="hidden" name="slug" value="{{ form.name }}">
             <div class="col-md-12">
@@ -14,7 +14,7 @@
                     Имя новой команды*
                 </div>
                 <div class="col-md-9">
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Имя" value="{{ form.url }}"
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Имя" value=""
                            data-validation="length" data-validation-length="2-100"
                            data-validation-error-msg="Введите имя команды"
                     />
@@ -28,19 +28,56 @@
                     <input type="text" class="form-control" id="url" name="url" placeholder="Адрес" value=""
                            data-validation="server" data-validation-url="{% url 'crew_check_url' %}"
                            data-validation-optional="true"
-                           data-validation-error-msg="Введите адрес команды, используя латинские символы"
+                           data-validation-error-msg="Введите адрес команды, используя латинские символы и цифры"
                     />
                 </div>
                 <div class="col-md-3">
                 </div>
                 <div class="col-md-9 form-comment">
-                    Для быстрого перехода на страницу команды http://helpcrew.ru/c/<span style="color: red">my_command</span>
+                    Для быстрого перехода на страницу команды http://helpcrew.ru/p/<span style="color: red">my_command</span>
                 </div>
             </div>
             <div class="col-md-12">
                 <input type="submit" class="form-control btn btn-primary" value="сохранить" />
             </div>
         </form>
+        {% else %}
+            <h2>Команда &laquo{{ crew.name }}&raquo;</h2>
+            <form action="{% url 'crew_edit' %}" method="post" id="form-crewedit" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="slug" value="{{ crew.slug }}">
+                <div class="col-md-12">
+                    <div class="col-md-3 form-label">
+                        Имя команды*
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Имя" value="{{ crew.name }}"
+                               data-validation="length" data-validation-length="2-100"
+                               data-validation-error-msg="Введите имя команды"
+                        />
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-3 form-label">
+                        Адрес команды
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" id="url" name="url" placeholder="Адрес" value="{{ crew.url }}"
+                               data-validation="server" data-validation-url="{% url 'crew_check_url' %}"
+                               data-validation-optional="true"
+                               data-validation-error-msg="Введите адрес команды, используя латинские символы и цифры"
+                        />
+                    </div>
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-9 form-comment">
+                        Для быстрого перехода на страницу команды http://helpcrew.ru/p/<span style="color: red">my_command</span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <input type="submit" class="form-control btn btn-primary" value="сохранить" />
+                </div>
+            </form>
         {% endif %}
     </div>
     <div class="col-md-2"></div>

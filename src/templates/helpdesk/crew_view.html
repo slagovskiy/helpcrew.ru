@@ -3,13 +3,12 @@
 {% block content %}
     <div class="col-md-12 crew-title">
         <span><i class="fa fa-users color-b" aria-hidden="true"></i> {{ crew.name }}</span>
-        <span>
-        <div class="btn-group" role="group" aria-label="...">
-            <button type="button" class="btn btn-default btn-xs">свойства группы</button>
+        <div class="btn-group crew-title-btn" role="group" aria-label="...">
+            <a href="{% url 'crew_edit' crew.url %}" class="btn btn-default btn-xs">свойства группы</a>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a href="#" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="caret"></span>
-                </button>
+                </a>
                 <ul class="dropdown-menu dropdown-menu-right">
                     {% for crew in crews %}
                         <li><a href="{% url 'crew_view' crew.url %}">{{ crew.name }}</a></li>
@@ -17,7 +16,6 @@
                 </ul>
             </div>
         </div>
-        </span>
     </div>
     <div class="col-md-3">
         <div class="crew-menu-title">Участники <a href="#" class="btn btn-xs btn-success">пригласить</a></div>
@@ -36,9 +34,11 @@
     <div class="col-md-9">
         <div class="crew-menu-title">
             Заявки
-            <a href="#" class="btn btn-xs btn-success">новая заявка</a>
-            <a href="#" class="btn btn-xs btn-danger">новый инцидент</a>
-            <a href="#" class="btn btn-xs btn-info">новая задача</a>
+            <div class="btn-group" role="group" aria-label="...">
+                <a href="#" class="btn btn-xs btn-success">новая заявка</a>
+                <a href="#" class="btn btn-xs btn-danger">новый инцидент</a>
+                <a href="#" class="btn btn-xs btn-info">новая задача</a>
+            </div>
         </div>
         <div></div>
     </div>

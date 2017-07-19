@@ -10,22 +10,22 @@ from .decorators import crew_member_check
 from ..userext.decoretors import authenticate_check
 
 
-def crew_edit(request, slug=None):
+def crew_edit(request, url=None):
     if not request.user.is_authenticated:
         return redirect(reverse('user_login'))
-    if request.GET:
-        if slug==None:
+    if request.method=='GET':
+        if url==None:
             content = {}
             return render(request, 'helpdesk/crew_edit.html', content)
         else:
-            crew = Crew.objects.get(slug=slug)
+            crew = Crew.objects.get(url=url)
             if crew:
                 content = {'crew': crew}
                 return render(request, 'helpdesk/crew_edit.html', content)
             else:
                 content = {'error': u'Команда не найдена'}
                 return render(request, 'helpdesk/crew_edit.html', content)
-    elif request.POST:
+    elif request.method=='POST':
         if 'name' in request.POST:
             name = request.POST['name']
             url = request.POST.get('url', '')

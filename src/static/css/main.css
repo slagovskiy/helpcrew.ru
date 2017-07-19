@@ -281,6 +281,10 @@ button {
     padding-bottom: 15px !important;
 }
 
+.crew-title .crew-title-btn {
+    margin-top: -7px;
+}
+
 .crew-title .dropdown-toggle {
     padding-left: 10px !important;
     padding-right: 10px !important;
@@ -318,6 +322,12 @@ form input[type=text], form input[type=password]
 
 a.btn {
     color: #FFFFFF;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+a.btn-default {
+    color: #333333;
 }
 
 .form-error
