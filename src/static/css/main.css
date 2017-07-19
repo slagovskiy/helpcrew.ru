@@ -98,7 +98,8 @@ button {
 
 .head-row {
     font-size: 1.5em;
-    padding: 1.3em;
+    padding-top: 10px;
+    padding-bottom: 10px;
     font-family: "RobotoMedium", sans-serif;
     text-transform: uppercase;
 }
@@ -231,6 +232,14 @@ button {
     line-height: 1.6em;
 }
 
+.content .col-md-1, .content .col-md-2, .content .col-md-3,
+.content .col-md-4, .content .col-md-5, .content .col-md-6,
+.content .col-md-7, .content .col-md-8, .content .col-md-9,
+.content .col-md-10, .content .col-md-11, .content .col-md-12
+{
+    padding: 3px;
+}
+
 .profile-name {
     font-size: 1.6em;
     line-height: 1.7em;
@@ -268,16 +277,37 @@ button {
     font-size: .8em;
 }
 
+.crew-title {
+    padding-bottom: 15px !important;
+}
+
+.crew-title .dropdown-toggle {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
+.crew-title span {
+    font-size: 1.2em;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.crew-menu-title {
+    font-size: .9em;
+    padding-bottom: 5px;
+}
+
+.crew-user-list {
+    list-style: none;
+    padding-left: 5px;
+    font-size: .7em;
+}
+
 /**********************************************************************************************************************/
 
 /* form */
 /**********************************************************************************************************************/
-form .col-md-1, form .col-md-2, form .col-md-3, form .col-md-4, form .col-md-5, form .col-md-6,
-form .col-md-7, form .col-md-8, form .col-md-9, form .col-md-10, form .col-md-11, form .col-md-12
-{
-    padding: 3px;
-}
-
 form input[type=text], form input[type=password]
 {
 }
