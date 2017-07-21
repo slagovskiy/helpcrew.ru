@@ -86,8 +86,50 @@
                     </div>
                 </form>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 crew-edit">
                 <h2>Члены команды</h2>
+                {% for cu in crew.crewusers_set.all %}
+                <div class="crew-user-list">
+                    {% ifequal cu.type 0 %}<i class="fa fa-user color-b" aria-hidden="true" title="Администратор"></i> {% endifequal %}
+                    {% ifequal cu.type 1 %}<i class="fa fa-user color-o" aria-hidden="true" title="Диспетчер"></i> {% endifequal %}
+                    {% ifequal cu.type 2 %}<i class="fa fa-user color-y" aria-hidden="true" title="Оператор"></i> {% endifequal %}
+                    {{ cu.user.name }}
+                    <div class="btn-group" role="group">
+                        <a href="#" class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">
+                                {% ifequal cu.type 0 %}
+                                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                {% else %}
+                                    <i class="fa fa-square-o" aria-hidden="true"></i>
+                                {% endifequal %}
+                                Администратор</a></li>
+                            <li><a href="#">
+                                {% ifequal cu.type 1 %}
+                                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                {% else %}
+                                    <i class="fa fa-square-o" aria-hidden="true"></i>
+                                {% endifequal %}
+                                Диспетчер</a></li>
+                            <li><a href="#">
+                                {% ifequal cu.type 2 %}
+                                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                {% else %}
+                                    <i class="fa fa-square-o" aria-hidden="true"></i>
+                                {% endifequal %}
+                                Оператор</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Удалить</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+                {% endfor %}
+                <div class="col-md-12">
+                    <input type="submit" class="form-control btn btn-primary" value="пригласить нового участника" />
+                </div>
             </div>
         {% endif %}
 {% endblock %}
