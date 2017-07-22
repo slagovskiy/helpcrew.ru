@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
 from .models import Crew, CrewUsers
+from ..userext.models import User
 from .utils import get_crews_list
 from .decorators import crew_member_check
 from ..userext.decoretors import authenticate_check
@@ -59,6 +60,27 @@ def crew_edit(request, url=None):
             return redirect(reverse('crew_edit'))
     else:
         return render(request, 'helpdesk/crew_edit.html', {})
+
+
+def crew_edit_user_edit(request, url=None, email=None, type=None):
+    if not type:
+        return redirect(reverse('crew_edit', url))
+    crew = Crew.objects.get(url=url)
+    user = User.objects.get(email=email)
+    if crew and user:
+        cu = CrewUsers.objects.filter(crew=crew, user=user)
+        if cu:
+            cu = cu[0]
+            if str(type).lower() == 'a':
+                cu.type = CrewUsers.ADMINISTRATOR_TYPE
+                cu.save()
+            elif str(type).lower() == 'd':
+                cu.type = CrewUsers.DISPATCHER_TYPE
+                cu.save()
+            elif str(type).lower() == 'o':
+                cu.type = CrewUsers.OPERATOR_TYPE
+                cu.save()
+    return redirect(reverse('crew_edit', url))
 
 
 @authenticate_check
