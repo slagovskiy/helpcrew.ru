@@ -99,21 +99,21 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url 'crew_edit_user_edit' url=crew.url email=cu.user.email type='a' %}">
+                            <li><a href="{% url 'crew_edit_user_edit' crew.url cu.user.email 'a' %}">
                                 {% ifequal cu.type 0 %}
                                     <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                 {% else %}
                                     <i class="fa fa-square-o" aria-hidden="true"></i>
                                 {% endifequal %}
                                 Администратор</a></li>
-                            <li><a href="{% url 'crew_edit_user_edit' url=crew.url email=cu.user.email type='d' %}">
+                            <li><a href="{% url 'crew_edit_user_edit' crew.url cu.user.email 'd' %}">
                                 {% ifequal cu.type 1 %}
                                     <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                 {% else %}
                                     <i class="fa fa-square-o" aria-hidden="true"></i>
                                 {% endifequal %}
                                 Диспетчер</a></li>
-                            <li><a href="{% url 'crew_edit_user_edit' url=crew.url email=cu.user.email type='o' %}">
+                            <li><a href="{% url 'crew_edit_user_edit' crew.url cu.user.email 'o' %}">
                                 {% ifequal cu.type 2 %}
                                     <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                 {% else %}

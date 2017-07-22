@@ -80,7 +80,7 @@ def crew_edit_user_edit(request, url=None, email=None, type=None):
             elif str(type).lower() == 'o':
                 cu.type = CrewUsers.OPERATOR_TYPE
                 cu.save()
-    return redirect(reverse('crew_edit', url))
+    return redirect(reverse('crew_edit', kwargs={'url': url}))
 
 
 @authenticate_check
