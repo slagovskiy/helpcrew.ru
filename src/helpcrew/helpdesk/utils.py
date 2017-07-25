@@ -32,3 +32,26 @@ def check_member(user=None, crew=None):
         return True
     else:
         return False
+
+
+def check_member_admin(user=None, crew=None):
+    cu = CrewUsers.objects.filter(crew=crew, user=user)
+    if cu:
+        cu = cu[0]
+        if cu.type == CrewUsers.ADMINISTRATOR_TYPE:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+def check_member_dispatcher(user=None, crew=None):
+    cu = CrewUsers.objects.filter(crew=crew, user=user)
+    if cu:
+        cu = cu[0]
+        if cu.type == CrewUsers.DISPATCHER_TYPE:
+            return True
+        else:
+            return False
+    else:
+        return False
