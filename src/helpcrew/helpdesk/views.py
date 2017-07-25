@@ -7,7 +7,7 @@ from django.contrib import messages
 
 from .models import Crew, CrewUsers
 from ..userext.models import User
-from .utils import get_crews_list, check_member
+from .utils import get_crews_list, check_member, check_member_admin
 from ..userext.decoretors import authenticate_check
 
 
@@ -70,18 +70,26 @@ def crew_edit_user_edit(request, url=None, email=None, type=None):
     if crew and user:
         crew = crew[0]
         user = user[0]
-        cu = CrewUsers.objects.filter(crew=crew, user=user)
-        if cu:
-            cu = cu[0]
-            if str(type).lower() == 'a':
-                cu.type = CrewUsers.ADMINISTRATOR_TYPE
-                cu.save()
-            elif str(type).lower() == 'd':
-                cu.type = CrewUsers.DISPATCHER_TYPE
-                cu.save()
-            elif str(type).lower() == 'o':
-                cu.type = CrewUsers.OPERATOR_TYPE
-                cu.save()
+        if not check_member_admin(request.user, crew):
+            messages.error(request, u'Доступ запрещен')
+        else:
+            cu = CrewUsers.objects.filter(crew=crew, user=user)
+            if cu:
+                cu = cu[0]
+                if cu.type == CrewUsers.ADMINISTRATOR_TYPE:
+                    _cu = CrewUsers.objects.filter(crew=crew, type=CrewUsers.ADMINISTRATOR_TYPE)
+                    if len(_cu) < 2 and str(type).lower() != 'a':
+                        messages.error(request, u'Нельзя убрать последнего администратора')
+                        return redirect(reverse('crew_edit', kwargs={'url': url}))
+                if str(type).lower() == 'a':
+                    cu.type = CrewUsers.ADMINISTRATOR_TYPE
+                    cu.save()
+                elif str(type).lower() == 'd':
+                    cu.type = CrewUsers.DISPATCHER_TYPE
+                    cu.save()
+                elif str(type).lower() == 'o':
+                    cu.type = CrewUsers.OPERATOR_TYPE
+                    cu.save()
     return redirect(reverse('crew_edit', kwargs={'url': url}))
 
 
