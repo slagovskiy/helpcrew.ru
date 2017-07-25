@@ -79,6 +79,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 SENDFILE_BACKEND = 'sendfile.backends.simple'
 

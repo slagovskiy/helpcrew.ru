@@ -24,3 +24,11 @@ def get_crews_list(user, flat=False):
                 'crews_o': crews_o
         }
     return content
+
+
+def check_member(user=None, crew=None):
+    cu = CrewUsers.objects.filter(crew=crew, user=user)
+    if cu:
+        return True
+    else:
+        return False

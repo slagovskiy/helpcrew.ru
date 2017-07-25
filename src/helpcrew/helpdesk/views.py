@@ -3,11 +3,11 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.contrib import messages
 
 from .models import Crew, CrewUsers
 from ..userext.models import User
-from .utils import get_crews_list
-from .decorators import crew_member_check
+from .utils import get_crews_list, check_member
 from ..userext.decoretors import authenticate_check
 
 
@@ -19,13 +19,13 @@ def crew_edit(request, url=None):
             content = {}
             return render(request, 'helpdesk/crew_edit.html', content)
         else:
-            crew = Crew.objects.get(url=url)
-            if crew:
-                content = {'crew': crew}
+            crew = Crew.objects.filter(url=url)
+            if crew and check_member(request.user, crew[0]):
+                content = {'crew': crew[0]}
                 return render(request, 'helpdesk/crew_edit.html', content)
             else:
-                content = {'error': u'Команда не найдена'}
-                return render(request, 'helpdesk/crew_edit.html', content)
+                messages.error(request, u'Команда не найдена')
+                return redirect(reverse('user_profile'))
     elif request.method=='POST':
         if 'name' in request.POST:
             name = request.POST['name']
@@ -48,8 +48,8 @@ def crew_edit(request, url=None):
                 cu.save()
                 return redirect(reverse('crew_view_redirect', kwargs={'url': c.url}))
             else:
+                messages.error(request, u'Ошибка сохранения')
                 content = {
-                    'error': u'Ошибка сохранения',
                     'form': {
                         'name': name,
                         'url': url
@@ -65,9 +65,11 @@ def crew_edit(request, url=None):
 def crew_edit_user_edit(request, url=None, email=None, type=None):
     if not type:
         return redirect(reverse('crew_edit', url))
-    crew = Crew.objects.get(url=url)
-    user = User.objects.get(email=email)
+    crew = Crew.objects.filter(url=url)
+    user = User.objects.filter(email=email)
     if crew and user:
+        crew = crew[0]
+        user = user[0]
         cu = CrewUsers.objects.filter(crew=crew, user=user)
         if cu:
             cu = cu[0]
@@ -87,15 +89,19 @@ def crew_edit_user_edit(request, url=None, email=None, type=None):
 def crew_view(request, url=None):
     crew = Crew.objects.filter(url=url)
     if crew:
+        crew = crew[0]
         if request.user.id in CrewUsers.objects.filter(crew=crew).values_list('user', flat=True):
+            request.session['crew'] = crew.url
             content = {
-                'crew': crew[0],
+                'crew': crew,
                 'crews': get_crews_list(request.user, flat=True)
             }
             return render(request, 'helpdesk/crew_view.html', content)
         else:
+            messages.error(request, u'Вы не участник этой команды')
             return redirect(reverse('user_profile'))
     else:
+        messages.error(request, u'Команда не найдена')
         return redirect(reverse('user_profile'))
 
 

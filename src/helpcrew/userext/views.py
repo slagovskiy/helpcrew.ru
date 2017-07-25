@@ -2,6 +2,7 @@ from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout, authenticate, login
 from django.template.loader import render_to_string
+from django.contrib import messages
 import os
 
 from .models import User
@@ -76,11 +77,11 @@ def user_register(request):
                 )
                 return redirect(reverse('user_profile'))
             else:
-                content = {'error': u'Ошибка авторизации'}
-                return render(request, 'user/login.html', content)
+                messages.error(request, u'Ошибка авторизации')
+                return render(request, 'user/login.html', {})
         else:
+            messages.error(request, u'Электронный адрес уже зарегистрирован в системе')
             content = {
-                'error': u'Электронный адрес уже зарегистрирован в системе',
                 'form': {
                     'fname': firstname,
                     'lname': lastname,
@@ -98,8 +99,8 @@ def user_activate(request):
         code = request.POST['code']
         user = User.objects.filter(uuid=code)
         if not user:
-            content = {'error': u'Ошибка активации'}
-            return render(request, 'user/profile.html', content)
+            messages.error(request, u'Ошибка активации')
+            return render(request, 'user/profile.html', {})
         else:
             if user[0].email == request.user.email:
                 user[0].is_checked = True
@@ -107,8 +108,8 @@ def user_activate(request):
                 request.user.is_checked = True
                 return render(request, 'user/profile.html', {})
             else:
-                content = {'error': u'Ошибка активации'}
-                return render(request, 'user/profile.html', content)
+                messages.error(request, u'Ошибка активации')
+                return render(request, 'user/profile.html', {})
 
 
 def user_save(request):
@@ -118,8 +119,8 @@ def user_save(request):
         user = User.objects.filter(email=request.user.email)
         user = user[0]
         if not user:
-            content = {'error': u'Пользователь не найден'}
-            return render(request, 'user/profile.html', content)
+            messages.error(request, u'Пользователь не найден')
+            return render(request, 'user/profile.html', {})
         else:
             try:
                 if request.POST['type'] == 'info':
@@ -156,11 +157,11 @@ def user_save(request):
                                 body=render_to_string('user/email_password.html', {'user': user})
                             )
                     else:
-                        content = {'error': u'Пароли не совпадают'}
-                        return render(request, 'user/profile.html', content)
+                        messages.error(request, u'Пароли не совпадают')
+                        return render(request, 'user/profile.html', {})
                     return redirect(reverse('user_profile'))
                 else:
                     return redirect(reverse('user_profile'))
             except:
-                content = {'error': u'Ошибка сохранения'}
-                return render(request, 'user/profile.html', content)
+                messages.error(request, u'Ошибка сохранения')
+                return render(request, 'user/profile.html', {})
