@@ -89,7 +89,6 @@
                     </div>
                 </form>
             </div>
-            {% endif %}
             <div class="col-md-6 crew-edit">
                 <h2>Члены команды</h2>
                 {% for cu in crew.crewusers_set.all %}
@@ -98,7 +97,6 @@
                     {% ifequal cu.type 1 %}<i class="fa fa-user color-o" aria-hidden="true" title="Диспетчер"></i> {% endifequal %}
                     {% ifequal cu.type 2 %}<i class="fa fa-user color-y" aria-hidden="true" title="Оператор"></i> {% endifequal %}
                     {{ cu.user.name }}
-                    {% if is_admin %}
                     <div class="btn-group" role="group">
                         <a href="#" class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="caret"></span>
@@ -129,14 +127,17 @@
                             <li><a href="#">Удалить</a></li>
                         </ul>
                     </div>
-                    {% endif %}
                 </div>
                 {% endfor %}
-                {% if is_admin %}
                 <div class="col-md-12">
                     <input type="submit" class="form-control btn btn-primary" value="пригласить нового участника" />
                 </div>
-                {% endif %}
+            </div>
+            {% endif %}
+            <div class="col-md-6">
+                <h2>Персональные настройки</h2>
+                <form action="{% url 'crew_edit' %}" method="post" id="form-crewedit" enctype="multipart/form-data">
+                </form>
             </div>
         {% endif %}
 {% endblock %}
