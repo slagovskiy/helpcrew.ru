@@ -11,6 +11,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # 3rd party apps
+    'debug_toolbar',
+    'django_extensions',
+
 
     # my apps
     'helpcrew.userext',
@@ -30,6 +33,9 @@ MIDDLEWARE = [
 
     # my middleware
     'helpcrew.toolbox.middleware.ClearTempMiddleware',
+
+    # 3rd party
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'helpcrew.urls'
