@@ -1,0 +1,35 @@
+<form action="{% url 'crew_edit' %}" method="post" id="form-crewedit" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="slug" value="{{ form.name }}">
+    <div class="col-md-12">
+        <div class="col-md-3 form-label">
+            Имя новой команды*
+        </div>
+        <div class="col-md-9">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Имя" value=""
+                   data-validation="length" data-validation-length="2-100"
+                   data-validation-error-msg="Введите имя команды"
+            />
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-3 form-label">
+            Адрес команды
+        </div>
+        <div class="col-md-9">
+            <input type="text" class="form-control" id="url" name="url" placeholder="Адрес" value=""
+                   data-validation="server" data-validation-url="{% url 'crew_check_url' %}"
+                   data-validation-optional="true"
+                   data-validation-error-msg="Введите адрес команды, используя латинские символы и цифры"
+            />
+        </div>
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-9 form-comment">
+            Для быстрого перехода на страницу команды http://helpcrew.ru/p/<span style="color: red">my_crew</span>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <input type="submit" class="form-control btn btn-primary" value="сохранить" />
+    </div>
+</form>
