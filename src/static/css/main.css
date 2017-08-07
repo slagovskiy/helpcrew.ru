@@ -92,6 +92,9 @@ button {
 .color-o { color: #EA7128; }
 .color-g { color: #B3B31C; }
 .color-b { color: #45737E; }
+.color-gr { color: #555555; }
+.color-dg { color: #333333; }
+.color-bl { color: #000000; }
 
 /* header */
 /**********************************************************************************************************************/
@@ -317,10 +320,28 @@ button {
     padding-left: 10px;
 }
 
+.crew-service-list {
+    list-style: none;
+    padding-left: 5px;
+    font-size: .7em;
+}
+
 /**********************************************************************************************************************/
 
 /* form */
 /**********************************************************************************************************************/
+.float-form .col-md-1, .float-form .col-md-2, .float-form .col-md-3,
+.float-form .col-md-4, .float-form .col-md-5, .float-form .col-md-6,
+.float-form .col-md-7, .float-form .col-md-8, .float-form .col-md-9,
+.float-form .col-md-10, .float-form .col-md-11, .float-form .col-md-12
+{
+    padding: 3px;
+}
+
+.dropdown-menu li a {
+    padding: 3px 10px;
+}
+
 form input[type=text], form input[type=password]
 {
 }
@@ -359,14 +380,28 @@ a.btn-link {
     height: 100px;
 }
 
-.form-label
-{
-    font-size: .8em;
+.form-label {
+    font-size: .6em;
+    line-height: .7;
+    padding-top: 7px;
+    padding-bottom: 2px;
 }
 
 .form-comment
 {
     font-size: .6em;
+}
+
+.float-form {
+    max-width: 550px;
+    border-radius: 4px;
+    transform: translateY(-50px);
+    transition: all .33s;
+    font-size: 1.5em;
+}
+.float-form .col-md-12 {
+    padding-bottom: 5px;
+    padding-top: 5px;
 }
 
 /**********************************************************************************************************************/
