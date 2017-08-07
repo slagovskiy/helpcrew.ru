@@ -140,3 +140,47 @@ class CrewService(models.Model):
         ordering = ['crew', 'name']
         verbose_name = u'Услуга'
         verbose_name_plural = u'Услуги'
+
+
+class ServicePrice(models.Model):
+    service = models.ForeignKey(
+        CrewService,
+        verbose_name=u'Услуга'
+    )
+    start_date = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name=u'Дата начала тействия цены'
+    )
+    cost = models.DecimalField(
+        default=0,
+        max_digits=5,
+        decimal_places=2,
+        verbose_name=u'Стоимость услуги'
+    )
+    prepay = models.DecimalField(
+        default=0,
+        max_digits=5,
+        decimal_places=2,
+        verbose_name=u'Предоплата'
+    )
+    fine1 = models.DecimalField(
+        default=0,
+        max_digits=5,
+        decimal_places=2,
+        verbose_name=u'Штраф за невыполнение заявки в срок'
+    )
+    fine2 = models.DecimalField(
+        default=0,
+        max_digits=5,
+        decimal_places=2,
+        verbose_name=u'Штраф за просроченную заявку'
+    )
+
+    def __str__(self):
+        return '%s %s %s' % (self.service, self.start_date, self.cost)
+
+    class Meta:
+        ordering = ['service', 'start_date']
+        verbose_name = u'Строимость услуги'
+        verbose_name_plural = u'Стоимость услуг'
