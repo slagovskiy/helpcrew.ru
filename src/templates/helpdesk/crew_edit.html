@@ -6,41 +6,7 @@
         <div class="col-md-2"></div>
         <div class="col-md-8">
             <h2>Новая команда</h2>
-            <form action="{% url 'crew_edit' %}" method="post" id="form-crewedit" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="hidden" name="slug" value="{{ form.name }}">
-                <div class="col-md-12">
-                    <div class="col-md-3 form-label">
-                        Имя новой команды*
-                    </div>
-                    <div class="col-md-9">
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Имя" value=""
-                               data-validation="length" data-validation-length="2-100"
-                               data-validation-error-msg="Введите имя команды"
-                        />
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="col-md-3 form-label">
-                        Адрес команды
-                    </div>
-                    <div class="col-md-9">
-                        <input type="text" class="form-control" id="url" name="url" placeholder="Адрес" value=""
-                               data-validation="server" data-validation-url="{% url 'crew_check_url' %}"
-                               data-validation-optional="true"
-                               data-validation-error-msg="Введите адрес команды, используя латинские символы и цифры"
-                        />
-                    </div>
-                    <div class="col-md-3">
-                    </div>
-                    <div class="col-md-9 form-comment">
-                        Для быстрого перехода на страницу команды http://helpcrew.ru/p/<span style="color: red">my_crew</span>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <input type="submit" class="form-control btn btn-primary" value="сохранить" />
-                </div>
-            </form>
+            {% include 'helpdesk/form_new_crew.html' %}
         </div>
         <div class="col-md-2"></div>
         <div class="form-bottom col-md-12"></div>
@@ -53,41 +19,45 @@
             {% if is_admin %}
             <div class="col-md-6">
                 <h2>Свойства команды</h2>
-                <form action="{% url 'crew_edit' %}" method="post" id="form-crewedit" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="hidden" name="slug" value="{{ crew.slug }}">
-                    <div class="col-md-12">
-                        <div class="col-md-3 form-label">
-                            Имя команды*
-                        </div>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Имя" value="{{ crew.name }}"
-                                   data-validation="length" data-validation-length="2-100"
-                                   data-validation-error-msg="Введите имя команды"
-                            />
+                {% include 'helpdesk/form_edit_crew.html' %}
+            </div>
+            <div class="col-md-6">
+                <h2>Услуги</h2>
+                {% for service in crew.crewservice_set.all %}
+                    <div class="crew-service-list">
+                        {{ service.name }}
+                        <div class="btn-group" role="group">
+                            <a href="#" class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-cog color-dg" aria-hidden="true"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <a data-fancybox data-options='{"src": "#hidden-form-serviceedit", "modal": true}' href="javascript:;">
+                                        <i class="fa fa-pencil" aria-hidden="true"></i> Изменить
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <i class="fa fa-rub" aria-hidden="true"></i> Прайс
+                                    </a>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-times" aria-hidden="true"></i> Удалить
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <div class="col-md-3 form-label">
-                            Адрес команды
-                        </div>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control" id="url" name="url" placeholder="Адрес" value="{{ crew.url }}"
-                                   data-validation="server" data-validation-url="{% url 'crew_check_url' %}"
-                                   data-validation-optional="true"
-                                   data-validation-error-msg="Введите адрес команды, используя латинские символы и цифры"
-                            />
-                        </div>
-                        <div class="col-md-3">
-                        </div>
-                        <div class="col-md-9 form-comment">
-                            Для быстрого перехода на страницу команды http://helpcrew.ru/p/<span style="color: red">my_crew</span>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <input type="submit" class="form-control btn btn-primary" value="сохранить" />
-                    </div>
-                </form>
+                {% endfor %}
+                <a data-fancybox data-options='{"src": "#hidden-form-serviceedit", "modal": true}' href="javascript:;" class="form-control btn btn-primary">Добавить услугу</a>
+
+                <div class="float-form" style="display: none;" id="hidden-form-serviceedit">
+                    {% include 'helpdesk/form_edit_service.html' %}
+                </div>
+
+
             </div>
             <div class="col-md-6 crew-edit">
                 <h2>Члены команды</h2>
@@ -99,9 +69,9 @@
                     {{ cu.user.name }}
                     <div class="btn-group" role="group">
                         <a href="#" class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="caret"></span>
+                            <i class="fa fa-cog color-dg" aria-hidden="true"></i>
                         </a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu dropdown-menu-right">
                             <li><a href="{% url 'crew_edit_user_edit' crew.url cu.user.email 'a' %}">
                                 {% ifequal cu.type 0 %}
                                     <i class="fa fa-check-square-o" aria-hidden="true"></i>
@@ -124,7 +94,7 @@
                                 {% endifequal %}
                                 Оператор</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#">Удалить</a></li>
+                            <li><a href="#"><i class="fa fa-times" aria-hidden="true"></i> Удалить</a></li>
                         </ul>
                     </div>
                 </div>
