@@ -118,7 +118,7 @@ def crew_view(request, url=None):
 def api_service_list(request, crew=None):
     crew = Crew.objects.filter(slug=crew).first()
     if crew:
-        data = serializers.serialize('json', crew.crewservice_set.filter(deleted=False)) #, fields=('id', 'name'))
+        data = serializers.serialize('json', crew.crewservice_set.filter(deleted=False))
         return JsonResponse({
             'message': '',
             'data': data
@@ -126,6 +126,23 @@ def api_service_list(request, crew=None):
     else:
         return JsonResponse({
             'message': u'Команда не найдена',
+            'data': ''
+        })
+
+
+@csrf_exempt
+@authenticate_check
+def api_service_edit(request, service=None):
+    serv = CrewService.objects.filter(id=service)
+    if serv:
+        data = serializers.serialize('json', serv)
+        return JsonResponse({
+            'message': '',
+            'data': data
+        })
+    else:
+        return JsonResponse({
+            'message': u'Услуга не найдена',
             'data': ''
         })
 

@@ -35,7 +35,7 @@
                             "       </a>\n" +
                             "       <ul class=\"dropdown-menu dropdown-menu-right\">\n" +
                             "           <li>\n" +
-                            "               <a data-fancybox data-options='{\"src\": \"#hidden-form-serviceedit\", \"modal\": true}' href=\"javascript:;\">\n" +
+                            "               <a href=\"#\" onclick=\"editService('[[pk]]'); return false;\">\n" +
                             "                  <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i> Изменить\n" +
                             "               </a>\n" +
                             "           </li>\n" +
@@ -58,9 +58,45 @@
                                         html_data += tmpl
                                             .replace('[[name]]', val['fields']['name'])
                                             .replace('[[pk]]', val['pk']);
+                                        console.log(val['pk']);
                                     });
                                     $('#crew-service-list').html(html_data);
                                 }
+                            }
+                            catch (err) {
+                                console.error(err);
+                            }
+                        });
+                    }
+
+                    function editService(service) {
+                        $('#form-serviceedit #name').val("");
+                        $('#form-serviceedit #time1').val("");
+                        $('#form-serviceedit #time2').val("");
+                        $('#form-serviceedit #time3').val("");
+                        $('#form-serviceedit #unit').val("");
+                        if (service == '0') {
+                            $.fancybox.open({
+                                src: '#hidden-form-serviceedit',
+                                type: 'inline',
+                                opts: {modal: true}
+                            });
+                        }
+                        $.getJSON( "{% url 'api_service_edit' %}" + service + "/", function( data ) {
+                            try {
+                                if (data['message'] == '') {
+                                    var html_data = '';
+                                    data = JSON.parse(data['data'])[0];
+                                    $('#form-serviceedit #name').val(data['fields']['name']);
+                                    $('#form-serviceedit #time1').val(data['fields']['time1']);
+                                    $('#form-serviceedit #time2').val(data['fields']['time2']);
+                                    $('#form-serviceedit #time3').val(data['fields']['time3']);
+                                    $('#form-serviceedit #unit').val(data['fields']['unit']);
+                                    $.fancybox.open({
+                                        src: '#hidden-form-serviceedit',
+                                        type: 'inline',
+                                        opts: {modal: true}
+                                    });                                }
                             }
                             catch (err) {
                                 console.error(err);
@@ -129,7 +165,7 @@
                         loadServiceList();
                     }
                 </script>
-                <a data-fancybox data-options='{"src": "#hidden-form-serviceedit", "modal": true}' href="javascript:;" class="form-control btn btn-primary">Добавить услугу</a>
+                <a href="#" class="form-control btn btn-primary" onclick="editService('0'); return false;">Добавить услугу</a>
 
                 <div class="float-form" style="display: none;" id="hidden-form-serviceedit">
                     {% include 'helpdesk/form_edit_service.html' %}
