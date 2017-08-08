@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.contrib import messages
+from django.core import serializers
 
 from .models import Crew, CrewUsers
 from ..userext.models import User
@@ -111,6 +112,22 @@ def crew_view(request, url=None):
     else:
         messages.error(request, u'Команда не найдена')
         return redirect(reverse('user_profile'))
+
+
+@csrf_exempt
+def api_service_list(request, crew=None):
+    crew = Crew.objects.filter(slug=crew).first()
+    if crew:
+        data = serializers.serialize('json', crew.crewservice_set.filter(deleted=False)) #, fields=('id', 'name'))
+        return JsonResponse({
+            'message': '',
+            'data': data
+        })
+    else:
+        return JsonResponse({
+            'message': u'Команда не найдена',
+            'data': ''
+        })
 
 
 @csrf_exempt

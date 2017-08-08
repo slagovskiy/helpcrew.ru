@@ -101,6 +101,8 @@
         $.validate({
             modules : 'location, date, security, file'
         });
+        try { init(); }
+        catch(err) {}
     });
 </script>
 </body>

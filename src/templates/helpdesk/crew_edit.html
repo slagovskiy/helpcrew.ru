@@ -23,34 +23,58 @@
             </div>
             <div class="col-md-6">
                 <h2>Услуги</h2>
-                {% for service in crew.crewservice_set.all %}
-                    <div class="crew-service-list">
-                        {{ service.name }}
-                        <div class="btn-group" role="group">
-                            <a href="#" class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-cog color-dg" aria-hidden="true"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li>
-                                    <a data-fancybox data-options='{"src": "#hidden-form-serviceedit", "modal": true}' href="javascript:;">
-                                        <i class="fa fa-pencil" aria-hidden="true"></i> Изменить
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="">
-                                        <i class="fa fa-rub" aria-hidden="true"></i> Прайс
-                                    </a>
-                                </li>
-                                <li role="separator" class="divider"></li>
-                                <li>
-                                    <a href="#">
-                                        <i class="fa fa-times" aria-hidden="true"></i> Удалить
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                {% endfor %}
+                <div id="crew-service-list"></div>
+                <script>
+                    function loadServiceList() {
+                        var tmpl = "<div class=\"crew-service-list\">\n" +
+                            "   [[name]]\n" +
+                            "   <div class=\"btn-group\" role=\"group\">\n" +
+                            "       <a href=\"#\" class=\"btn btn-link btn-xs dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
+                            "           <i class=\"fa fa-cog color-dg\" aria-hidden=\"true\"></i>\n" +
+                            "       </a>\n" +
+                            "       <ul class=\"dropdown-menu dropdown-menu-right\">\n" +
+                            "           <li>\n" +
+                            "               <a data-fancybox data-options='{\"src\": \"#hidden-form-serviceedit\", \"modal\": true}' href=\"javascript:;\">\n" +
+                            "                  <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i> Изменить\n" +
+                            "               </a>\n" +
+                            "           </li>\n" +
+                            "           <li>\n" +
+                            "               <a href=\"#\" onclick=\"getPrice('[[pk]]'); return false;\"><i class=\"fa fa-rub\" aria-hidden=\"true\"></i> Прайс</a>\n" +
+                            "           </li>\n" +
+                            "           <li role=\"separator\" class=\"divider\"></li>\n" +
+                            "           <li>\n" +
+                            "               <a href=\"#\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> Удалить</a>\n" +
+                            "           </li>\n" +
+                            "       </ul>\n" +
+                            "   </div>\n" +
+                            "</div>";
+                        $.getJSON( "{% url 'api_service_list' %}{{ crew.slug }}/", function( data ) {
+                            try {
+                                if (data['message'] == '') {
+                                    var html_data = '';
+                                    data = JSON.parse(data['data']);
+                                    $.each(data, function (key, val) {
+                                        html_data += tmpl
+                                            .replace('[[name]]', val['fields']['name'])
+                                            .replace('[[pk]]', val['pk']);
+                                    });
+                                    $('#crew-service-list').html(html_data);
+                                }
+                            }
+                            catch (err) {
+                                console.error(err);
+                            }
+                        });
+                    }
+
+                    function getPrice(service) {
+
+                    }
+
+                    function init() {
+                        loadServiceList();
+                    }
+                </script>
                 <a data-fancybox data-options='{"src": "#hidden-form-serviceedit", "modal": true}' href="javascript:;" class="form-control btn btn-primary">Добавить услугу</a>
 
                 <div class="float-form" style="display: none;" id="hidden-form-serviceedit">
