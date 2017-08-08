@@ -70,15 +70,17 @@
 
                     function getPrice(service) {
                         var tmpl = "" +
-                            "<td>[[start_date]]</td>" +
-                            "<td>[[cost]]</td>" +
-                            "<td>[[prepay]]</td>" +
-                            "<td>[[fine1]]</td>" +
-                            "<td>[[fine2]]</td>" +
-                            "<td>" +
-                            "   <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>" +
-                            "   <i class=\"fa fa-times\" aria-hidden=\"true\"></i>" +
-                            "</td>";
+                            "<tr>" +
+                            "   <td>[[start_date]]</td>" +
+                            "   <td>[[cost]]</td>" +
+                            "   <td>[[prepay]]</td>" +
+                            "   <td>[[fine1]]</td>" +
+                            "   <td>[[fine2]]</td>" +
+                            "   <td>" +
+                            "      <a hred=\"#\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></a>" +
+                            "      <a hred=\"#\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i></a>" +
+                            "   </td>" +
+                            "</tr>";
                         $.getJSON( "{% url 'api_service_price_list' %}" + service + "/", function( data ) {
                             try {
                                 if (data['message'] == '') {
@@ -97,12 +99,12 @@
                                         "<div class=\"col-md-12\">" +
                                         "   <table class=\"data-table\">" +
                                         "      <thead><tr>" +
-                                        "          <td>Дата начала действия</td>" +
-                                        "          <td>Цена</td>" +
-                                        "          <td>Преодплата</td>" +
-                                        "          <td>Штраф за невыполнение заявки в срок</td>" +
-                                        "          <td>Штраф за просроченную заявку</td>" +
-                                        "          <td></td>" +
+                                        "          <td width=\"19%\">Дата начала действия</td>" +
+                                        "          <td width=\"19%\">Цена</td>" +
+                                        "          <td width=\"19%\">Преодплата</td>" +
+                                        "          <td width=\"19%\">Штраф за невыполнение заявки в срок</td>" +
+                                        "          <td width=\"19%\">Штраф за просроченную заявку</td>" +
+                                        "          <td width=\"5%\">&nbsp;&nbsp;&nbsp;</td>" +
                                         "      </tr></thead>" +
                                         "      " + html_data + "" +
                                         "   </table></div>" +
