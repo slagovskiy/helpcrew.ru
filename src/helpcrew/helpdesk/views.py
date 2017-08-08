@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.core import serializers
 
-from .models import Crew, CrewUsers
+from .models import Crew, CrewUsers, CrewService
 from ..userext.models import User
 from .utils import get_crews_list, check_member, check_member_admin
 from ..userext.decoretors import authenticate_check
@@ -126,6 +126,22 @@ def api_service_list(request, crew=None):
     else:
         return JsonResponse({
             'message': u'Команда не найдена',
+            'data': ''
+        })
+
+
+@csrf_exempt
+def api_service_price_list(request, service=None):
+    serv = CrewService.objects.filter(id=service).first()
+    if serv:
+        data = serializers.serialize('json', serv.serviceprice_set.all())
+        return JsonResponse({
+            'message': '',
+            'data': data
+        })
+    else:
+        return JsonResponse({
+            'message': u'Услуга не найдена',
             'data': ''
         })
 

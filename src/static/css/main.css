@@ -393,7 +393,8 @@ a.btn-link {
 }
 
 .float-form {
-    max-width: 550px;
+    max-width: 800px;
+    min-width: 600px;
     border-radius: 4px;
     transform: translateY(-50px);
     transition: all .33s;
@@ -402,6 +403,27 @@ a.btn-link {
 .float-form .col-md-12 {
     padding-bottom: 5px;
     padding-top: 5px;
+}
+
+.data-table {
+    width: 100%;
+    font-size: .8em;
+}
+
+.data-table thead {
+    background: #DEDEDE;
+    font-size: .8em;
+    font-weight: bold;
+}
+
+.data-table td {
+    padding: 3px;
+    width: auto;
+    text-align: center;
+}
+
+.data-table td.data-table-actions {
+    text-wrap: none;
 }
 
 /**********************************************************************************************************************/
