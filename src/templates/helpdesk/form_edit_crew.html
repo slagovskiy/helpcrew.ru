@@ -18,7 +18,7 @@
         </div>
         <div class="col-md-12">
             <input type="text" class="form-control" id="url" name="url" placeholder="Адрес" value="{{ crew.url }}"
-                   data-validation="server" data-validation-url="{% url 'crew_check_url' %}"
+                   data-validation="server" data-validation-url="{% url 'api_crew_check_url' %}"
                    data-validation-optional="true"
                    data-validation-error-msg="Введите адрес команды, используя латинские символы и цифры"
             />

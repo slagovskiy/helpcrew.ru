@@ -3,7 +3,7 @@ import json
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
 from django.core import serializers
 
@@ -134,18 +134,30 @@ def api_service_list(request, crew=None):
 @csrf_exempt
 @authenticate_check
 def api_service_edit(request, service=None):
-    serv = CrewService.objects.filter(id=service)
-    if serv:
-        data = serializers.serialize('json', serv)
-        return JsonResponse({
-            'message': '',
-            'data': json.loads(data)
-        })
-    else:
-        return JsonResponse({
-            'message': u'Услуга не найдена',
-            'data': ''
-        })
+    if request.method == 'GET':
+        serv = CrewService.objects.filter(id=service)
+        if serv:
+            data = serializers.serialize('json', serv)
+            return JsonResponse({
+                'message': '',
+                'data': json.loads(data)
+            })
+        else:
+            return JsonResponse({
+                'message': u'Услуга не найдена',
+                'data': ''
+            })
+    if request.method == 'POST':
+        serv = CrewService.objects.filter(id=service).first()
+        if serv:
+            serv.name = request.POST.get('name', '_')
+            serv.time1 = request.POST.get('time1', '0')
+            serv.time2 = request.POST.get('time2', '0')
+            serv.unit = request.POST.get('unit', '_')
+            serv.save()
+            return HttpResponse('ok')
+        else:
+            return HttpResponse('service not found!')
 
 
 @csrf_exempt
@@ -165,7 +177,7 @@ def api_service_price_list(request, service=None):
 
 
 @csrf_exempt
-def crew_check_url(request):
+def api_crew_check_url(request):
     message = ''
     r = True
     if 'url' in request.POST:
