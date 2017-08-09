@@ -56,6 +56,8 @@
 <script src="{% static 'libs/fancybox/dist/jquery.fancybox.min.js' %}"></script>
 <link rel="stylesheet" href="{% static 'libs/fancybox/dist/jquery.fancybox.min.css' %}" />
 
+<script src="{% static 'libs/jsrender/jsrender.min.js' %}"></script>
+
 <script src="{% static 'js/main.js' %}"></script>
 {% block ext_js %}
 {% endblock %}
@@ -101,6 +103,7 @@
         $.validate({
             modules : 'location, date, security, file'
         });
+        $.views.settings.delimiters('<%', '%>', '*');
         try { init(); }
         catch(err) {}
     });
