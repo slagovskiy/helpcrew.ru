@@ -24,43 +24,139 @@
             <div class="col-md-6">
                 <h2>Услуги</h2>
                 <div id="crew-service-list"></div>
-                <div class="float-form" id="crew-service-price-list"></div>
+                <div class="float-form" style="display: none;" id="hidden-service-price-list"></div>
+                <div class="float-form" style="display: none;" id="hidden-form-serviceedit"></div>
+                <script id="tmpl-crew-service-list" type="text/x-jsrender">
+                <%for data%>
+                    <div class="crew-service-list">
+                        <%:fields.name%>
+                        <div class="btn-group" role="group">
+                            <a href="#" class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-cog color-dg" aria-hidden="true"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <a href="#" onclick="editService('<%:pk%>'); return false;">
+                                        <i class="fa fa-pencil" aria-hidden="true"></i> Изменить
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="getPrice('<%:pk%>'); return false;"><i class="fa fa-rub" aria-hidden="true"></i> Прайс</a>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li>
+                                    <a href="#"><i class="fa fa-times" aria-hidden="true"></i> Удалить</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                <%/for%>
+                </script>
+                <script id="tmpl-crew-service-edit" type="text/x-jsrender">
+                    <%for data%>
+                    <form action="{% url 'crew_edit' %}" method="post" id="form-crew-service-edit" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="col-md-12">
+                            <div class="col-md-12 form-label">
+                                Наименование
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Наименование услуги" value="<%:fields.name onerror=''%>"
+                                       data-validation="length" data-validation-length="2-100"
+                                       data-validation-error-msg="Введите наименование услуги"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-12 form-label">
+                                Время первой реакции на заявку (в часах)
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="time1" name="time1" placeholder="Время первой реакции на заявку" value="<%:fields.time1 onerror=''%>"
+                                       data-validation="number"
+                                       data-validation-error-msg="Введите время в часах"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-12 form-label">
+                                Время на завершение заявки (в часах)
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="time2" name="time2" placeholder="Время на завершение заявки" value="<%:fields.time2 onerror=''%>"
+                                       data-validation="number"
+                                       data-validation-error-msg="Введите время в часах"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-12 form-label">
+                                Время провала заявки (в часах)
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="time3" name="time3" placeholder="Время провала заявки" value="<%:fields.time3 onerror=''%>"
+                                       data-validation="number"
+                                       data-validation-error-msg="Введите время в часах"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-12 form-label">
+                                Единица измерения
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="unit" name="unit" placeholder="Единица измерения" value="<%:fields.unit onerror=''%>"
+                                       data-validation="length" data-validation-length="2-100"
+                                       data-validation-error-msg="Введите единицу измерения"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="сохранить" /></div>
+                            <div class="col-md-6"><button data-fancybox-close class="form-control btn btn-default">отмена</button></div>
+                        </div>
+                    </form>
+                    <%/for%>
+                </script>
+                <script id="tmpl-service-price-list" type="text/x-jsrender">
+                    <div class="col-md-12">
+                        <table class="data-table">
+                            <thead><tr>
+                                <td width="19%">Дата начала действия</td>
+                                <td width="19%">Цена</td>
+                                <td width="19%">Преодплата</td>
+                                <td width="19%">Штраф за невыполнение заявки в срок</td>
+                                <td width="19%">Штраф за просроченную заявку</td>
+                                <td width="5%">&nbsp;</td>
+                            </tr></thead>
+                            <%for data%>
+                            <tr>
+                                <td width="19%"><%:fields.start_date onerror=''%></td>
+                                <td width="19%"><%:fields.cost onerror=''%></td>
+                                <td width="19%"><%:fields.prepay onerror=''%></td>
+                                <td width="19%"><%:fields.fine1 onerror=''%></td>
+                                <td width="19%"><%:fields.fine2 onerror=''%></td>
+                                <td>
+                                    <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="#"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                            <%/for%>
+                        </table>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="добавить" /></div>
+                        <div class="col-md-6"><button data-fancybox-close class="form-control btn btn-default">отмена</button></div>
+                    </div>
+                </script>
                 <script>
                     function loadServiceList() {
-                        var tmpl = "<div class=\"crew-service-list\">\n" +
-                            "   [[name]]\n" +
-                            "   <div class=\"btn-group\" role=\"group\">\n" +
-                            "       <a href=\"#\" class=\"btn btn-link btn-xs dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
-                            "           <i class=\"fa fa-cog color-dg\" aria-hidden=\"true\"></i>\n" +
-                            "       </a>\n" +
-                            "       <ul class=\"dropdown-menu dropdown-menu-right\">\n" +
-                            "           <li>\n" +
-                            "               <a href=\"#\" onclick=\"editService('[[pk]]'); return false;\">\n" +
-                            "                  <i class=\"fa fa-pencil\" aria-hidden=\"true\"></i> Изменить\n" +
-                            "               </a>\n" +
-                            "           </li>\n" +
-                            "           <li>\n" +
-                            "               <a href=\"#\" onclick=\"getPrice('[[pk]]'); return false;\"><i class=\"fa fa-rub\" aria-hidden=\"true\"></i> Прайс</a>\n" +
-                            "           </li>\n" +
-                            "           <li role=\"separator\" class=\"divider\"></li>\n" +
-                            "           <li>\n" +
-                            "               <a href=\"#\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i> Удалить</a>\n" +
-                            "           </li>\n" +
-                            "       </ul>\n" +
-                            "   </div>\n" +
-                            "</div>";
                         $.getJSON( "{% url 'api_service_list' %}{{ crew.slug }}/", function( data ) {
                             try {
                                 if (data['message'] == '') {
-                                    var html_data = '';
-                                    data = JSON.parse(data['data']);
-                                    $.each(data, function (key, val) {
-                                        html_data += tmpl
-                                            .replace('[[name]]', val['fields']['name'])
-                                            .replace('[[pk]]', val['pk']);
-                                        console.log(val['pk']);
-                                    });
-                                    $('#crew-service-list').html(html_data);
+                                    var tmpl = $.templates("#tmpl-crew-service-list");
+                                    var html = tmpl.render(data);
+                                    $('#crew-service-list').html(html);
                                 }
                             }
                             catch (err) {
@@ -70,33 +166,34 @@
                     }
 
                     function editService(service) {
-                        $('#form-serviceedit #name').val("");
-                        $('#form-serviceedit #time1').val("");
-                        $('#form-serviceedit #time2').val("");
-                        $('#form-serviceedit #time3').val("");
-                        $('#form-serviceedit #unit').val("");
                         if (service == '0') {
+                            var tmpl = $.templates("#tmpl-crew-service-edit");
+                            var html = tmpl.render({data: ''});
+                            $('#hidden-form-serviceedit').html(html);
                             $.fancybox.open({
                                 src: '#hidden-form-serviceedit',
                                 type: 'inline',
                                 opts: {modal: true}
                             });
+                            $.validate({
+                                form : '#form-crew-service-edit'
+                            });
                         }
                         $.getJSON( "{% url 'api_service_edit' %}" + service + "/", function( data ) {
                             try {
                                 if (data['message'] == '') {
-                                    var html_data = '';
-                                    data = JSON.parse(data['data'])[0];
-                                    $('#form-serviceedit #name').val(data['fields']['name']);
-                                    $('#form-serviceedit #time1').val(data['fields']['time1']);
-                                    $('#form-serviceedit #time2').val(data['fields']['time2']);
-                                    $('#form-serviceedit #time3').val(data['fields']['time3']);
-                                    $('#form-serviceedit #unit').val(data['fields']['unit']);
+                                    var tmpl = $.templates("#tmpl-crew-service-edit");
+                                    var html = tmpl.render(data);
+                                    $('#hidden-form-serviceedit').html(html);
                                     $.fancybox.open({
                                         src: '#hidden-form-serviceedit',
                                         type: 'inline',
                                         opts: {modal: true}
-                                    });                                }
+                                    });
+                                    $.validate({
+                                        form : '#form-crew-service-edit'
+                                    });
+                                }
                             }
                             catch (err) {
                                 console.error(err);
@@ -105,51 +202,14 @@
                     }
 
                     function getPrice(service) {
-                        var tmpl = "" +
-                            "<tr>" +
-                            "   <td>[[start_date]]</td>" +
-                            "   <td>[[cost]]</td>" +
-                            "   <td>[[prepay]]</td>" +
-                            "   <td>[[fine1]]</td>" +
-                            "   <td>[[fine2]]</td>" +
-                            "   <td>" +
-                            "      <a hred=\"#\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></a>" +
-                            "      <a hred=\"#\"><i class=\"fa fa-times\" aria-hidden=\"true\"></i></a>" +
-                            "   </td>" +
-                            "</tr>";
                         $.getJSON( "{% url 'api_service_price_list' %}" + service + "/", function( data ) {
                             try {
                                 if (data['message'] == '') {
-                                    var html_data = '';
-                                    data = JSON.parse(data['data']);
-                                    $.each(data, function (key, val) {
-                                        html_data += "<tr>" + tmpl
-                                            .replace('[[start_date]]', val['fields']['start_date'])
-                                            .replace('[[cost]]', val['fields']['cost'])
-                                            .replace('[[prepay]]', val['fields']['prepay'])
-                                            .replace('[[fine1]]', val['fields']['fine1'])
-                                            .replace('[[fine2]]', val['fields']['fine2'])
-                                            .replace('[[pk]]', val['pk']) + "</tr>";
-                                    });
-                                    $('#crew-service-price-list').html("" +
-                                        "<div class=\"col-md-12\">" +
-                                        "   <table class=\"data-table\">" +
-                                        "      <thead><tr>" +
-                                        "          <td width=\"19%\">Дата начала действия</td>" +
-                                        "          <td width=\"19%\">Цена</td>" +
-                                        "          <td width=\"19%\">Преодплата</td>" +
-                                        "          <td width=\"19%\">Штраф за невыполнение заявки в срок</td>" +
-                                        "          <td width=\"19%\">Штраф за просроченную заявку</td>" +
-                                        "          <td width=\"5%\">&nbsp;&nbsp;&nbsp;</td>" +
-                                        "      </tr></thead>" +
-                                        "      " + html_data + "" +
-                                        "   </table></div>" +
-                                        "<div class=\"col-md-12\">" +
-                                        "   <div class=\"col-md-6\"><input type=\"submit\" class=\"form-control btn btn-primary\" value=\"добавить\" /></div>\n" +
-                                        "   <div class=\"col-md-6\"><button data-fancybox-close class=\"form-control btn btn-default\">отмена</button></div>\n" +
-                                        "</div>\n");
+                                    var tmpl = $.templates("#tmpl-service-price-list");
+                                    var html = tmpl.render(data);
+                                    $('#hidden-service-price-list').html(html);
                                     $.fancybox.open({
-                                        src: '#crew-service-price-list',
+                                        src: '#hidden-service-price-list',
                                         type: 'inline',
                                         opts: {modal: true}
                                     });
@@ -166,11 +226,6 @@
                     }
                 </script>
                 <a href="#" class="form-control btn btn-primary" onclick="editService('0'); return false;">Добавить услугу</a>
-
-                <div class="float-form" style="display: none;" id="hidden-form-serviceedit">
-                    {% include 'helpdesk/form_edit_service.html' %}
-                </div>
-
 
             </div>
             <div class="col-md-6 crew-edit">
