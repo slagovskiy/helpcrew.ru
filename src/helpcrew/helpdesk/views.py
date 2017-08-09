@@ -1,4 +1,5 @@
 import re
+import json
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -121,12 +122,12 @@ def api_service_list(request, crew=None):
         data = serializers.serialize('json', crew.crewservice_set.filter(deleted=False))
         return JsonResponse({
             'message': '',
-            'data': data
+            'data': json.loads(data)
         })
     else:
         return JsonResponse({
             'message': u'Команда не найдена',
-            'data': ''
+            'model': ''
         })
 
 
@@ -138,7 +139,7 @@ def api_service_edit(request, service=None):
         data = serializers.serialize('json', serv)
         return JsonResponse({
             'message': '',
-            'data': data
+            'data': json.loads(data)
         })
     else:
         return JsonResponse({
@@ -154,7 +155,7 @@ def api_service_price_list(request, service=None):
         data = serializers.serialize('json', serv.serviceprice_set.all())
         return JsonResponse({
             'message': '',
-            'data': data
+            'data': json.loads(data)
         })
     else:
         return JsonResponse({
