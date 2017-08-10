@@ -119,7 +119,7 @@ def crew_view(request, url=None):
 def api_service_list(request, crew=None):
     crew = Crew.objects.filter(slug=crew).first()
     if crew:
-        data = serializers.serialize('json', crew.crewservice_set.filter(deleted=False))
+        data = serializers.serialize('json', crew.crewservice_set.all().order_by('deleted', 'name'))
         return JsonResponse({
             'message': '',
             'data': json.loads(data)
@@ -132,12 +132,16 @@ def api_service_list(request, crew=None):
 
 
 @csrf_exempt
-@authenticate_check
 def api_service_edit(request, service=None):
     if request.method == 'GET':
-        serv = CrewService.objects.filter(id=service)
+        serv = CrewService.objects.filter(id=service).first()
+        if not check_member_admin(request.user, serv.crew):
+            return JsonResponse({
+                'message': u'access denied!',
+                'data': ''
+            })
         if serv:
-            data = serializers.serialize('json', serv)
+            data = serializers.serialize('json', [serv,])
             return JsonResponse({
                 'message': '',
                 'data': json.loads(data)
@@ -148,27 +152,68 @@ def api_service_edit(request, service=None):
                 'data': ''
             })
     if request.method == 'POST':
+        if service == '0':
+            crew = Crew.objects.filter(id=request.POST.get('crew', '0')).first()
+            if crew:
+                if check_member_admin(request.user, crew):
+                    serv = CrewService.objects.create(
+                        crew=crew,
+                        name=request.POST.get('name', '_'),
+                        time1=request.POST.get('time1', '0'),
+                        time2=request.POST.get('time2', '0'),
+                        unit=request.POST.get('unit', '_')
+                    )
+                    serv.save()
+                    return HttpResponse('ok')
+                else:
+                    return HttpResponse('access denied!')
+            else:
+                return HttpResponse('crew not found!')
         serv = CrewService.objects.filter(id=service).first()
+        if check_member_admin(request.user, serv.crew):
+            if serv:
+                serv.name = request.POST.get('name', '_')
+                serv.time1 = request.POST.get('time1', '0')
+                serv.time2 = request.POST.get('time2', '0')
+                serv.unit = request.POST.get('unit', '_')
+                serv.save()
+                return HttpResponse('ok')
+            else:
+                return HttpResponse('service not found!')
+        else:
+            return HttpResponse('access denied!')
+
+
+@csrf_exempt
+def api_service_delete(request, service=None):
+    serv = CrewService.objects.filter(id=service).first()
+    if check_member_admin(request.user, serv.crew):
         if serv:
-            serv.name = request.POST.get('name', '_')
-            serv.time1 = request.POST.get('time1', '0')
-            serv.time2 = request.POST.get('time2', '0')
-            serv.unit = request.POST.get('unit', '_')
+            serv.deleted = not serv.deleted
             serv.save()
             return HttpResponse('ok')
         else:
             return HttpResponse('service not found!')
+    else:
+        return HttpResponse('access denied!')
 
 
 @csrf_exempt
 def api_service_price_list(request, service=None):
     serv = CrewService.objects.filter(id=service).first()
     if serv:
-        data = serializers.serialize('json', serv.serviceprice_set.all())
-        return JsonResponse({
-            'message': '',
-            'data': json.loads(data)
-        })
+        if check_member_admin(request.user, serv.crew):
+            data = serializers.serialize('json', serv.serviceprice_set.all())
+            return JsonResponse({
+                'message': '',
+                'data': json.loads(data)
+            })
+        else:
+            return JsonResponse({
+                'message': u'access denied!',
+                'data': ''
+            })
+
     else:
         return JsonResponse({
             'message': u'Услуга не найдена',

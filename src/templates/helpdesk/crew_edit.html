@@ -29,7 +29,7 @@
                 <script id="tmpl-crew-service-list" type="text/x-jsrender">
                 <%for data%>
                     <div class="crew-service-list">
-                        <%:fields.name%>
+                        <%if fields.deleted%><strike><%/if%><%:fields.name%><%if fields.deleted%></strike><%/if%>
                         <div class="btn-group" role="group">
                             <a href="#" class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-cog color-dg" aria-hidden="true"></i>
@@ -45,7 +45,7 @@
                                 </li>
                                 <li role="separator" class="divider"></li>
                                 <li>
-                                    <a href="#"><i class="fa fa-times" aria-hidden="true"></i> Удалить</a>
+                                    <a href="#" onclick="deleteService('<%:pk%>'); return false;"><i class="fa fa-times" aria-hidden="true"></i> <%if fields.deleted%>Восстановить<%else%>Удалить<%/if%></a>
                                 </li>
                             </ul>
                         </div>
@@ -56,6 +56,7 @@
                     <%for data%>
                     <form action="{% url 'api_service_edit' %}" method="post" id="form-crew-service-edit" enctype="multipart/form-data">
                         {% csrf_token %}
+                        <input type="hidden" name="crew" value="{{ crew.id }}" />
                         <div class="col-md-12">
                             <div class="col-md-12 form-label">
                                 Наименование
@@ -193,6 +194,8 @@
                                     $.validate({
                                         form : '#form-crew-service-edit'
                                     });
+                                } else {
+                                    $.notify(data['message'], 'error');
                                 }
                             }
                             catch (err) {
@@ -201,7 +204,26 @@
                         });
                     }
 
+                    function deleteService(service) {
+                        $.ajax({
+                            type: 'GET',
+                            url: '{% url 'api_service_delete' %}' + service + '/'
+                        })
+                            .done(function(data){
+                                if (data=='ok') {
+                                    $.notify('Сохранено', 'success');
+                                    loadServiceList();
+                                } else {
+                                    $.notify(data, 'warn');
+                                }
+                            })
+                            .fail(function(){
+                                $.notify('Ошибка передачи данных');
+                            });
+                    }
+
                     function saveService(service) {
+                        if (service == '') service = '0';
                         $.ajax({
                             type: 'POST',
                             url: $('#form-crew-service-edit').attr('action') + service + '/',
@@ -211,9 +233,10 @@
                                 if(data=='ok') {
                                     $.fancybox.close();
                                     $.notify('Сохранено', 'success');
+                                    loadServiceList();
                                 }
                                 else {
-                                    $.notify(data, "warn");
+                                    $.notify(data, 'warn');
                                 }
                             })
                             .fail(function(){

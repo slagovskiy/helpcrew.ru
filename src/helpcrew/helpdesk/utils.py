@@ -35,6 +35,8 @@ def check_member(user=None, crew=None):
 
 
 def check_member_admin(user=None, crew=None):
+    if user.is_anonymous:
+        return False
     cu = CrewUsers.objects.filter(crew=crew, user=user)
     if cu:
         cu = cu[0]
