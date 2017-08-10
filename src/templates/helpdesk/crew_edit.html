@@ -16,17 +16,82 @@
             <div class="col-md-12">
                 <h2>Команда &laquo{{ crew.name }}&raquo;</h2>
             </div>
-            {% if is_admin %}
-            <div class="col-md-6">
-                <h2>Свойства команды</h2>
-                {% include 'helpdesk/form_edit_crew.html' %}
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#tab_personal" aria-controls="tab_personal" role="tab" data-toggle="tab">Персональные настройки</a></li>
+                <li role="presentation"><a href="#tab_crew" aria-controls="tab_crew" role="tab" data-toggle="tab">Свойства команды</a></li>
+                <li role="presentation"><a href="#tab_service" aria-controls="tab_service" role="tab" data-toggle="tab">Услуги</a></li>
+                <li role="presentation"><a href="#tab_users" aria-controls="tab_users" role="tab" data-toggle="tab">Члены команды</a></li>
+            </ul>
+            <div class="tab-content">
+                {% if is_admin %}
+                <div role="tabpanel" class="tab-pane" id="tab_crew">
+                    <div class="col-md-6">
+                        {% include 'helpdesk/form_edit_crew.html' %}
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="tab_service">
+                    <div id="crew-service-list"></div>
+                    <div class="float-form" style="display: none;" id="hidden-service-price-list"></div>
+                    <div class="float-form" style="display: none;" id="hidden-crew-service-edit"></div>
+                    <div class="col-md-6">
+                        <a href="#" class="form-control btn btn-primary" onclick="editService('0'); return false;">Добавить услугу</a>
+                    </div>
+
+                </div>
+                <div role="tabpanel" class="tab-pane" id="tab_users">
+                    {% for cu in crew.crewusers_set.all %}
+                    <div class="crew-user-list">
+                        {% ifequal cu.type 0 %}<i class="fa fa-user color-b" aria-hidden="true" title="Администратор"></i> {% endifequal %}
+                        {% ifequal cu.type 1 %}<i class="fa fa-user color-o" aria-hidden="true" title="Диспетчер"></i> {% endifequal %}
+                        {% ifequal cu.type 2 %}<i class="fa fa-user color-y" aria-hidden="true" title="Оператор"></i> {% endifequal %}
+                        {{ cu.user.name }}
+                        <div class="btn-group" role="group">
+                            <a href="#" class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-cog color-dg" aria-hidden="true"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="{% url 'crew_edit_user_edit' crew.url cu.user.email 'a' %}">
+                                    {% ifequal cu.type 0 %}
+                                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                    {% else %}
+                                        <i class="fa fa-square-o" aria-hidden="true"></i>
+                                    {% endifequal %}
+                                    Администратор</a></li>
+                                <li><a href="{% url 'crew_edit_user_edit' crew.url cu.user.email 'd' %}">
+                                    {% ifequal cu.type 1 %}
+                                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                    {% else %}
+                                        <i class="fa fa-square-o" aria-hidden="true"></i>
+                                    {% endifequal %}
+                                    Диспетчер</a></li>
+                                <li><a href="{% url 'crew_edit_user_edit' crew.url cu.user.email 'o' %}">
+                                    {% ifequal cu.type 2 %}
+                                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                    {% else %}
+                                        <i class="fa fa-square-o" aria-hidden="true"></i>
+                                    {% endifequal %}
+                                    Оператор</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#"><i class="fa fa-times" aria-hidden="true"></i> Удалить</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="col-md-6">
+                        <input type="submit" class="form-control btn btn-primary" value="пригласить нового участника" />
+                    </div>
+                </div>
+                {% endif %}
+                <div role="tabpanel" class="tab-pane active" id="tab_personal">
+                    <form action="{% url 'crew_edit' %}" method="post" id="form-crewedit" enctype="multipart/form-data">
+                    </form>
+                </div>
             </div>
-            <div class="col-md-6">
-                <h2>Услуги</h2>
-                <div id="crew-service-list"></div>
-                <div class="float-form" style="display: none;" id="hidden-service-price-list"></div>
-                <div class="float-form" style="display: none;" id="hidden-crew-service-edit"></div>
-                <script id="tmpl-crew-service-list" type="text/x-jsrender">
+        {% endif %}
+
+
+        {% if is_admin %}
+            <script id="tmpl-crew-service-list" type="text/x-jsrender">
                 <%for data%>
                     <div class="crew-service-list">
                         <%if fields.deleted%><strike><%/if%><%:fields.name%><%if fields.deleted%></strike><%/if%>
@@ -52,7 +117,7 @@
                     </div>
                 <%/for%>
                 </script>
-                <script id="tmpl-crew-service-edit" type="text/x-jsrender">
+            <script id="tmpl-crew-service-edit" type="text/x-jsrender">
                     <%for data%>
                     <form action="{% url 'api_service_edit' %}" method="post" id="form-crew-service-edit" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -119,7 +184,7 @@
                     </form>
                     <%/for%>
                 </script>
-                <script id="tmpl-service-price-list" type="text/x-jsrender">
+            <script id="tmpl-service-price-list" type="text/x-jsrender">
                     <div class="col-md-12">
                         <table class="data-table">
                             <thead><tr>
@@ -150,177 +215,124 @@
                         <div class="col-md-6"><button data-fancybox-close class="form-control btn btn-default">отмена</button></div>
                     </div>
                 </script>
-                <script>
-                    function loadServiceList() {
-                        $.getJSON( "{% url 'api_service_list' %}{{ crew.slug }}/", function( data ) {
-                            try {
-                                if (data['message'] == '') {
-                                    var tmpl = $.templates("#tmpl-crew-service-list");
-                                    var html = tmpl.render(data);
-                                    $('#crew-service-list').html(html);
-                                }
+            <script>
+                function loadServiceList() {
+                    $.getJSON( "{% url 'api_service_list' %}{{ crew.slug }}/", function( data ) {
+                        try {
+                            if (data['message'] == '') {
+                                var tmpl = $.templates("#tmpl-crew-service-list");
+                                var html = tmpl.render(data);
+                                $('#crew-service-list').html(html);
                             }
-                            catch (err) {
-                                console.error(err);
-                            }
-                        });
-                    }
-
-                    function editService(service) {
-                        if (service == '0') {
-                            var tmpl = $.templates("#tmpl-crew-service-edit");
-                            var html = tmpl.render({data: ''});
-                            $('#hidden-crew-service-edit').html(html);
-                            $.fancybox.open({
-                                src: '#hidden-crew-service-edit',
-                                type: 'inline',
-                                opts: {modal: true}
-                            });
-                            $.validate({
-                                form : '#form-crew-service-edit'
-                            });
                         }
-                        $.getJSON( "{% url 'api_service_edit' %}" + service + "/", function( data ) {
-                            try {
-                                if (data['message'] == '') {
-                                    var tmpl = $.templates("#tmpl-crew-service-edit");
-                                    var html = tmpl.render(data);
-                                    $('#hidden-crew-service-edit').html(html);
-                                    $.fancybox.open({
-                                        src: '#hidden-crew-service-edit',
-                                        type: 'inline',
-                                        opts: {modal: true}
-                                    });
-                                    $.validate({
-                                        form : '#form-crew-service-edit'
-                                    });
-                                } else {
-                                    $.notify(data['message'], 'error');
-                                }
-                            }
-                            catch (err) {
-                                console.error(err);
-                            }
+                        catch (err) {
+                            console.error(err);
+                        }
+                    });
+                }
+
+                function editService(service) {
+                    if (service == '0') {
+                        var tmpl = $.templates("#tmpl-crew-service-edit");
+                        var html = tmpl.render({data: ''});
+                        $('#hidden-crew-service-edit').html(html);
+                        $.fancybox.open({
+                            src: '#hidden-crew-service-edit',
+                            type: 'inline',
+                            opts: {modal: true}
+                        });
+                        $.validate({
+                            form : '#form-crew-service-edit'
                         });
                     }
-
-                    function deleteService(service) {
-                        $.ajax({
-                            type: 'GET',
-                            url: '{% url 'api_service_delete' %}' + service + '/'
-                        })
-                            .done(function(data){
-                                if (data=='ok') {
-                                    $.notify('Сохранено', 'success');
-                                    loadServiceList();
-                                } else {
-                                    $.notify(data, 'warn');
-                                }
-                            })
-                            .fail(function(){
-                                $.notify('Ошибка передачи данных');
-                            });
-                    }
-
-                    function saveService(service) {
-                        if (service == '') service = '0';
-                        $.ajax({
-                            type: 'POST',
-                            url: $('#form-crew-service-edit').attr('action') + service + '/',
-                            data: $('#form-crew-service-edit').serialize()
-                        })
-                            .done(function(data){
-                                if(data=='ok') {
-                                    $.fancybox.close();
-                                    $.notify('Сохранено', 'success');
-                                    loadServiceList();
-                                }
-                                else {
-                                    $.notify(data, 'warn');
-                                }
-                            })
-                            .fail(function(){
-                                $.notify('Ошибка передачи данных', 'error');
-                            });
-
-                    }
-
-                    function getPrice(service) {
-                        $.getJSON( "{% url 'api_service_price_list' %}" + service + "/", function( data ) {
-                            try {
-                                if (data['message'] == '') {
-                                    var tmpl = $.templates("#tmpl-service-price-list");
-                                    var html = tmpl.render(data);
-                                    $('#hidden-service-price-list').html(html);
-                                    $.fancybox.open({
-                                        src: '#hidden-service-price-list',
-                                        type: 'inline',
-                                        opts: {modal: true}
-                                    });
-                                }
+                    $.getJSON( "{% url 'api_service_edit' %}" + service + "/", function( data ) {
+                        try {
+                            if (data['message'] == '') {
+                                var tmpl = $.templates("#tmpl-crew-service-edit");
+                                var html = tmpl.render(data);
+                                $('#hidden-crew-service-edit').html(html);
+                                $.fancybox.open({
+                                    src: '#hidden-crew-service-edit',
+                                    type: 'inline',
+                                    opts: {modal: true}
+                                });
+                                $.validate({
+                                    form : '#form-crew-service-edit'
+                                });
+                            } else {
+                                $.notify(data['message'], 'error');
                             }
-                            catch (err) {
-                                console.error(err);
+                        }
+                        catch (err) {
+                            console.error(err);
+                        }
+                    });
+                }
+
+                function deleteService(service) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '{% url 'api_service_delete' %}' + service + '/'
+                    })
+                        .done(function(data){
+                            if (data=='ok') {
+                                $.notify('Сохранено', 'success');
+                                loadServiceList();
+                            } else {
+                                $.notify(data, 'warn');
                             }
+                        })
+                        .fail(function(){
+                            $.notify('Ошибка передачи данных');
                         });
-                    }
+                }
 
-                    function init() {
-                        loadServiceList();
-                    }
-                </script>
-                <a href="#" class="form-control btn btn-primary" onclick="editService('0'); return false;">Добавить услугу</a>
+                function saveService(service) {
+                    if (service == '') service = '0';
+                    $.ajax({
+                        type: 'POST',
+                        url: $('#form-crew-service-edit').attr('action') + service + '/',
+                        data: $('#form-crew-service-edit').serialize()
+                    })
+                        .done(function(data){
+                            if(data=='ok') {
+                                $.fancybox.close();
+                                $.notify('Сохранено', 'success');
+                                loadServiceList();
+                            }
+                            else {
+                                $.notify(data, 'warn');
+                            }
+                        })
+                        .fail(function(){
+                            $.notify('Ошибка передачи данных', 'error');
+                        });
 
-            </div>
-            <div class="col-md-6 crew-edit">
-                <h2>Члены команды</h2>
-                {% for cu in crew.crewusers_set.all %}
-                <div class="crew-user-list">
-                    {% ifequal cu.type 0 %}<i class="fa fa-user color-b" aria-hidden="true" title="Администратор"></i> {% endifequal %}
-                    {% ifequal cu.type 1 %}<i class="fa fa-user color-o" aria-hidden="true" title="Диспетчер"></i> {% endifequal %}
-                    {% ifequal cu.type 2 %}<i class="fa fa-user color-y" aria-hidden="true" title="Оператор"></i> {% endifequal %}
-                    {{ cu.user.name }}
-                    <div class="btn-group" role="group">
-                        <a href="#" class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-cog color-dg" aria-hidden="true"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li><a href="{% url 'crew_edit_user_edit' crew.url cu.user.email 'a' %}">
-                                {% ifequal cu.type 0 %}
-                                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                {% else %}
-                                    <i class="fa fa-square-o" aria-hidden="true"></i>
-                                {% endifequal %}
-                                Администратор</a></li>
-                            <li><a href="{% url 'crew_edit_user_edit' crew.url cu.user.email 'd' %}">
-                                {% ifequal cu.type 1 %}
-                                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                {% else %}
-                                    <i class="fa fa-square-o" aria-hidden="true"></i>
-                                {% endifequal %}
-                                Диспетчер</a></li>
-                            <li><a href="{% url 'crew_edit_user_edit' crew.url cu.user.email 'o' %}">
-                                {% ifequal cu.type 2 %}
-                                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                {% else %}
-                                    <i class="fa fa-square-o" aria-hidden="true"></i>
-                                {% endifequal %}
-                                Оператор</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="#"><i class="fa fa-times" aria-hidden="true"></i> Удалить</a></li>
-                        </ul>
-                    </div>
-                </div>
-                {% endfor %}
-                <div class="col-md-12">
-                    <input type="submit" class="form-control btn btn-primary" value="пригласить нового участника" />
-                </div>
-            </div>
-            {% endif %}
-            <div class="col-md-6">
-                <h2>Персональные настройки</h2>
-                <form action="{% url 'crew_edit' %}" method="post" id="form-crewedit" enctype="multipart/form-data">
-                </form>
-            </div>
+                }
+
+                function getPrice(service) {
+                    $.getJSON( "{% url 'api_service_price_list' %}" + service + "/", function( data ) {
+                        try {
+                            if (data['message'] == '') {
+                                var tmpl = $.templates("#tmpl-service-price-list");
+                                var html = tmpl.render(data);
+                                $('#hidden-service-price-list').html(html);
+                                $.fancybox.open({
+                                    src: '#hidden-service-price-list',
+                                    type: 'inline',
+                                    opts: {modal: true}
+                                });
+                            }
+                        }
+                        catch (err) {
+                            console.error(err);
+                        }
+                    });
+                }
+
+                function init() {
+                    loadServiceList();
+                }
+            </script>
         {% endif %}
 {% endblock %}
