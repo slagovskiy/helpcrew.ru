@@ -33,6 +33,7 @@
                     <div id="crew-service-list"></div>
                     <div class="float-form" style="display: none;" id="hidden-service-price-list"></div>
                     <div class="float-form" style="display: none;" id="hidden-crew-service-edit"></div>
+                    <div class="float-form" style="display: none;" id="hidden-service-price-edit"></div>
                     <div class="col-md-6">
                         <a href="#" class="form-control btn btn-primary" onclick="editService('0'); return false;">Добавить услугу</a>
                     </div>
@@ -91,7 +92,7 @@
 
 
         {% if is_admin %}
-            <script id="tmpl-crew-service-list" type="text/x-jsrender">
+                <script id="tmpl-crew-service-list" type="text/x-jsrender">
                 <%for data%>
                     <div class="crew-service-list">
                         <%if fields.deleted%><strike><%/if%><%:fields.name%><%if fields.deleted%></strike><%/if%>
@@ -117,7 +118,7 @@
                     </div>
                 <%/for%>
                 </script>
-            <script id="tmpl-crew-service-edit" type="text/x-jsrender">
+                <script id="tmpl-crew-service-edit" type="text/x-jsrender">
                     <%for data%>
                     <form action="{% url 'api_service_edit' %}" method="post" id="form-crew-service-edit" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -184,7 +185,7 @@
                     </form>
                     <%/for%>
                 </script>
-            <script id="tmpl-service-price-list" type="text/x-jsrender">
+                <script id="tmpl-service-price-list" type="text/x-jsrender">
                     <div class="col-md-12">
                         <table class="data-table">
                             <thead><tr>
@@ -203,17 +204,85 @@
                                 <td width="19%"><%:fields.fine1 onerror=''%></td>
                                 <td width="19%"><%:fields.fine2 onerror=''%></td>
                                 <td>
-                                    <a href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                    <a href="#"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                    <a href="#" onclick="editPrice(<%:pk%>); return false;"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="#" onclick="deletePrice(<%:pk%>); return false;"><i class="fa fa-times" aria-hidden="true"></i></a>
                                 </td>
                             </tr>
                             <%/for%>
                         </table>
                     </div>
                     <div class="col-md-12">
-                        <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="добавить" /></div>
+                        <input type="hidden" name="service-id" value="<%:service onerror=''%>" />
+                        <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="добавить" onclick="editPrice('0');return false;" /></div>
                         <div class="col-md-6"><button data-fancybox-close class="form-control btn btn-default">отмена</button></div>
                     </div>
+                </script>
+                <script id="tmpl-service-price-edit" type="text/x-jsrender">
+                    <%for data%>
+                    <form action="{% url 'api_service_price_edit' %}" method="post" id="form-service-price-edit" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="service" value="<%:fields.service onerror='0'%><%:service onerror=''%>" />
+                        <div class="col-md-12">
+                            <div class="col-md-12 form-label">
+                                Дата начала действия цены
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="start_date" name="start_date" placeholder="YYYY-MM-DD" value="<%:fields.start_date onerror=''%>"
+                                       data-validation="date" data-validation-require-leading-zero="true" data-validation-format="yyyy-mm-dd"
+                                       data-validation-error-msg="Введите дату начала действия цены"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-12 form-label">
+                                Цена
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="cost" name="cost" placeholder="000.00" value="<%:fields.cost onerror='0'%>"
+                                       data-validation="number" data-validation-allowing="float" data-validation-decimal-separator="."
+                                       data-validation-error-msg="Введите верную цену в фомате 000.00"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-12 form-label">
+                                Предоплата
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="prepay" name="prepay" placeholder="000.0" value="<%:fields.prepay onerror='0'%>"
+                                       data-validation="number" data-validation-allowing="float" data-validation-decimal-separator="."
+                                       data-validation-error-msg="Введите верную цену в фомате 000.00"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-12 form-label">
+                                Штраф за невыполнение заявки в срок
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="fine1" name="fine1" placeholder="0.15" value="<%:fields.fine1 onerror='0.15'%>"
+                                       data-validation="number" data-validation-allowing="float" data-validation-decimal-separator="."
+                                       data-validation-error-msg="Введите верное число в фомате 000.00"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-12 form-label">
+                                Штраф за просроченную заявку
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" id="fine2" name="fine2" placeholder="0.5" value="<%:fields.fine2 onerror='0.50'%>"
+                                       data-validation="number" data-validation-allowing="float" data-validation-decimal-separator="."
+                                       data-validation-error-msg="Введите верное число в фомате 000.00"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="сохранить" onclick="savePrice('<%:pk onerror='0'%>');return false;" /></div>
+                            <div class="col-md-6"><button data-fancybox-close class="form-control btn btn-default">отмена</button></div>
+                        </div>
+                    </form>
+                    <%/for%>
                 </script>
             <script>
                 function loadServiceList() {
@@ -244,29 +313,30 @@
                         $.validate({
                             form : '#form-crew-service-edit'
                         });
-                    }
-                    $.getJSON( "{% url 'api_service_edit' %}" + service + "/", function( data ) {
-                        try {
-                            if (data['message'] == '') {
-                                var tmpl = $.templates("#tmpl-crew-service-edit");
-                                var html = tmpl.render(data);
-                                $('#hidden-crew-service-edit').html(html);
-                                $.fancybox.open({
-                                    src: '#hidden-crew-service-edit',
-                                    type: 'inline',
-                                    opts: {modal: true}
-                                });
-                                $.validate({
-                                    form : '#form-crew-service-edit'
-                                });
-                            } else {
-                                $.notify(data['message'], 'error');
+                    } else {
+                        $.getJSON( "{% url 'api_service_edit' %}" + service + "/", function( data ) {
+                            try {
+                                if (data['message'] == '') {
+                                    var tmpl = $.templates("#tmpl-crew-service-edit");
+                                    var html = tmpl.render(data);
+                                    $('#hidden-crew-service-edit').html(html);
+                                    $.fancybox.open({
+                                        src: '#hidden-crew-service-edit',
+                                        type: 'inline',
+                                        opts: {modal: true}
+                                    });
+                                    $.validate({
+                                        form : '#form-crew-service-edit'
+                                    });
+                                } else {
+                                    $.notify(data['message'], 'error');
+                                }
                             }
-                        }
-                        catch (err) {
-                            console.error(err);
-                        }
-                    });
+                            catch (err) {
+                                console.error(err);
+                            }
+                        });
+                    }
                 }
 
                 function deleteService(service) {
@@ -329,6 +399,83 @@
                         }
                     });
                 }
+
+                function newPrice(service) {
+                    var tmpl = $.templates("#tmpl-service-price-edit");
+                    var html = tmpl.render({'data': [{'service': service}]});
+                    $('#hidden-service-price-edit').html(html);
+                    $.fancybox.open({
+                        src: '#hidden-service-price-edit',
+                        type: 'inline',
+                        opts: {modal: true}
+                    });
+                    $.validate({
+                        form : '#form-service-price-edit'
+                    });
+                }
+
+                function editPrice(price) {
+                    if (price == '0') {
+                        var tmpl = $.templates("#tmpl-service-price-edit");
+                        var html = tmpl.render({data: ''});
+                        $('#hidden-service-price-edit').html(html);
+                        $.fancybox.open({
+                            src: '#hidden-service-price-edit',
+                            type: 'inline',
+                            opts: {modal: true}
+                        });
+                        $.validate({
+                            form : '#form-service-price-edit'
+                        });
+                    } else {
+                        $.getJSON( "{% url 'api_service_price_edit' %}" + price + "/", function( data ) {
+                            try {
+                                if (data['message'] == '') {
+                                    var tmpl = $.templates("#tmpl-service-price-edit");
+                                    var html = tmpl.render(data);
+                                    $('#hidden-service-price-edit').html(html);
+                                    $.fancybox.open({
+                                        src: '#hidden-service-price-edit',
+                                        type: 'inline',
+                                        opts: {modal: true}
+                                    });
+                                    $.validate({
+                                        form : '#form-service-price-edit'
+                                    });
+                                } else {
+                                    $.notify(data['message'], 'error');
+                                }
+                            }
+                            catch (err) {
+                                console.error(err);
+                            }
+                        });
+                    }
+                }
+
+                function savePrice(price) {
+                    if (price == '') price = '0';
+                    $.ajax({
+                        type: 'POST',
+                        url: $('#form-service-price-edit').attr('action') + price + '/',
+                        data: $('#form-service-price-edit').serialize()
+                    })
+                        .done(function(data){
+                            if(data=='ok') {
+                                $.fancybox.close();
+                                $.notify('Сохранено', 'success');
+                                getPrice($('#form-service-price-edit input[name="service"]').val());
+                            }
+                            else {
+                                $.notify(data, 'warn');
+                            }
+                        })
+                        .fail(function(){
+                            $.notify('Ошибка передачи данных', 'error');
+                        });
+
+                }
+
 
                 function init() {
                     loadServiceList();

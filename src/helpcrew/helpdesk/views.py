@@ -7,7 +7,7 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
 from django.core import serializers
 
-from .models import Crew, CrewUsers, CrewService
+from .models import Crew, CrewUsers, CrewService, ServicePrice
 from ..userext.models import User
 from .utils import get_crews_list, check_member, check_member_admin
 from ..userext.decoretors import authenticate_check
@@ -219,6 +219,61 @@ def api_service_price_list(request, service=None):
             'message': u'Услуга не найдена',
             'data': ''
         })
+
+
+@csrf_exempt
+def api_service_price_edit(request, price=None):
+    if request.method == 'GET':
+        price = ServicePrice.objects.filter(id=price).first()
+        if not check_member_admin(request.user, price.service.crew):
+            return JsonResponse({
+                'message': u'access denied!',
+                'data': ''
+            })
+        if price:
+            data = serializers.serialize('json', [price,])
+            return JsonResponse({
+                'message': '',
+                'data': json.loads(data)
+            })
+        else:
+            return JsonResponse({
+                'message': u'Прайс не найдена',
+                'data': ''
+            })
+    if request.method == 'POST':
+        if price == '0':
+            service = CrewService.objects.filter(id=request.POST.get('service', '0')).first()
+            if service:
+                if check_member_admin(request.user, service.crew):
+                    price = ServicePrice.objects.create(
+                        service=service,
+                        start_date=request.POST.get('start_date', '_'),
+                        cost=request.POST.get('cost', '0'),
+                        prepay=request.POST.get('prepay', '0'),
+                        fine1=request.POST.get('fine1', '_'),
+                        fine2=request.POST.get('fine2', '_')
+                    )
+                    price.save()
+                    return HttpResponse('ok')
+                else:
+                    return HttpResponse('access denied!')
+            else:
+                return HttpResponse('service not found!')
+        price = ServicePrice.objects.filter(id=price).first()
+        if check_member_admin(request.user, price.service.crew):
+            if price:
+                price.start_date = request.POST.get('start_date', '_')
+                price.cost = request.POST.get('cost', '0')
+                price.prepay = request.POST.get('prepay', '0')
+                price.fine1 = request.POST.get('fine1', '_')
+                price.fine2 = request.POST.get('fine2', '_')
+                price.save()
+                return HttpResponse('ok')
+            else:
+                return HttpResponse('price not found!')
+        else:
+            return HttpResponse('access denied!')
 
 
 @csrf_exempt

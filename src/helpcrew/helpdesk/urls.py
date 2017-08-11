@@ -2,6 +2,7 @@ from django.conf.urls import url
 
 from .views import crew_edit, crew_edit_user_edit, api_crew_check_url, crew_view
 from .views import api_service_list, api_service_price_list, api_service_edit, api_service_delete
+from .views import api_service_price_edit
 
 urlpatterns = [
     url(r'^view/(?P<url>[-\w]+)/$', crew_view, name='crew_view'),
@@ -12,12 +13,13 @@ urlpatterns = [
 
     url(r'^api/service/list/$', api_service_list, name='api_service_list'),
     url(r'^api/service/list/(?P<crew>[-\w]+)/$', api_service_list, name='api_service_list'),
-
     url(r'^api/service/edit/$', api_service_edit, name='api_service_edit'),
     url(r'^api/service/edit/(?P<service>[-\w]+)/$', api_service_edit, name='api_service_edit'),
     url(r'^api/service/delete/$', api_service_delete, name='api_service_delete'),
     url(r'^api/service/delete/(?P<service>[-\w]+)/?$', api_service_delete, name='api_service_delete'),
 
+    url(r'^api/service/price/edit/$', api_service_price_edit, name='api_service_price_edit'),
+    url(r'^api/service/price/edit/(?P<price>[-\w]+)/$', api_service_price_edit, name='api_service_price_edit'),
     url(r'^api/service/price/list/$', api_service_price_list, name='api_service_price_list'),
     url(r'^api/service/price/list/(?P<service>[-\w]+)/$', api_service_price_list, name='api_service_price_list'),
 
