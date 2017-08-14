@@ -206,6 +206,7 @@ def api_service_price_list(request, service=None):
             data = serializers.serialize('json', serv.serviceprice_set.all())
             return JsonResponse({
                 'message': '',
+                'service': serv.id,
                 'data': json.loads(data)
             })
         else:

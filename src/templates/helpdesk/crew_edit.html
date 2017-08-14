@@ -212,7 +212,7 @@
                         </table>
                     </div>
                     <div class="col-md-12">
-                        <input type="hidden" name="service-id" value="<%:service onerror=''%>" />
+                        <input type="hidden" name="service-id" id="service-id" value="<%:service oneroor='0'%>" />
                         <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="добавить" onclick="editPrice('0');return false;" /></div>
                         <div class="col-md-6"><button data-fancybox-close class="form-control btn btn-default">отмена</button></div>
                     </div>
@@ -221,7 +221,7 @@
                     <%for data%>
                     <form action="{% url 'api_service_price_edit' %}" method="post" id="form-service-price-edit" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <input type="hidden" name="service" value="<%:fields.service onerror='0'%><%:service onerror=''%>" />
+                        <input type="hidden" name="service" value="<%:fields.service onerror='0'%>" />
                         <div class="col-md-12">
                             <div class="col-md-12 form-label">
                                 Дата начала действия цены
@@ -400,25 +400,12 @@
                     });
                 }
 
-                function newPrice(service) {
-                    var tmpl = $.templates("#tmpl-service-price-edit");
-                    var html = tmpl.render({'data': [{'service': service}]});
-                    $('#hidden-service-price-edit').html(html);
-                    $.fancybox.open({
-                        src: '#hidden-service-price-edit',
-                        type: 'inline',
-                        opts: {modal: true}
-                    });
-                    $.validate({
-                        form : '#form-service-price-edit'
-                    });
-                }
-
                 function editPrice(price) {
                     if (price == '0') {
                         var tmpl = $.templates("#tmpl-service-price-edit");
                         var html = tmpl.render({data: ''});
                         $('#hidden-service-price-edit').html(html);
+                        $('#form-service-price-edit input[name="service"]').val($('#service-id').val());
                         $.fancybox.open({
                             src: '#hidden-service-price-edit',
                             type: 'inline',
@@ -462,6 +449,7 @@
                     })
                         .done(function(data){
                             if(data=='ok') {
+                                $.fancybox.close();
                                 $.fancybox.close();
                                 $.notify('Сохранено', 'success');
                                 getPrice($('#form-service-price-edit input[name="service"]').val());
