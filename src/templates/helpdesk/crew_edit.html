@@ -18,9 +18,11 @@
             </div>
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a href="#tab_personal" aria-controls="tab_personal" role="tab" data-toggle="tab">Персональные настройки</a></li>
+                {% if is_admin %}
                 <li role="presentation"><a href="#tab_crew" aria-controls="tab_crew" role="tab" data-toggle="tab">Свойства команды</a></li>
                 <li role="presentation"><a href="#tab_service" aria-controls="tab_service" role="tab" data-toggle="tab">Услуги</a></li>
                 <li role="presentation"><a href="#tab_users" aria-controls="tab_users" role="tab" data-toggle="tab">Члены команды</a></li>
+                {% endif %}
             </ul>
             <div class="tab-content">
                 {% if is_admin %}
