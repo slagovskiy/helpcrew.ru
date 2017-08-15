@@ -154,25 +154,25 @@ class ServicePrice(models.Model):
     )
     cost = models.DecimalField(
         default=0,
-        max_digits=5,
+        max_digits=9,
         decimal_places=2,
         verbose_name=u'Стоимость услуги'
     )
     prepay = models.DecimalField(
         default=0,
-        max_digits=5,
+        max_digits=9,
         decimal_places=2,
         verbose_name=u'Предоплата'
     )
     fine1 = models.DecimalField(
         default=0,
-        max_digits=5,
+        max_digits=9,
         decimal_places=2,
         verbose_name=u'Штраф за невыполнение заявки в срок'
     )
     fine2 = models.DecimalField(
         default=0,
-        max_digits=5,
+        max_digits=9,
         decimal_places=2,
         verbose_name=u'Штраф за просроченную заявку'
     )

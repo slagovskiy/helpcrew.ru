@@ -250,10 +250,10 @@ def api_service_price_edit(request, price=None):
                     price = ServicePrice.objects.create(
                         service=service,
                         start_date=request.POST.get('start_date', '_'),
-                        cost=request.POST.get('cost', '0'),
-                        prepay=request.POST.get('prepay', '0'),
-                        fine1=request.POST.get('fine1', '_'),
-                        fine2=request.POST.get('fine2', '_')
+                        cost=float(request.POST.get('cost', '0')),
+                        prepay=float(request.POST.get('prepay', '0')),
+                        fine1=float(request.POST.get('fine1', '0')),
+                        fine2=float(request.POST.get('fine2', '0'))
                     )
                     price.save()
                     return HttpResponse('ok')
@@ -265,10 +265,10 @@ def api_service_price_edit(request, price=None):
         if check_member_admin(request.user, price.service.crew):
             if price:
                 price.start_date = request.POST.get('start_date', '_')
-                price.cost = request.POST.get('cost', '0')
-                price.prepay = request.POST.get('prepay', '0')
-                price.fine1 = request.POST.get('fine1', '_')
-                price.fine2 = request.POST.get('fine2', '_')
+                price.cost = float(request.POST.get('cost', '0'))
+                price.prepay = float(request.POST.get('prepay', '0'))
+                price.fine1 = float(request.POST.get('fine1', '_'))
+                price.fine2 = float(request.POST.get('fine2', '_'))
                 price.save()
                 return HttpResponse('ok')
             else:
