@@ -83,10 +83,22 @@
 <div class="container clearfix content">
 {% if messages %}
     {% for message in messages %}
+        <script>
+            $.notify(
+                '{{ message }}',
+                {
+                    autoHideDelay: 10000,
+                    style: 'bootstrap',
+                    className: 'error'
+                }
+                );
+        </script>
+        {% comment %}
         <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             {{ message }}
         </div>
+        {% endcomment %}
     {% endfor %}
 {% endif %}
 {% block content %}
