@@ -356,6 +356,16 @@ def api_user_delete(request, member=None):
 
 
 @csrf_exempt
+def api_user_invaite(request, email=None):
+    return HttpResponse('ok')
+
+
+@csrf_exempt
+def api_user_add(request, email=None, type=None):
+    return HttpResponse('ok')
+
+
+@csrf_exempt
 def api_crew_check_url(request):
     message = ''
     r = True

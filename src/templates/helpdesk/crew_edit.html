@@ -45,7 +45,7 @@
                     <div id="crew-user-list"></div>
                     <div class="float-form" style="display: none;" id="hidden-crew-user-add"></div>
                     <div class="col-md-3">
-                        <input type="button" class="form-control btn btn-primary" value="пригласить нового участника" onclick="addNewUser(); return false;" />
+                        <input type="button" class="form-control btn btn-primary" value="пригласить нового участника" onclick="invaiteUser(); return false;" />
                     </div>
                     <div class="col-md-3">
                         <input type="button" class="form-control btn btn-primary" value="добавить нового участника" onclick="addExistUser(); return false;" />
@@ -66,6 +66,8 @@
             {% include 'helpdesk/tmpl_price_list.html' %}
             {% include 'helpdesk/tmpl_price_edit.html' %}
             {% include 'helpdesk/tmpl_user_list.html' %}
+            {% include 'helpdesk/tmpl_user_invaite.html' %}
+            {% include 'helpdesk/tmpl_user_add.html' %}
             <script>
                 function loadServiceList() {
                     $.getJSON( "{% url 'api_service_list' %}{{ crew.slug }}/", function( data ) {
@@ -307,6 +309,34 @@
                         .fail(function(){
                             $.notify('Ошибка передачи данных');
                         });
+                }
+
+                function invaiteUser() {
+                    var tmpl = $.templates("#tmpl-crew-user-invaite");
+                    var html = tmpl.render('');
+                    $('#hidden-crew-user-add').html(html);
+                    $.fancybox.open({
+                        src: '#hidden-crew-user-add',
+                        type: 'inline',
+                        opts: {modal: true}
+                    });
+                    $.validate({
+                        form : '#form-crew-user-invaite'
+                    });
+                }
+
+                function addExistUser() {
+                    var tmpl = $.templates("#tmpl-crew-user-add");
+                    var html = tmpl.render('');
+                    $('#hidden-crew-user-add').html(html);
+                    $.fancybox.open({
+                        src: '#hidden-crew-user-add',
+                        type: 'inline',
+                        opts: {modal: true}
+                    });
+                    $.validate({
+                        form : '#form-crew-user-add'
+                    });
                 }
 
 

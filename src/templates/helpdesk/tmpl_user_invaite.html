@@ -1,0 +1,20 @@
+<script id="tmpl-crew-user-invaite" type="text/x-jsrender">
+    <form action="{% url 'api_user_invaite' %}" method="post" id="form-crew-user-invaite" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="col-md-12">
+            <div class="col-md-12 form-label">
+                Электронный адрес для отправки приглашения
+            </div>
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="email" name="email" placeholder="Эл. почта" value=""
+                       data-validation="email"
+                       data-validation-error-msg="Введите верный электронный адрес"
+                />
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="пригласить" onclick="return false;" /></div>
+            <div class="col-md-6"><button data-fancybox-close class="form-control btn btn-default">отмена</button></div>
+        </div>
+    </form>
+</script>
