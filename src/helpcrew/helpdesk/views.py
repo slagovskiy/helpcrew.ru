@@ -290,7 +290,7 @@ def api_user_list(request, crew=None):
                         'crew_url': item.crew.url,
                         'member_type': item.type,
                         'member_id': item.id,
-                        'member_deleted': False,
+                        'member_deleted': item.deleted,
                         'user_id': item.user.id,
                         'user_email': item.user.email,
                         'user_firstname': item.user.firstname,
@@ -334,6 +334,20 @@ def api_user_edit(request, member=None, type=None):
             elif str(type).lower() == 'o':
                 user.type = CrewUsers.OPERATOR_TYPE
                 user.save()
+            return HttpResponse('ok')
+        else:
+            return HttpResponse('access denied!')
+    else:
+        return HttpResponse('member not found')
+
+
+@csrf_exempt
+def api_user_delete(request, member=None):
+    user = CrewUsers.objects.filter(id=member).first()
+    if user:
+        if check_member_admin(request.user, user.crew):
+            user.deleted = not user.deleted
+            user.save()
             return HttpResponse('ok')
         else:
             return HttpResponse('access denied!')

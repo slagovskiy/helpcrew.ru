@@ -43,8 +43,12 @@
                 </div>
                 <div role="tabpanel" class="tab-pane" id="tab_users">
                     <div id="crew-user-list"></div>
-                    <div class="col-md-6">
-                        <input type="submit" class="form-control btn btn-primary" value="пригласить нового участника" />
+                    <div class="float-form" style="display: none;" id="hidden-crew-user-add"></div>
+                    <div class="col-md-3">
+                        <input type="button" class="form-control btn btn-primary" value="пригласить нового участника" onclick="addNewUser(); return false;" />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="button" class="form-control btn btn-primary" value="добавить нового участника" onclick="addExistUser(); return false;" />
                     </div>
                 </div>
                 {% endif %}
@@ -284,6 +288,25 @@
                             $.notify('Ошибка передачи данных', 'error');
                         });
 
+                }
+
+
+                function deleteUser(member) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '{% url 'api_user_delete' %}' + member + '/'
+                    })
+                        .done(function(data){
+                            if (data=='ok') {
+                                $.notify('Сохранено', 'success');
+                                loadUserList();
+                            } else {
+                                $.notify(data, 'warn');
+                            }
+                        })
+                        .fail(function(){
+                            $.notify('Ошибка передачи данных');
+                        });
                 }
 
 

@@ -4,7 +4,7 @@
         <%if member_type==0%><i class="fa fa-user color-b" aria-hidden="true" title="Администратор"></i><%/if%>
         <%if member_type==1%><i class="fa fa-user color-o" aria-hidden="true" title="Диспетчер"></i><%/if%>
         <%if member_type==2%><i class="fa fa-user color-y" aria-hidden="true" title="Оператор"></i><%/if%>
-        <%:user_firstname%> <%:user_lastname%> [<%:user_email%>]
+        <%if member_deleted%><strike><%/if%><%:user_firstname%> <%:user_lastname%> [<%:user_email%>]<%if member_deleted%></strike><%/if%>
         <div class="btn-group" role="group">
             <a href="#" class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-cog color-dg" aria-hidden="true"></i>
@@ -32,7 +32,9 @@
                     <%/if%>
                     Оператор</a></li>
                 <li role="separator" class="divider"></li>
-                <li><a href="#"><i class="fa fa-times" aria-hidden="true"></i> Удалить</a></li>
+                <li><a href="#" onclick="deleteUser('<%:member_id%>'); return false;">
+                <%if member_deleted%><i class="fa fa-plus" aria-hidden="true"></i> Восстановить<%else%><i class="fa fa-times" aria-hidden="true"></i> Удалить<%/if%>
+                </a></li>
             </ul>
         </div>
     </div>
