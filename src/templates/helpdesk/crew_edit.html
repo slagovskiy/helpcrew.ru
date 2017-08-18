@@ -42,44 +42,7 @@
 
                 </div>
                 <div role="tabpanel" class="tab-pane" id="tab_users">
-                    {% for cu in crew.crewusers_set.all %}
-                    <div class="crew-user-list">
-                        {% ifequal cu.type 0 %}<i class="fa fa-user color-b" aria-hidden="true" title="Администратор"></i> {% endifequal %}
-                        {% ifequal cu.type 1 %}<i class="fa fa-user color-o" aria-hidden="true" title="Диспетчер"></i> {% endifequal %}
-                        {% ifequal cu.type 2 %}<i class="fa fa-user color-y" aria-hidden="true" title="Оператор"></i> {% endifequal %}
-                        {{ cu.user.name }}
-                        <div class="btn-group" role="group">
-                            <a href="#" class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-cog color-dg" aria-hidden="true"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="{% url 'crew_edit_user_edit' crew.url cu.user.email 'a' %}">
-                                    {% ifequal cu.type 0 %}
-                                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                    {% else %}
-                                        <i class="fa fa-square-o" aria-hidden="true"></i>
-                                    {% endifequal %}
-                                    Администратор</a></li>
-                                <li><a href="{% url 'crew_edit_user_edit' crew.url cu.user.email 'd' %}">
-                                    {% ifequal cu.type 1 %}
-                                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                    {% else %}
-                                        <i class="fa fa-square-o" aria-hidden="true"></i>
-                                    {% endifequal %}
-                                    Диспетчер</a></li>
-                                <li><a href="{% url 'crew_edit_user_edit' crew.url cu.user.email 'o' %}">
-                                    {% ifequal cu.type 2 %}
-                                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                    {% else %}
-                                        <i class="fa fa-square-o" aria-hidden="true"></i>
-                                    {% endifequal %}
-                                    Оператор</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#"><i class="fa fa-times" aria-hidden="true"></i> Удалить</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    {% endfor %}
+                    <div id="crew-user-list"></div>
                     <div class="col-md-6">
                         <input type="submit" class="form-control btn btn-primary" value="пригласить нового участника" />
                     </div>
@@ -98,6 +61,7 @@
             {% include 'helpdesk/tmpl_service_edit.html' %}
             {% include 'helpdesk/tmpl_price_list.html' %}
             {% include 'helpdesk/tmpl_price_edit.html' %}
+            {% include 'helpdesk/tmpl_user_list.html' %}
             <script>
                 function loadServiceList() {
                     $.getJSON( "{% url 'api_service_list' %}{{ crew.slug }}/", function( data ) {
@@ -286,9 +250,27 @@
 
                 }
 
+                function loadUserList() {
+                    $.getJSON( "{% url 'api_user_list' %}{{ crew.slug }}/", function( data ) {
+                        try {
+                            if (data['message'] == '') {
+                                var tmpl = $.templates("#tmpl-crew-user-list");
+                                var html = tmpl.render(data);
+                                $('#crew-user-list').html(html);
+                            }
+                        }
+                        catch (err) {
+                            console.error(err);
+                        }
+                    });
+                }
+
+
+
 
                 function init() {
                     loadServiceList();
+                    loadUserList();
                 }
             </script>
         {% endif %}
