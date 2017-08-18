@@ -1,0 +1,73 @@
+<script id="tmpl-service-price-edit" type="text/x-jsrender">
+    <%for data%>
+    <form action="{% url 'api_service_price_edit' %}" method="post" id="form-service-price-edit" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="service" value="<%:fields.service onerror='0'%>" />
+        <div class="col-md-12">
+            <div class="col-md-12 form-label">
+                Дата начала действия цены
+            </div>
+            <div class="col-md-12">
+                <div class='input-group date' id='datetimepicker-start-date'>
+                    <input type='text' class="form-control" id="start_date" name="start_date" placeholder="YYYY-MM-DD" value="<%:fields.start_date onerror=''%>"
+                       data-validation="date" data-validation-require-leading-zero="true" data-validation-format="yyyy-mm-dd"
+                       data-validation-error-msg="Введите дату начала действия цены" data-validation-error-msg-container="#datetimepicker-start-date-error"
+                       />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+                <span id="datetimepicker-start-date-error"></span>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12 form-label">
+                Цена
+            </div>
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="cost" name="cost" placeholder="000.00" value="<%:fields.cost onerror='0'%>"
+                       data-validation="number" data-validation-allowing="float" data-validation-decimal-separator="."
+                       data-validation-error-msg="Введите верную цену в фомате 000.00"
+                />
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12 form-label">
+                Предоплата
+            </div>
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="prepay" name="prepay" placeholder="000.0" value="<%:fields.prepay onerror='0'%>"
+                       data-validation="number" data-validation-allowing="float" data-validation-decimal-separator="."
+                       data-validation-error-msg="Введите верную цену в фомате 000.00"
+                />
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12 form-label">
+                Штраф за невыполнение заявки в срок
+            </div>
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="fine1" name="fine1" placeholder="0.15" value="<%:fields.fine1 onerror='0.15'%>"
+                       data-validation="number" data-validation-allowing="float" data-validation-decimal-separator="."
+                       data-validation-error-msg="Введите верное число в фомате 000.00"
+                />
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12 form-label">
+                Штраф за просроченную заявку
+            </div>
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="fine2" name="fine2" placeholder="0.5" value="<%:fields.fine2 onerror='0.50'%>"
+                       data-validation="number" data-validation-allowing="float" data-validation-decimal-separator="."
+                       data-validation-error-msg="Введите верное число в фомате 000.00"
+                />
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="сохранить" onclick="savePrice('<%:pk onerror='0'%>');return false;" /></div>
+            <div class="col-md-6"><button data-fancybox-close class="form-control btn btn-default">отмена</button></div>
+        </div>
+    </form>
+    <%/for%>
+</script>

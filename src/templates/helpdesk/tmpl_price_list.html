@@ -1,0 +1,32 @@
+<script id="tmpl-service-price-list" type="text/x-jsrender">
+    <div class="col-md-12">
+        <table class="data-table">
+            <thead><tr>
+                <td width="19%">Дата начала действия</td>
+                <td width="19%">Цена</td>
+                <td width="19%">Преодплата</td>
+                <td width="19%">Штраф за невыполнение заявки в срок</td>
+                <td width="19%">Штраф за просроченную заявку</td>
+                <td width="5%">&nbsp;</td>
+            </tr></thead>
+            <%for data%>
+            <tr>
+                <td width="19%"><%:fields.start_date onerror=''%></td>
+                <td width="19%"><%:fields.cost onerror=''%></td>
+                <td width="19%"><%:fields.prepay onerror=''%></td>
+                <td width="19%"><%:fields.fine1 onerror=''%></td>
+                <td width="19%"><%:fields.fine2 onerror=''%></td>
+                <td>
+                    <a href="#" onclick="editPrice(<%:pk%>); return false;"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <a href="#" onclick="deletePrice(<%:pk%>); return false;"><i class="fa fa-times" aria-hidden="true"></i></a>
+                </td>
+            </tr>
+            <%/for%>
+        </table>
+    </div>
+    <div class="col-md-12">
+        <input type="hidden" name="service-id" id="service-id" value="<%:service oneroor='0'%>" />
+        <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="добавить" onclick="editPrice('0');return false;" /></div>
+        <div class="col-md-6"><button data-fancybox-close class="form-control btn btn-default">отмена</button></div>
+    </div>
+</script>
