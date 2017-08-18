@@ -94,6 +94,10 @@ class CrewUsers(models.Model):
         default=OPERATOR_TYPE,
         verbose_name=u'Уровеь доступа'
     )
+    deleted = models.BooleanField(
+        default=False,
+        verbose_name=u'Член команды удален'
+    )
 
     def __str__(self):
         return '%s %s' % (self.crew, self.user)
