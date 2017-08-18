@@ -265,7 +265,26 @@
                     });
                 }
 
+                function saveUser(member, type) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '{% url 'api_user_edit' %}' + member + '/' + type + '/'
+                    })
+                        .done(function(data){
+                            if(data=='ok') {
+                                $.fancybox.close();
+                                $.notify('Сохранено', 'success');
+                                loadUserList();
+                            }
+                            else {
+                                $.notify(data, 'warn');
+                            }
+                        })
+                        .fail(function(){
+                            $.notify('Ошибка передачи данных', 'error');
+                        });
 
+                }
 
 
                 function init() {

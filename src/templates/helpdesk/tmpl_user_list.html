@@ -10,21 +10,21 @@
                 <i class="fa fa-cog color-dg" aria-hidden="true"></i>
             </a>
             <ul class="dropdown-menu dropdown-menu-right">
-                <li><a href="">
+                <li><a href="#" onclick="saveUser('<%:member_id%>', 'a'); return false;">
                     <%if member_type==0%>
                         <i class="fa fa-check-square-o" aria-hidden="true"></i>
                     <%else%>
                         <i class="fa fa-square-o" aria-hidden="true"></i>
                     <%/if%>
                     Администратор</a></li>
-                <li><a href="">
+                <li><a href="#" onclick="saveUser('<%:member_id%>', 'd'); return false;">
                     <%if member_type==1%>
                         <i class="fa fa-check-square-o" aria-hidden="true"></i>
                     <%else%>
                         <i class="fa fa-square-o" aria-hidden="true"></i>
                     <%/if%>
                     Диспетчер</a></li>
-                <li><a href="">
+                <li><a href="#" onclick="saveUser('<%:member_id%>', 'o'); return false;">
                     <%if member_type==2%>
                         <i class="fa fa-check-square-o" aria-hidden="true"></i>
                     <%else%>
