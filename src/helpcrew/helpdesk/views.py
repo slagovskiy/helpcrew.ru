@@ -315,6 +315,33 @@ def api_user_list(request, crew=None):
 
 
 @csrf_exempt
+def api_user_edit(request, member=None, type=None):
+    if not type:
+        return HttpResponse('type not found')
+    user = CrewUsers.objects.filter(id=member).first()
+    if user:
+        if check_member_admin(request.user, user.crew):
+            if user.type == CrewUsers.ADMINISTRATOR_TYPE:
+                _cu = CrewUsers.objects.filter(crew=user.crew, type=CrewUsers.ADMINISTRATOR_TYPE)
+                if len(_cu) < 2 and str(type).lower() != 'a':
+                    return HttpResponse(u'Нельзя убрать последнего администратора')
+            if str(type).lower() == 'a':
+                user.type = CrewUsers.ADMINISTRATOR_TYPE
+                user.save()
+            elif str(type).lower() == 'd':
+                user.type = CrewUsers.DISPATCHER_TYPE
+                user.save()
+            elif str(type).lower() == 'o':
+                user.type = CrewUsers.OPERATOR_TYPE
+                user.save()
+            return HttpResponse('ok')
+        else:
+            return HttpResponse('access denied!')
+    else:
+        return HttpResponse('member not found')
+
+
+@csrf_exempt
 def api_crew_check_url(request):
     message = ''
     r = True

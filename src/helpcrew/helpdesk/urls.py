@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from .views import crew_edit, crew_edit_user_edit, api_crew_check_url, crew_view
-from .views import api_user_list
+from .views import api_user_list, api_user_edit
 from .views import api_service_list, api_service_edit, api_service_delete
 from .views import api_service_price_edit, api_service_price_list
 
@@ -14,6 +14,8 @@ urlpatterns = [
 
     url(r'^api/user/list/$', api_user_list, name='api_user_list'),
     url(r'^api/user/list/(?P<crew>[-\w]+)/$', api_user_list, name='api_user_list'),
+    url(r'^api/user/edit/$', api_user_edit, name='api_user_edit'),
+    url(r'^api/user/edit/(?P<member>[-\w]+)/(?P<type>[-\w]+)/$', api_user_edit, name='api_user_edit'),
     url(r'^api/service/list/$', api_service_list, name='api_service_list'),
     url(r'^api/service/list/(?P<crew>[-\w]+)/$', api_service_list, name='api_service_list'),
     url(r'^api/service/edit/$', api_service_edit, name='api_service_edit'),
