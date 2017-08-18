@@ -229,10 +229,16 @@
                                 Дата начала действия цены
                             </div>
                             <div class="col-md-12">
-                                <input type="text" class="form-control" id="start_date" name="start_date" placeholder="YYYY-MM-DD" value="<%:fields.start_date onerror=''%>"
+                                <div class='input-group date' id='datetimepicker-start-date'>
+                                    <input type='text' class="form-control" id="start_date" name="start_date" placeholder="YYYY-MM-DD" value="<%:fields.start_date onerror=''%>"
                                        data-validation="date" data-validation-require-leading-zero="true" data-validation-format="yyyy-mm-dd"
-                                       data-validation-error-msg="Введите дату начала действия цены"
-                                />
+                                       data-validation-error-msg="Введите дату начала действия цены" data-validation-error-msg-container="#datetimepicker-start-date-error"
+                                       />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                                <span id="datetimepicker-start-date-error"></span>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -416,6 +422,10 @@
                         $.validate({
                             form : '#form-service-price-edit'
                         });
+                        $('#datetimepicker-start-date').datetimepicker({
+                            format: 'YYYY-MM-DD',
+                            keepOpen: false
+                        });
                     } else {
                         $.getJSON( "{% url 'api_service_price_edit' %}" + price + "/", function( data ) {
                             try {
@@ -430,6 +440,10 @@
                                     });
                                     $.validate({
                                         form : '#form-service-price-edit'
+                                    });
+                                    $('#datetimepicker-start-date').datetimepicker({
+                                        format: 'YYYY-MM-DD',
+                                        keepOpen: false
                                     });
                                 } else {
                                     $.notify(data['message'], 'error');
