@@ -278,6 +278,43 @@ def api_service_price_edit(request, price=None):
 
 
 @csrf_exempt
+def api_user_list(request, crew=None):
+    crew = Crew.objects.filter(slug=crew).first()
+    if crew:
+        if check_member(request.user, crew):
+            list = []
+            for item in CrewUsers.objects.select_related('user', 'crew').filter(crew=crew).order_by('type'):
+                list.append(
+                    {
+                        'crew_id': item.crew.id,
+                        'crew_url': item.crew.url,
+                        'member_type': item.type,
+                        'member_id': item.id,
+                        'member_deleted': False,
+                        'user_id': item.user.id,
+                        'user_email': item.user.email,
+                        'user_firstname': item.user.firstname,
+                        'user_lastname': item.user.lastname
+                    }
+                )
+            data = json.dumps(list)
+            return JsonResponse({
+                'message': '',
+                'data': json.loads(data)
+            })
+        else:
+            return JsonResponse({
+                'message': u'Доступ запрещен',
+                'model': ''
+            })
+    else:
+        return JsonResponse({
+            'message': u'Команда не найдена',
+            'model': ''
+        })
+
+
+@csrf_exempt
 def api_crew_check_url(request):
     message = ''
     r = True
