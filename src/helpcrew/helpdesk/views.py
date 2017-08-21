@@ -346,6 +346,9 @@ def api_user_delete(request, member=None):
     user = CrewUsers.objects.filter(id=member).first()
     if user:
         if check_member_admin(request.user, user.crew):
+            _cu = CrewUsers.objects.filter(crew=user.crew, type=CrewUsers.ADMINISTRATOR_TYPE)
+            if len(_cu) < 2 and user.type == CrewUsers.ADMINISTRATOR_TYPE:
+                return HttpResponse(u'Нельзя убрать последнего администратора')
             user.deleted = not user.deleted
             user.save()
             return HttpResponse('ok')
