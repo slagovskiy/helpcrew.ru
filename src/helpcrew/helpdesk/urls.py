@@ -3,6 +3,7 @@ from django.conf.urls import url
 from .views import crew_edit, crew_edit_user_edit, api_crew_check_url, crew_view
 from .views import api_user_list, api_user_edit, api_user_delete, api_user_invaite, api_user_add
 from .views import api_service_list, api_service_edit, api_service_delete
+from .views import api_priority_list, api_priority_edit, api_priority_delete
 from .views import api_service_price_edit, api_service_price_list
 
 urlpatterns = [
@@ -20,8 +21,8 @@ urlpatterns = [
     url(r'^api/user/delete/(?P<member>[-\w]+)/$', api_user_delete, name='api_user_delete'),
     url(r'^api/user/invaite/$', api_user_invaite, name='api_user_invaite'),
     url(r'^api/user/invaite/(?P<email>\w+|[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/$', api_user_invaite, name='api_user_invaite'),
-    url(r'^api/user/add/$', api_user_invaite, name='api_user_add'),
-    url(r'^api/user/add/(?P<email>\w+|[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/(?P<type>[-\w]+)/$', api_user_invaite, name='api_user_add'),
+    url(r'^api/user/add/$', api_user_add, name='api_user_add'),
+    url(r'^api/user/add/(?P<email>\w+|[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/(?P<type>[-\w]+)/$', api_user_add, name='api_user_add'),
 
     url(r'^api/service/list/$', api_service_list, name='api_service_list'),
     url(r'^api/service/list/(?P<crew>[-\w]+)/$', api_service_list, name='api_service_list'),
@@ -34,6 +35,13 @@ urlpatterns = [
     url(r'^api/service/price/edit/(?P<price>[-\w]+)/$', api_service_price_edit, name='api_service_price_edit'),
     url(r'^api/service/price/list/$', api_service_price_list, name='api_service_price_list'),
     url(r'^api/service/price/list/(?P<service>[-\w]+)/$', api_service_price_list, name='api_service_price_list'),
+
+    url(r'^api/priority/list/$', api_priority_list, name='api_priority_list'),
+    url(r'^api/priority/list/(?P<crew>[-\w]+)/$', api_priority_list, name='api_priority_list'),
+    url(r'^api/priority/edit/$', api_priority_edit, name='api_priority_edit'),
+    url(r'^api/priority/edit/(?P<priority>[-\w]+)/$', api_priority_edit, name='api_priority_edit'),
+    url(r'^api/priority/delete/$', api_priority_delete, name='api_priority_delete'),
+    url(r'^api/priority/delete/(?P<priority>[-\w]+)/?$', api_priority_delete, name='api_priority_delete'),
 
     url(r'^api/crew/check/url/$', api_crew_check_url, name='api_crew_check_url'),
 ]

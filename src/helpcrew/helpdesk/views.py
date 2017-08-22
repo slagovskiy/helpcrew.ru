@@ -7,7 +7,7 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
 from django.core import serializers
 
-from .models import Crew, CrewUsers, CrewService, ServicePrice
+from .models import Crew, CrewUsers, CrewService, ServicePrice, TaskPriority
 from ..userext.models import User
 from .utils import get_crews_list, check_member, check_member_admin
 from ..userext.decoretors import authenticate_check
@@ -366,6 +366,89 @@ def api_user_invaite(request, email=None):
 @csrf_exempt
 def api_user_add(request, email=None, type=None):
     return HttpResponse('ok')
+
+
+@csrf_exempt
+def api_priority_list(request, crew=None):
+    crew = Crew.objects.filter(slug=crew).first()
+    if crew:
+        data = serializers.serialize('json', crew.taskpriority_set.all().order_by('deleted', 'name'))
+        return JsonResponse({
+            'message': '',
+            'data': json.loads(data)
+        })
+    else:
+        return JsonResponse({
+            'message': u'Команда не найдена',
+            'model': ''
+        })
+
+
+@csrf_exempt
+def api_priority_edit(request, priority=None):
+    if request.method == 'GET':
+        priority = TaskPriority.objects.filter(id=priority).first()
+        if not check_member_admin(request.user, priority.crew):
+            return JsonResponse({
+                'message': u'access denied!',
+                'data': ''
+            })
+        if priority:
+            data = serializers.serialize('json', [priority,])
+            return JsonResponse({
+                'message': '',
+                'data': json.loads(data)
+            })
+        else:
+            return JsonResponse({
+                'message': u'Приоритет не найден',
+                'data': ''
+            })
+    if request.method == 'POST':
+        if priority == '0':
+            crew = Crew.objects.filter(id=request.POST.get('crew', '0')).first()
+            if crew:
+                if check_member_admin(request.user, crew):
+                    priority = TaskPriority.objects.create(
+                        crew=crew,
+                        name=request.POST.get('name', '_'),
+                        time_factor=request.POST.get('time_factor', '0'),
+                        cost_factor=request.POST.get('cost_factor', '0'),
+                        default=request.POST.get('default', 'False')
+                    )
+                    priority.save()
+                    return HttpResponse('ok')
+                else:
+                    return HttpResponse('access denied!')
+            else:
+                return HttpResponse('crew not found!')
+        priority = TaskPriority.objects.filter(id=priority).first()
+        if check_member_admin(request.user, priority.crew):
+            if priority:
+                priority.name = request.POST.get('name', '_')
+                priority.time_factor = request.POST.get('time_factor', '0')
+                priority.cost_factor = request.POST.get('cost_factor', '0')
+                priority.default = request.POST.get('default', 'False')
+                priority.save()
+                return HttpResponse('ok')
+            else:
+                return HttpResponse('service not found!')
+        else:
+            return HttpResponse('access denied!')
+
+
+@csrf_exempt
+def api_priority_delete(request, priority=None):
+    priority = TaskPriority.objects.filter(id=priority).first()
+    if check_member_admin(request.user, priority.crew):
+        if priority:
+            priority.deleted = not priority.deleted
+            priority.save()
+            return HttpResponse('ok')
+        else:
+            return HttpResponse('service not found!')
+    else:
+        return HttpResponse('access denied!')
 
 
 @csrf_exempt
