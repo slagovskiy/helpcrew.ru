@@ -188,3 +188,43 @@ class ServicePrice(models.Model):
         ordering = ['service', 'start_date']
         verbose_name = u'Строимость услуги'
         verbose_name_plural = u'Стоимость услуг'
+
+
+class TaskPriority(models.Model):
+    crew = models.ForeignKey(
+        Crew,
+        verbose_name=u'Команда'
+    )
+    name = models.CharField(
+        max_length=200,
+        default='',
+        verbose_name=u'Наименование'
+    )
+    time_factor = models.DecimalField(
+        default=0,
+        max_digits=9,
+        decimal_places=2,
+        verbose_name=u'Коэффициент времени выполнения'
+    )
+    cost_factor = models.DecimalField(
+        default=0,
+        max_digits=9,
+        decimal_places=2,
+        verbose_name=u'Коэффициент стоимости'
+    )
+    default = models.BooleanField(
+        default=False,
+        verbose_name=u'Выбрано по умолчанию'
+    )
+    deleted = models.BooleanField(
+        default=False,
+        verbose_name=u'Приоритет удален'
+    )
+
+    def __str__(self):
+        return '%s [%s %s]' % (self.name, self.time_factor, self.cost_factor)
+
+    class Meta:
+        ordering = ['crew', 'name']
+        verbose_name = u'Приоритет выполнения'
+        verbose_name_plural = u'Приоритеты выполнения'
