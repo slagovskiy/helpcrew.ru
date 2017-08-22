@@ -1,0 +1,26 @@
+<script id="tmpl-task-priority-list" type="text/x-jsrender">
+    <%for data%>
+        <div class="crew-service-list">
+            <%if fields.deleted%><strike><%/if%><%:fields.name%><%if fields.deleted%></strike><%/if%>
+            <%if fields.default%> (по умолчанию)<%/if%>
+            <div class="btn-group" role="group">
+                <a href="#" class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-cog color-dg" aria-hidden="true"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a href="#" onclick="editPriority('<%:pk%>'); return false;">
+                            <i class="fa fa-pencil" aria-hidden="true"></i> Изменить
+                        </a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                        <a href="#" onclick="deletePriority('<%:pk%>'); return false;"><%if fields.deleted%><i class="fa fa-plus" aria-hidden="true"></i> Восстановить<%else%><i class="fa fa-times" aria-hidden="true"></i> Удалить<%/if%></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    <%else%>
+        Нет данных
+    <%/for%>
+</script>

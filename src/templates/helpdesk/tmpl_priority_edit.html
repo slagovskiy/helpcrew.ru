@@ -1,0 +1,51 @@
+<script id="tmpl-task-priority-edit" type="text/x-jsrender">
+    <%for data%>
+    <form action="{% url 'api_priority_edit' %}" method="post" id="form-task-priority-edit" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="crew" value="{{ crew.id }}" />
+        <div class="col-md-12">
+            <div class="col-md-12 form-label">
+                Наименование
+            </div>
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Наименование приоритета" value="<%:fields.name onerror=''%>"
+                       data-validation="length" data-validation-length="2-100"
+                       data-validation-error-msg="Введите наименование приоритета"
+                />
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12 form-label">
+                Коэффициент времени выполнения
+            </div>
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="time_factor" name="time_factor" placeholder="Коэффициент времени выполнения" value="<%:fields.time_factor onerror=''%>"
+                       data-validation="number" data-validation-allowing="float" data-validation-decimal-separator="."
+                       data-validation-error-msg="Введите верный коэффициент в формате 000.00"
+                />
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12 form-label">
+                Коэффициент стоимости
+            </div>
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="cost_factor" name="cost_factor" placeholder="Коэффициент стоимости" value="<%:fields.cost_factor onerror=''%>"
+                       data-validation="number" data-validation-allowing="float" data-validation-decimal-separator="."
+                       data-validation-error-msg="Введите верный коэффициент в формате 000.00"
+                />
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12">
+                <input type="checkbox" id="checkbox_default" name="default" value="True" class="css-checkbox lrg" <%if fields%><%if fields.default%>checked="checked"<%/if%><%/if%> />
+                <label for="checkbox_default" name="default" class="css-label lrg web-two-style">Приоритет выбран по умолчанию</label>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="сохранить" onclick="savePriority('<%:pk onerror='0'%>');return false;" /></div>
+            <div class="col-md-6"><button data-fancybox-close class="form-control btn btn-default">отмена</button></div>
+        </div>
+    </form>
+    <%/for%>
+</script>
