@@ -161,7 +161,8 @@ def api_service_edit(request, service=None):
                         name=request.POST.get('name', '_'),
                         time1=request.POST.get('time1', '0'),
                         time2=request.POST.get('time2', '0'),
-                        unit=request.POST.get('unit', '_')
+                        unit=request.POST.get('unit', '_'),
+                        auto_wait_status=request.POST.get('auto_wait_status', 'False')
                     )
                     serv.save()
                     return HttpResponse('ok')
@@ -176,6 +177,7 @@ def api_service_edit(request, service=None):
                 serv.time1 = request.POST.get('time1', '0')
                 serv.time2 = request.POST.get('time2', '0')
                 serv.unit = request.POST.get('unit', '_')
+                serv.auto_wait_status = request.POST.get('auto_wait_status', 'False')
                 serv.save()
                 return HttpResponse('ok')
             else:

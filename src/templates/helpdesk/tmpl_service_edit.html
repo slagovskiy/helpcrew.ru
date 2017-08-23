@@ -59,6 +59,12 @@
             </div>
         </div>
         <div class="col-md-12">
+            <div class="col-md-12">
+                <input type="checkbox" id="checkbox_auto_wait_status" name="auto_wait_status" value="True" class="css-checkbox lrg" <%if fields%><%if fields.auto_wait_status%>checked="checked"<%/if%><%/if%> />
+                <label for="checkbox_auto_wait_status" name="auto_wait_status" class="css-label lrg web-two-style">Заявка автоматически переводится в статус "В ожидании"</label>
+            </div>
+        </div>
+        <div class="col-md-12">
             <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="сохранить" onclick="saveService('<%:pk onerror='0'%>');return false;" /></div>
             <div class="col-md-6"><button data-fancybox-close class="form-control btn btn-default">отмена</button></div>
         </div>
