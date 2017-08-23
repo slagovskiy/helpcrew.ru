@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Crew, CrewUsers, CrewService, ServicePrice, TaskPriority
+from .models import Crew, CrewUsers, CrewService, ServicePrice, TaskPriority, CrewEvent
 
 
 class CrewAdmin(admin.ModelAdmin):
@@ -38,8 +38,16 @@ class TaskPriorityAdmin(admin.ModelAdmin):
     readonly_fields = ()
 
 
+class CrewEventAdmin(admin.ModelAdmin):
+    list_display = ('crew', 'date', 'user', 'message')
+    ordering = ('date',)
+    exclude = ()
+    readonly_fields = ()
+
+
 admin.site.register(CrewUsers, CrewUsersAdmin)
 admin.site.register(CrewService, CrewServiceAdmin)
 admin.site.register(ServicePrice, ServicePriceAdmin)
 admin.site.register(TaskPriority, TaskPriorityAdmin)
+admin.site.register(CrewEvent, CrewEventAdmin)
 admin.site.register(Crew, CrewAdmin)
