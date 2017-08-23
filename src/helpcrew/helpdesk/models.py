@@ -132,6 +132,10 @@ class CrewService(models.Model):
         default='',
         verbose_name=u'Единица измерения'
     )
+    auto_wait_status = models.BooleanField(
+        default=False,
+        verbose_name=u'Заявка автоматически переводится в статус "В ожидании"'
+    )
     deleted = models.BooleanField(
         default=False,
         verbose_name=u'Услуга удалена'
