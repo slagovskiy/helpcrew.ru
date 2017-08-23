@@ -7,7 +7,7 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
 from django.core import serializers
 
-from .models import Crew, CrewUsers, CrewService, ServicePrice, TaskPriority
+from .models import Crew, CrewUsers, CrewService, ServicePrice, TaskPriority, CrewEvent
 from ..userext.models import User
 from .utils import get_crews_list, check_member, check_member_admin
 from ..userext.decoretors import authenticate_check
@@ -39,6 +39,7 @@ def crew_edit(request, url=None):
                     user=request.user
                 )
                 c.save()
+                CrewEvent.addEvent(request, c, u'Создана новая команда')
                 if c.url=='':
                     c.url = c.slug
                     c.save()
@@ -48,6 +49,7 @@ def crew_edit(request, url=None):
                     type=CrewUsers.ADMINISTRATOR_TYPE
                 )
                 cu.save()
+                CrewEvent.addEvent(request, c, u'В команду домавлен администратор')
                 return redirect(reverse('crew_view_redirect', kwargs={'url': c.url}))
             else:
                 messages.error(request, u'Ошибка сохранения')
@@ -62,37 +64,6 @@ def crew_edit(request, url=None):
             return redirect(reverse('crew_edit'))
     else:
         return render(request, 'helpdesk/crew_edit.html', {})
-
-
-def crew_edit_user_edit(request, url=None, email=None, type=None):
-    if not type:
-        return redirect(reverse('crew_edit', url))
-    crew = Crew.objects.filter(url=url)
-    user = User.objects.filter(email=email)
-    if crew and user:
-        crew = crew[0]
-        user = user[0]
-        if not check_member_admin(request.user, crew):
-            messages.error(request, u'Доступ запрещен')
-        else:
-            cu = CrewUsers.objects.filter(crew=crew, user=user)
-            if cu:
-                cu = cu[0]
-                if cu.type == CrewUsers.ADMINISTRATOR_TYPE:
-                    _cu = CrewUsers.objects.filter(crew=crew, type=CrewUsers.ADMINISTRATOR_TYPE)
-                    if len(_cu) < 2 and str(type).lower() != 'a':
-                        messages.error(request, u'Нельзя убрать последнего администратора')
-                        return redirect(reverse('crew_edit', kwargs={'url': url}))
-                if str(type).lower() == 'a':
-                    cu.type = CrewUsers.ADMINISTRATOR_TYPE
-                    cu.save()
-                elif str(type).lower() == 'd':
-                    cu.type = CrewUsers.DISPATCHER_TYPE
-                    cu.save()
-                elif str(type).lower() == 'o':
-                    cu.type = CrewUsers.OPERATOR_TYPE
-                    cu.save()
-    return redirect(reverse('crew_edit', kwargs={'url': url}))
 
 
 @authenticate_check
@@ -165,6 +136,7 @@ def api_service_edit(request, service=None):
                         auto_wait_status=request.POST.get('auto_wait_status', 'False')
                     )
                     serv.save()
+                    CrewEvent.addEvent(request, crew, u'Добавлена услуга ' + serv.name)
                     return HttpResponse('ok')
                 else:
                     return HttpResponse('access denied!')
@@ -179,6 +151,7 @@ def api_service_edit(request, service=None):
                 serv.unit = request.POST.get('unit', '_')
                 serv.auto_wait_status = request.POST.get('auto_wait_status', 'False')
                 serv.save()
+                CrewEvent.addEvent(request, serv.crew, u'Изменена услуга ' + serv.name)
                 return HttpResponse('ok')
             else:
                 return HttpResponse('service not found!')
@@ -193,6 +166,10 @@ def api_service_delete(request, service=None):
         if serv:
             serv.deleted = not serv.deleted
             serv.save()
+            if serv.deleted:
+                CrewEvent.addEvent(request, serv.crew, u'Услуга ' + serv.name + ' помечена удаленной')
+            else:
+                CrewEvent.addEvent(request, serv.crew, u'Услуга ' + serv.name + ' восстановлена')
             return HttpResponse('ok')
         else:
             return HttpResponse('service not found!')
@@ -258,6 +235,7 @@ def api_service_price_edit(request, price=None):
                         fine2=float(request.POST.get('fine2', '0'))
                     )
                     price.save()
+                    CrewEvent.addEvent(request, price.service.crew, u'Услуге ' + price.service.name + ' добавлен прайс')
                     return HttpResponse('ok')
                 else:
                     return HttpResponse('access denied!')
@@ -272,6 +250,7 @@ def api_service_price_edit(request, price=None):
                 price.fine1 = float(request.POST.get('fine1', '_'))
                 price.fine2 = float(request.POST.get('fine2', '_'))
                 price.save()
+                CrewEvent.addEvent(request, price.service.crew, u'Услуге ' + price.service.name + ' изменен прайс')
                 return HttpResponse('ok')
             else:
                 return HttpResponse('price not found!')
@@ -330,12 +309,15 @@ def api_user_edit(request, member=None, type=None):
             if str(type).lower() == 'a':
                 user.type = CrewUsers.ADMINISTRATOR_TYPE
                 user.save()
+                CrewEvent.addEvent(request, user.crew, u'Пользователь ' + user.name + ' назначен администратором')
             elif str(type).lower() == 'd':
                 user.type = CrewUsers.DISPATCHER_TYPE
                 user.save()
+                CrewEvent.addEvent(request, user.crew, u'Пользователь ' + user.name + ' назначен диспетчером')
             elif str(type).lower() == 'o':
                 user.type = CrewUsers.OPERATOR_TYPE
                 user.save()
+                CrewEvent.addEvent(request, user.crew, u'Пользователь ' + user.name + ' назначен оператором')
             return HttpResponse('ok')
         else:
             return HttpResponse('access denied!')
@@ -353,6 +335,10 @@ def api_user_delete(request, member=None):
                 return HttpResponse(u'Нельзя убрать последнего администратора')
             user.deleted = not user.deleted
             user.save()
+            if user.deleted:
+                CrewEvent.addEvent(request, user.crew, u'Пользователь ' + user.name + ' помечен удаленным')
+            else:
+                CrewEvent.addEvent(request, user.crew, u'Пользователь ' + user.name + ' восстановлен')
             return HttpResponse('ok')
         else:
             return HttpResponse('access denied!')
@@ -419,6 +405,7 @@ def api_priority_edit(request, priority=None):
                         default=request.POST.get('default', 'False')
                     )
                     priority.save()
+                    CrewEvent.addEvent(request, priority.crew, u'Добавлен новый приоритет ' + priority.name)
                     return HttpResponse('ok')
                 else:
                     return HttpResponse('access denied!')
@@ -432,6 +419,7 @@ def api_priority_edit(request, priority=None):
                 priority.cost_factor = request.POST.get('cost_factor', '0')
                 priority.default = request.POST.get('default', 'False')
                 priority.save()
+                CrewEvent.addEvent(request, priority.crew, u'Изменен приоритет ' + priority.name)
                 return HttpResponse('ok')
             else:
                 return HttpResponse('service not found!')
@@ -446,6 +434,10 @@ def api_priority_delete(request, priority=None):
         if priority:
             priority.deleted = not priority.deleted
             priority.save()
+            if property.deleted:
+                CrewEvent.addEvent(request, priority.crew, u'Приоритет ' + priority.name + ' помечен удаленным')
+            else:
+                CrewEvent.addEvent(request, priority.crew, u'Приоритет ' + priority.name + ' восстановлен')
             return HttpResponse('ok')
         else:
             return HttpResponse('service not found!')
