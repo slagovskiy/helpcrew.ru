@@ -103,7 +103,7 @@ class CrewEvent(models.Model):
     )
 
     def __str__(self):
-        return self.date
+        return self.date.strftime('%Y/%m/%d %H:%M:%S')
 
     @staticmethod
     def addEvent(request, crew, message):
