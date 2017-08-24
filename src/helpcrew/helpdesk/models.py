@@ -286,3 +286,134 @@ class TaskPriority(models.Model):
         ordering = ['crew', 'name']
         verbose_name = u'Приоритет выполнения'
         verbose_name_plural = u'Приоритеты выполнения'
+
+
+class CrewTask(models.Model):
+    TASK_TYPE_NORMAL = 0
+    TASK_TYPE_INCIDENT = 1
+    TASK_TYPE_SUBSCRIBE = 2
+
+    TASK_TYPE_CHOICES = (
+        (TASK_TYPE_NORMAL, 'Normal'),
+        (TASK_TYPE_INCIDENT, 'Incident'),
+        (TASK_TYPE_SUBSCRIBE, 'Subscribe'),
+    )
+
+    TASK_STATUS_NEW = 0
+    TASK_STATUS_WAITING = 1
+    TASK_STATUS_PAUSED = 2
+    TASK_STATUS_IN_WORK = 3
+    TASK_STATUS_CANCELED = 4
+    TASK_STATUS_FINISHED = 5
+    TASK_STATUS_CLOSED = 6
+
+    TASK_STATUS_CHOICES = (
+        (TASK_STATUS_NEW, 'New'),
+        (TASK_STATUS_WAITING, 'Waiting'),
+        (TASK_STATUS_PAUSED, 'Paused'),
+        (TASK_STATUS_IN_WORK, 'In work'),
+        (TASK_STATUS_CANCELED, 'Canceled'),
+        (TASK_STATUS_FINISHED, 'Finished'),
+        (TASK_STATUS_CLOSED, 'Closed')
+    )
+    uuid = models.CharField(
+        max_length=200,
+        default='',
+        verbose_name=u'Уникальный ключ'
+    )
+    crew = models.ForeignKey(
+        Crew,
+        verbose_name=u'Команда'
+    )
+    type = models.IntegerField(
+        choices=TASK_TYPE_CHOICES,
+        default=TASK_TYPE_NORMAL,
+        verbose_name=u'Тип заявки'
+    )
+    status = models.IntegerField(
+        choices=TASK_STATUS_CHOICES,
+        default=TASK_STATUS_NEW,
+        verbose_name=u'Статус заявки'
+    )
+    service = models.ForeignKey(
+        CrewService,
+        null=True,
+        blank=True,
+        verbose_name=u'Услуга'
+    )
+    description = models.TextField(
+        default='',
+        verbose_name=u'Текстовое описание'
+    )
+    priority = models.ForeignKey(
+        TaskPriority,
+        verbose_name=u'Приоритет заявки'
+    )
+    date_in = models.DateTimeField(
+        verbose_name=u'Дата подачи заявки'
+    )
+    date_end = models.DateTimeField(
+        verbose_name=u'Дата окончания подписки'
+    )
+    date_finish = models.DateTimeField(
+        verbose_name=u'Дата выполнения заявки'
+    )
+    date_close = models.DateTimeField(
+        verbose_name=u'Дата закрытия заявки'
+    )
+    contact_name = models.CharField(
+        max_length=200,
+        default='',
+        verbose_name=u'Имя контакта'
+    )
+    contact_email = models.CharField(
+        max_length=200,
+        default='',
+        verbose_name=u'Электронный адрес контакта'
+    )
+    dispatcher_in = models.ForeignKey(
+        User,
+        related_name='dispatcher_in',
+        null=True,
+        blank=True,
+        verbose_name=u'Диспетчер, обработавший новую заявку'
+    )
+    dispatcher_close = models.ForeignKey(
+        User,
+        related_name='dispatcher_close',
+        null=True,
+        blank=True,
+        verbose_name=u'Диспетчер, закрывший заявку'
+    )
+    operator = models.ForeignKey(
+        User,
+        related_name='operator',
+        null=True,
+        blank=True,
+        verbose_name=u'Оператор, выполнивший заявку'
+    )
+    qty = models.DecimalField(
+        max_digits=9,
+        decimal_places=2,
+        default=0,
+        verbose_name=u'Количество оказанной услуги'
+    )
+    fine = models.DecimalField(
+        max_digits=9,
+        decimal_places=2,
+        default=0,
+        verbose_name=u'Штраф к стоимости, накладываемый администратором'
+    )
+
+    def __str__(self):
+        return self.uuid
+
+    def save(self, *args, **kwargs):
+        if not self.uuid:
+            self.uuid = uuid.uuid1()
+        super(CrewTask, self).save(*args, **kwargs)
+
+    class Meta:
+        ordering = ['-date_in']
+        verbose_name = u'Заявка'
+        verbose_name_plural = u'Заявки'
