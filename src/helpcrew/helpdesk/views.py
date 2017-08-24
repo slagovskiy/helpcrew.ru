@@ -309,15 +309,15 @@ def api_user_edit(request, member=None, type=None):
             if str(type).lower() == 'a':
                 user.type = CrewUsers.ADMINISTRATOR_TYPE
                 user.save()
-                CrewEvent.addEvent(request, user.crew, u'Пользователь ' + user.name + ' назначен администратором')
+                CrewEvent.addEvent(request, user.crew, u'Пользователь ' + user.user.email + ' назначен администратором')
             elif str(type).lower() == 'd':
                 user.type = CrewUsers.DISPATCHER_TYPE
                 user.save()
-                CrewEvent.addEvent(request, user.crew, u'Пользователь ' + user.name + ' назначен диспетчером')
+                CrewEvent.addEvent(request, user.crew, u'Пользователь ' + user.user.email + ' назначен диспетчером')
             elif str(type).lower() == 'o':
                 user.type = CrewUsers.OPERATOR_TYPE
                 user.save()
-                CrewEvent.addEvent(request, user.crew, u'Пользователь ' + user.name + ' назначен оператором')
+                CrewEvent.addEvent(request, user.crew, u'Пользователь ' + user.user.email + ' назначен оператором')
             return HttpResponse('ok')
         else:
             return HttpResponse('access denied!')
