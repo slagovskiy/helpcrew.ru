@@ -425,6 +425,24 @@ a.btn-link {
     text-wrap: none;
 }
 
+.data-table td.text-left {
+    text-align: left;
+}
+
+.data-table td.text-right {
+    text-align: right;
+}
+
+.data-table td.info {
+    color: #AAAAAA;
+    font-size: .7em;
+    text-align: left;
+    padding-top: 0px;
+    padding-bottom: 8px;
+    line-height: .7em;
+    border-bottom: 1px solid #EEEEEE;
+}
+
 /**********************************************************************************************************************/
 
 

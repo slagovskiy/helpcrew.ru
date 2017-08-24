@@ -1,0 +1,19 @@
+<script id="tmpl-crew-events-list" type="text/x-jsrender">
+    <div class="col-md-12">
+        <table class="data-table">
+            <thead><tr>
+                <td width="20%">Дата</td>
+                <td width="80%">Событие</td>
+            </tr></thead>
+            <%for data%>
+            <tr>
+                <td width="20%"><%:date onerror=''%></td>
+                <td width="80%" class="text-left"><%:message onerror=''%></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="info"><%:user_firstname%> <%:user_lastname%> <%:user_email%> from: <%:host%> <%:ip%> <%:user_agent%></td>
+            </tr>
+            <%/for%>
+        </table>
+    </div>
+</script>

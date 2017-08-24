@@ -5,6 +5,7 @@ from .views import api_user_list, api_user_edit, api_user_delete, api_user_invai
 from .views import api_service_list, api_service_edit, api_service_delete
 from .views import api_priority_list, api_priority_edit, api_priority_delete
 from .views import api_service_price_edit, api_service_price_list
+from .views import api_event_list
 
 urlpatterns = [
     url(r'^view/(?P<url>[-\w]+)/$', crew_view, name='crew_view'),
@@ -40,6 +41,9 @@ urlpatterns = [
     url(r'^api/priority/edit/(?P<priority>[-\w]+)/$', api_priority_edit, name='api_priority_edit'),
     url(r'^api/priority/delete/$', api_priority_delete, name='api_priority_delete'),
     url(r'^api/priority/delete/(?P<priority>[-\w]+)/?$', api_priority_delete, name='api_priority_delete'),
+
+    url(r'^api/event/list/(?P<crew>[-\w]+)/$', api_event_list, name='api_event_list'),
+    url(r'^api/event/list/(?P<crew>[-\w]+)/(?P<limit>[-\w]+)/$', api_event_list, name='api_event_list'),
 
     url(r'^api/crew/check/url/$', api_crew_check_url, name='api_crew_check_url'),
 ]

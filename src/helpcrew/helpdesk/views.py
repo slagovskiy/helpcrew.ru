@@ -446,6 +446,44 @@ def api_priority_delete(request, priority=None):
 
 
 @csrf_exempt
+def api_event_list(request, crew=None, limit=100):
+    crew = Crew.objects.filter(slug=crew).first()
+    if crew:
+        if check_member_admin(request.user, crew):
+            list = []
+            for item in CrewEvent.objects.select_related('user', 'crew').filter(crew=crew).order_by('-date')[0:int(limit)]:
+                list.append(
+                    {
+                        'id': item.id,
+                        'crew_id': item.crew.id,
+                        'date': item.date.strftime('%Y/%m/%d %H:%M:%S'),
+                        'ip': item.ip,
+                        'host': item.host,
+                        'user_agent': item.user_agent,
+                        'message': item.message,
+                        'user_firstname': item.user.firstname,
+                        'user_lastname': item.user.lastname,
+                        'user_email': item.user.email,
+                    }
+                )
+            data = json.dumps(list)
+            return JsonResponse({
+                'message': '',
+                'data': json.loads(data)
+            })
+        else:
+            return JsonResponse({
+                'message': u'Доступ запрещен',
+                'model': ''
+            })
+    else:
+        return JsonResponse({
+            'message': u'Команда не найдена',
+            'model': ''
+        })
+
+
+@csrf_exempt
 def api_crew_check_url(request):
     message = ''
     r = True
