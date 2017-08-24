@@ -13,8 +13,9 @@
         {% else %}
             {% chk_member_admin crew as is_admin  %}
             {% chk_member_dispatcher crew as is_dispatcher  %}
-            <div class="col-md-12">
-                <h2>Команда &laquo{{ crew.name }}&raquo;</h2>
+            <div class="col-md-12 crew-title">
+                <span><a href="{% url 'crew_view' crew.url %}"><i class="fa fa-arrow-left color-b" aria-hidden="true"></i></a>
+                    Настройка команды &laquo{{ crew.name }}&raquo;</span>
             </div>
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a href="#tab_personal" aria-controls="tab_personal" role="tab" data-toggle="tab">Персональные настройки</a></li>

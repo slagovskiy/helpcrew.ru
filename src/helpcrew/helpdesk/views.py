@@ -71,8 +71,7 @@ def crew_view(request, url=None):
     crew = Crew.objects.filter(url=url)
     if crew:
         crew = crew[0]
-        if request.user.id in CrewUsers.objects.filter(crew=crew).values_list('user', flat=True):
-            request.session['crew'] = crew.url
+        if check_member(request.user, crew):
             content = {
                 'crew': crew,
                 'crews': get_crews_list(request.user, flat=True)
@@ -434,7 +433,7 @@ def api_priority_delete(request, priority=None):
         if priority:
             priority.deleted = not priority.deleted
             priority.save()
-            if property.deleted:
+            if priority.deleted:
                 CrewEvent.addEvent(request, priority.crew, u'Приоритет ' + priority.name + ' помечен удаленным')
             else:
                 CrewEvent.addEvent(request, priority.crew, u'Приоритет ' + priority.name + ' восстановлен')

@@ -2,36 +2,10 @@
 
 {% block content %}
     <div class="col-md-12 crew-title">
-        <span><i class="fa fa-users color-b" aria-hidden="true"></i> {{ crew.name }}</span>
-        <div class="btn-group crew-title-btn" role="group" aria-label="...">
-            <a href="{% url 'crew_edit' crew.url %}" class="btn btn-default btn-xs">свойства группы</a>
-            <div class="btn-group" role="group">
-                <a href="#" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-right">
-                    {% for crew in crews %}
-                        <li><a href="{% url 'crew_view' crew.url %}">{{ crew.name }}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
+        <span>Команда &laquo{{ crew.name }}&raquo;</span>
+        <a href="{% url 'crew_edit' crew.url %}" aria-haspopup="true" title="Настройка команды"><i class="fa fa-cog color-b" aria-hidden="true"></i></a>
     </div>
-    <div class="col-md-3">
-        <div class="crew-menu-title">Участники <a href="#" class="btn btn-xs btn-success">пригласить</a></div>
-        <ul class="crew-user-list">
-            {% for cu in crew.crewusers_set.all %}
-                <li>
-                {% ifequal cu.type 0 %}<i class="fa fa-user color-b" aria-hidden="true" title="Администратор"></i> {% endifequal %}
-                {% ifequal cu.type 1 %}<i class="fa fa-user color-o" aria-hidden="true" title="Диспетчер"></i> {% endifequal %}
-                {% ifequal cu.type 2 %}<i class="fa fa-user color-y" aria-hidden="true" title="Оператор"></i> {% endifequal %}
-                    {{ cu.user.name }}</li>
-            {% endfor %}
-        </ul>
-        <hr>
-        <div class="crew-menu-title">Базы знаний</div>
-    </div>
-    <div class="col-md-9">
+    <div class="col-md-12">
         <div class="crew-menu-title">
             Заявки
             <div class="btn-group" role="group" aria-label="...">
