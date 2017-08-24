@@ -39,7 +39,7 @@ def crew_edit(request, url=None):
                     user=request.user
                 )
                 crew.save()
-                CrewEvent.addEvent(request, c, u'Создана новая команда')
+                CrewEvent.addEvent(request, crew, u'Создана новая команда')
                 if crew.url=='':
                     crew.url = crew.slug
                     crew.save()
