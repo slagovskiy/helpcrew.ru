@@ -1,0 +1,23 @@
+<form action="{% url 'crew_edit' %}" method="post" id="form-crewedit" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="slug" value="{{ form.name }}">
+    <div class="col-md-12">
+        <div class="col-md-12 form-label">
+            Ключ команды*
+        </div>
+        <div class="col-md-12">
+            <input type="text" class="form-control" id="uuid" name="uuid" placeholder="Ключ" value=""
+                   data-validation="length" data-validation-length="2-100"
+                   data-validation-error-msg="Введите ключ команды"
+            />
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <input type="submit" class="form-control btn btn-primary" value="сохранить" />
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="form-control btn btn-default" value="отмена" onclick="window.history.back();" />
+        </div>
+    </div>
+</form>

@@ -40,7 +40,7 @@
         <div class="col-md-12 profile-data">
             <div class="col-md-4">
                     {% widget_crew_list %}
-                <div class="profile-data-actions"><a href="{% url 'crew_edit' %}" class="btn btn-success btn-sm">добавить</a> <a href="{% url 'crew_edit' %}" class="btn btn-success btn-sm">создать новую</a></div>
+                <div class="profile-data-actions"><a href="{% url 'crew_edit' %}?action=new" class="btn btn-success btn-sm">добавить</a> <a href="{% url 'crew_edit' %}" class="btn btn-success btn-sm">создать новую</a></div>
             </div>
             <div class="col-md-8">
                 <div class="profile-data-title">Активные заявки</div>

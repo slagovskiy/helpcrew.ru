@@ -16,9 +16,9 @@ from ..userext.decoretors import authenticate_check
 def crew_edit(request, url=None):
     if not request.user.is_authenticated:
         return redirect(reverse('user_login'))
-    if request.method=='GET':
+    if request.method == 'GET':
         if url==None:
-            content = {}
+            content = {'action': request.GET.get('action', '')}
             return render(request, 'helpdesk/crew_edit.html', content)
         else:
             crew = Crew.objects.filter(url=url)
@@ -33,24 +33,24 @@ def crew_edit(request, url=None):
             name = request.POST['name']
             url = request.POST.get('url', '')
             if not Crew.exist_url(url):
-                c = Crew.objects.create(
+                crew = Crew.objects.create(
                     name=name,
                     url=url,
                     user=request.user
                 )
-                c.save()
+                crew.save()
                 CrewEvent.addEvent(request, c, u'Создана новая команда')
-                if c.url=='':
-                    c.url = c.slug
-                    c.save()
+                if crew.url=='':
+                    crew.url = crew.slug
+                    crew.save()
                 cu = CrewUsers.objects.create(
-                    crew=c,
+                    crew=crew,
                     user=request.user,
                     type=CrewUsers.ADMINISTRATOR_TYPE
                 )
                 cu.save()
-                CrewEvent.addEvent(request, c, u'В команду домавлен администратор')
-                return redirect(reverse('crew_view_redirect', kwargs={'url': c.url}))
+                CrewEvent.addEvent(request, crew, u'В команду добавлен администратор ' + request.user.email)
+                return redirect(reverse('crew_view_redirect', kwargs={'url': crew.url}))
             else:
                 messages.error(request, u'Ошибка сохранения')
                 content = {
@@ -60,10 +60,20 @@ def crew_edit(request, url=None):
                     }
                 }
                 return render(request, 'helpdesk/crew_edit.html', content)
+        elif 'uuid' in request.POST:
+            crew = Crew.objects.filter(slug=request.POST.get('uuid', '')).first()
+            if crew:
+                if not CrewUsers.objects.filter(user=request.user, crew=crew):
+                    cu = CrewUsers.objects.create(
+                        crew=crew,
+                        user=request.user,
+                        type=CrewUsers.OPERATOR_TYPE
+                    )
+                    cu.save()
+                    CrewEvent.addEvent(request, crew, u'В команду добавлен оператор ' + request.user.email)
+                return redirect(reverse('crew_view_redirect', kwargs={'url': crew.url}))
         else:
-            return redirect(reverse('crew_edit'))
-    else:
-        return render(request, 'helpdesk/crew_edit.html', {})
+            return render(request, 'helpdesk/crew_edit.html', {})
 
 
 @authenticate_check

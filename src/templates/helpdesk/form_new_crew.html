@@ -2,10 +2,10 @@
     {% csrf_token %}
     <input type="hidden" name="slug" value="{{ form.name }}">
     <div class="col-md-12">
-        <div class="col-md-3 form-label">
+        <div class="col-md-12 form-label">
             Имя новой команды*
         </div>
-        <div class="col-md-9">
+        <div class="col-md-12">
             <input type="text" class="form-control" id="name" name="name" placeholder="Имя" value=""
                    data-validation="length" data-validation-length="2-100"
                    data-validation-error-msg="Введите имя команды"
@@ -13,10 +13,10 @@
         </div>
     </div>
     <div class="col-md-12">
-        <div class="col-md-3 form-label">
+        <div class="col-md-12 form-label">
             Адрес команды
         </div>
-        <div class="col-md-9">
+        <div class="col-md-12">
             <input type="text" class="form-control" id="url" name="url" placeholder="Адрес" value=""
                    data-validation="server" data-validation-url="{% url 'api_crew_check_url' %}"
                    data-validation-optional="true"
@@ -30,6 +30,11 @@
         </div>
     </div>
     <div class="col-md-12">
-        <input type="submit" class="form-control btn btn-primary" value="сохранить" />
+        <div class="col-md-6">
+            <input type="submit" class="form-control btn btn-primary" value="сохранить" />
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="form-control btn btn-default" value="отмена" onclick="window.history.back();" />
+        </div>
     </div>
 </form>
