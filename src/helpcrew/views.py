@@ -1,8 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.contrib import messages
 import logging
 
 from django.urls import reverse
+from .helpdesk.models import Crew
+from .helpdesk.utils import check_member
 
 log = logging.getLogger(__name__)
 
@@ -13,7 +16,18 @@ def index(request):
 
 
 def go_crew(request, url=None):
-    return redirect(reverse('crew_view', kwargs={'url': url}))
+    if request.user.is_anonymous:
+        return redirect(reverse('task_new', kwargs={'url': url}))
+    else:
+        crew = Crew.objects.filter(url=url).first()
+        if crew:
+            if check_member(request.user, crew):
+                return redirect(reverse('crew_view', kwargs={'url': url}))
+            else:
+                return redirect(reverse('task_new', kwargs={'url': url}))
+        else:
+            messages.error(request, u'Команда не найдена')
+            return redirect(reverse('home'))
 
 
 def test(request):

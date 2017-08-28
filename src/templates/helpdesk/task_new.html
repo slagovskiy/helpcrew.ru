@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="col-md-12 crew-title">
+        <span>Команда &laquo{{ crew.name }}&raquo;</span>
+    </div>
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#tab_task" aria-controls="tab_task" role="tab" data-toggle="tab">Новая заявка</a></li>
+            <li role="presentation"><a href="#tab_problem" aria-controls="tab_problem" role="tab" data-toggle="tab">Проблема</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="tab_task">
+                <form>
+                    <div class="col-md-12">
+                        <div class="col-md-12 form-label">
+                            Тип заявки
+                        </div>
+                        <div class="col-md-12">
+                            <select class="form-control selectpicker" id="service" name="service">
+                                {% for service in crew.crewservice_set.all %}
+                                    {% if not service.deleted %}
+                                        <option value="{{ service.id }}">{{ service.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-12 form-label">
+                            Тип заявки
+                        </div>
+                        <div class="col-md-12">
+                            <select class="form-control" id="service" name="service">
+                                {% for priority in crew.taskpriority_set.all %}
+                                    {% if not priority.deleted %}
+                                        <option value="{{ priority.id }}"{% if priority.default %} selected="selected"{% endif %}>{{ priority.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-12 form-label">
+                            Дополнительная информация
+                        </div>
+                        <div class="col-md-12">
+                            <textarea rows="5" class="form-control" id="description" name="description"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <input type="submit" class="form-control btn btn-primary" value="сохранить" />
+                        </div>
+                        <div class="col-md-6">
+                            <input type="button" class="form-control btn btn-default" value="отмена" onclick="window.history.back();" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="tab_problem">
+            </div>
+        </div>
+    </div>
+{% endblock %}

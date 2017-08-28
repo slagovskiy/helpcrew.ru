@@ -95,6 +95,21 @@ def crew_view(request, url=None):
         return redirect(reverse('user_profile'))
 
 
+def task_new(request, url=None):
+    crew = Crew.objects.filter(url=url).first()
+    if crew:
+        content = {
+            'crew': crew
+        }
+        if check_member(request.user, crew):
+            pass
+        else:
+            return render(request, 'helpdesk/task_new.html', content)
+    else:
+        messages.error(request, u'Команда не найдена')
+        return redirect(reverse('home'))
+
+
 @csrf_exempt
 def api_service_list(request, crew=None):
     crew = Crew.objects.filter(slug=crew).first()
