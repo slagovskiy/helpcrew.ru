@@ -27,6 +27,8 @@ def get_crews_list(user, flat=False):
 
 
 def check_member(user=None, crew=None):
+    if user.is_anonymous:
+        return False
     cu = CrewUsers.objects.filter(crew=crew, user=user)
     if cu:
         return True
@@ -48,6 +50,8 @@ def check_member_admin(user=None, crew=None):
         return False
 
 def check_member_dispatcher(user=None, crew=None):
+    if user.is_anonymous:
+        return False
     cu = CrewUsers.objects.filter(crew=crew, user=user)
     if cu:
         cu = cu[0]
