@@ -59,6 +59,14 @@
             </div>
         </div>
         <div class="col-md-12">
+            <div class="col-md-12 form-label">
+                Шаблон заявки
+            </div>
+            <div class="col-md-12">
+                <textarea rows="3" class="form-control" id="template" name="template"><%:fields.template onerror=''%></textarea>
+            </div>
+        </div>
+        <div class="col-md-12">
             <div class="col-md-12">
                 <input type="checkbox" id="checkbox_auto_wait_status" name="auto_wait_status" value="True" class="css-checkbox lrg" <%if fields%><%if fields.auto_wait_status%>checked="checked"<%/if%><%/if%> />
                 <label for="checkbox_auto_wait_status" name="auto_wait_status" class="css-label lrg web-two-style">Заявка автоматически переводится в статус "В ожидании"</label>

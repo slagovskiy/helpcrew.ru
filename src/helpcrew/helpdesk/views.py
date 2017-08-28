@@ -142,6 +142,7 @@ def api_service_edit(request, service=None):
                         time1=request.POST.get('time1', '0'),
                         time2=request.POST.get('time2', '0'),
                         unit=request.POST.get('unit', '_'),
+                        template=request.POST.get('template', ''),
                         auto_wait_status=request.POST.get('auto_wait_status', 'False')
                     )
                     serv.save()
@@ -158,6 +159,7 @@ def api_service_edit(request, service=None):
                 serv.time1 = request.POST.get('time1', '0')
                 serv.time2 = request.POST.get('time2', '0')
                 serv.unit = request.POST.get('unit', '_')
+                serv.template = request.POST.get('template', '')
                 serv.auto_wait_status = request.POST.get('auto_wait_status', 'False')
                 serv.save()
                 CrewEvent.addEvent(request, serv.crew, u'Изменена услуга ' + serv.name)
