@@ -190,6 +190,10 @@ class CrewService(models.Model):
         default=False,
         verbose_name=u'Заявка автоматически переводится в статус "В ожидании"'
     )
+    template = models.TextField(
+        default='',
+        verbose_name=u'Шаблон заявки'
+    )
     deleted = models.BooleanField(
         default=False,
         verbose_name=u'Услуга удалена'
