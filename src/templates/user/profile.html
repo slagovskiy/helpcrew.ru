@@ -26,7 +26,7 @@
                 <div class="profile-name">{{ request.user.name }}</div>
                 <div class="profile-email">{{ request.user.email }}</div>
                 <div class="profile-date">Зарегистрирован {{ request.user.register_date|date_from_now|safe }}, последний вход {{ request.user.last_login|date_from_now|safe }}</div>
-                <div class="profile-btn"><button class="btn btn-primary" onclick="$('#profile-edit').show();$('#profile-info').hide();">изменить</button></div>
+                <div class="profile-btn"><button class="btn btn-default" onclick="$('#profile-edit').show();$('#profile-info').hide();">изменить</button></div>
             </div>
             <div class="col-md-10" id="profile-edit">
                 <div class="col-md-6">
@@ -40,7 +40,14 @@
         <div class="col-md-12 profile-data">
             <div class="col-md-4">
                     {% widget_crew_list %}
-                <div class="profile-data-actions"><a href="{% url 'crew_edit' %}?action=new" class="btn btn-success btn-sm">добавить</a> <a href="{% url 'crew_edit' %}" class="btn btn-success btn-sm">создать новую</a></div>
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <button onclick="location.href='{% url 'crew_edit' %}?action=new';" class="form-control btn btn-default">добавить</button>
+                    </div>
+                    <div class="col-md-6">
+                        <button onclick="location.href='{% url 'crew_edit' %}';" class="form-control btn btn-default">создать новую</button>
+                    </div>
+                </div>
             </div>
             <div class="col-md-8">
                 <div class="profile-data-title">Активные заявки</div>

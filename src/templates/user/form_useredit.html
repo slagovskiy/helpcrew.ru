@@ -1,7 +1,7 @@
 <form action="{% url 'user_save' %}" method="post" id="form-useredit" enctype="multipart/form-data">
     {% csrf_token %}
     <input type="hidden" name="type" value="info">
-    <div class="col-md-12 profile-data-text">
+    <div class="col-md-12 form-label">
         Имя
     </div>
     <div class="col-md-12">
@@ -10,7 +10,7 @@
                data-validation-error-msg="Введите свое имя"
         />
     </div>
-    <div class="col-md-12 profile-data-text">
+    <div class="col-md-12 form-label">
         Фамилия
     </div>
     <div class="col-md-12">
@@ -19,11 +19,12 @@
                data-validation-error-msg="Введите свою фамилию"
         />
     </div>
-    <div class="col-md-12 profile-data-text">
+    <div class="col-md-12 form-label">
         Аватар
     </div>
     <div class="col-md-12">
-        <input type="file" class="form-control" id="avatar" name="avatar" placeholder="Аватар" value=""
+        <input type="file" class="filestyle" id="avatar" name="avatar"
+               data-text="Выбрать файл" data-btnClass="btn-primary"
                data-validation="size" data-validation-allowing="jpg, png, gif"
                data-validation-max-size="2M"
                data-validation-error-msg="Выберите графический файл, размером не более 2Мб"
@@ -34,7 +35,7 @@
             <input type="submit" class="form-control btn btn-primary" value="сохранить" />
         </div>
         <div class="col-md-6">
-            <input type="button" class="form-control  btn btn-info" value="отменить"
+            <input type="button" class="form-control  btn btn-default" value="отменить"
                    onclick="$('#profile-edit').hide();$('#profile-info').show();"
             />
         </div>
