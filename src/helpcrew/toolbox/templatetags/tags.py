@@ -28,3 +28,20 @@ def chk_member_dispatcher(context, crew):
 def chk_member(context, crew):
     request = context['request']
     return check_member(request.user, crew)
+
+
+@register.filter
+def escapebr(val=''):
+    return str(val) \
+        .replace('&', '&amp;') \
+        .replace('\'', '&#39;') \
+        .replace('"', ' &quot;') \
+        .replace('<', '&lt;') \
+        .replace('>', '&gt;') \
+        .replace('\n', '<br>')
+
+
+@register.filter
+def jsmultiline(val=''):
+    return str(val) \
+        .replace('\r\n', '\\n\\')
