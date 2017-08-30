@@ -134,11 +134,13 @@ class CrewUsers(models.Model):
     ADMINISTRATOR_TYPE = 0
     DISPATCHER_TYPE = 1
     OPERATOR_TYPE = 2
+    OBSERVER_TYPE = 3
 
     USER_TYPE_CHOICES = (
         (ADMINISTRATOR_TYPE, 'Administrator'),
         (DISPATCHER_TYPE, 'Dispatcher'),
         (OPERATOR_TYPE, 'Operator'),
+        (OBSERVER_TYPE, 'Observer')
     )
 
     crew = models.ForeignKey(
@@ -360,15 +362,23 @@ class CrewTask(models.Model):
         verbose_name=u'Приоритет заявки'
     )
     date_in = models.DateTimeField(
+        null=True,
+        blank=True,
         verbose_name=u'Дата подачи заявки'
     )
     date_end = models.DateTimeField(
+        null=True,
+        blank=True,
         verbose_name=u'Дата окончания подписки'
     )
     date_finish = models.DateTimeField(
+        null=True,
+        blank=True,
         verbose_name=u'Дата выполнения заявки'
     )
     date_close = models.DateTimeField(
+        null=True,
+        blank=True,
         verbose_name=u'Дата закрытия заявки'
     )
     contact_name = models.CharField(
