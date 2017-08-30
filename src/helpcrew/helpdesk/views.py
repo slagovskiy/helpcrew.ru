@@ -1,5 +1,6 @@
 import re
 import json
+from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -7,7 +8,7 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
 from django.core import serializers
 
-from .models import Crew, CrewUsers, CrewService, ServicePrice, TaskPriority, CrewEvent
+from .models import Crew, CrewUsers, CrewService, ServicePrice, TaskPriority, CrewEvent, CrewTask, TaskEvent, TaskFiles
 from ..userext.models import User
 from .utils import get_crews_list, check_member, check_member_admin
 from ..userext.decoretors import authenticate_check
@@ -107,6 +108,80 @@ def task_new(request, url=None):
             return render(request, 'helpdesk/task_new.html', content)
     else:
         messages.error(request, u'Команда не найдена')
+        return redirect(reverse('home'))
+
+
+def task_save(request):
+    crew = Crew.objects.filter(slug=request.POST.get('crew', '')).first()
+    if crew:
+        service = CrewService.objects.filter(id=int(request.POST.get('service', '-1'))).first()
+        status = CrewTask.TASK_STATUS_NEW
+        priority = TaskPriority.objects.filter(id=int(request.POST.get('priority', '-1'))).first()
+        description = request.POST.get('description', '')
+        task_type = CrewTask.TASK_TYPE_NORMAL
+        contact_name = request.POST.get('name', '')
+        contact_email = request.POST.get('email', '')
+        if not service:
+            task_type = CrewTask.TASK_TYPE_INCIDENT
+        observer = None
+        if not request.user.is_anonymous:
+            observer = request.user
+
+        task = CrewTask.objects.create(
+            crew=crew,
+            type=task_type,
+            status=status,
+            service=service,
+            description=description,
+            priority=priority,
+            date_in=timezone.now(),
+            contact_name=contact_name,
+            contact_email=contact_email,
+            observer=observer
+        )
+        task.save()
+
+        messages.error(request, u'Заявка успешно сохранена')
+
+        CrewEvent.addEvent(request, crew, u'Добавлена новая заявка ' + str(task.uuid))
+        TaskEvent.addEvent(request, task, u'Добавлена новая заявка ' + str(task.uuid))
+
+        if service and service.auto_wait_status:
+            task.status = CrewTask.TASK_STATUS_WAITING
+            task.save()
+            TaskEvent.addEvent((request, task, u'Заявка автоматически переведена в статус "В ожидании"'))
+
+        if service and task.type == CrewTask.TASK_TYPE_SUBSCRIBE:
+            task.status = CrewTask.TASK_STATUS_IN_WORK
+            task.save()
+            TaskEvent.addEvent((request, task, u'Подписка автоматически переведена в статус "В работе"'))
+
+        if observer and not check_member(request.user, crew):
+            cu = CrewUsers.objects.create(
+                crew=crew,
+                user=observer,
+                type=CrewUsers.OBSERVER_TYPE
+            )
+            cu.save()
+            CrewEvent.addEvent(request, crew, u'В команду добавлен наблюдатель ' + observer.email)
+            return redirect(reverse('crew_view', kwargs={'url': crew.url}))
+        else:
+            messages.error(request, u'Заявка успешно сохранена')
+            return redirect(reverse('task_info', kwargs={'uuid': str(task.uuid)}))
+    else:
+        messages.error(request, u'Команда не найдена')
+        return redirect(reverse('home'))
+
+
+def task_info(request, uuid=None):
+    task = CrewTask.objects.filter(uuid=uuid).first()
+    if task:
+        content = {
+            'task': task
+        }
+        return render(request, 'helpdesk/task_info.html', content)
+    else:
+        messages.error(request, u'Заявка не найдена')
         return redirect(reverse('home'))
 
 
