@@ -421,3 +421,58 @@ class CrewTask(models.Model):
         ordering = ['-date_in']
         verbose_name = u'Заявка'
         verbose_name_plural = u'Заявки'
+
+
+class TaskEvent(models.Model):
+    task = models.ForeignKey(
+        CrewTask,
+        verbose_name=u'Заявка'
+    )
+    date = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name=u'Время события'
+    )
+    user = models.ForeignKey(
+        User,
+        verbose_name=u'Пользователь'
+    )
+    ip = models.GenericIPAddressField(
+        default='',
+        max_length=60,
+        verbose_name=u'IP адрес пользователя'
+    )
+    host = models.CharField(
+        default='',
+        max_length=60,
+        verbose_name=u'Хост пользователя'
+    )
+    user_agent = models.CharField(
+        default='',
+        max_length=200,
+        verbose_name=u'Идентификатор браузера'
+    )
+    message = models.TextField(
+        default='',
+        verbose_name=u'Событие'
+    )
+
+    def __str__(self):
+        return self.date.strftime('%Y/%m/%d %H:%M:%S')
+
+    @staticmethod
+    def addEvent(request, task, message):
+        if request and task:
+            event = TaskEvent(
+                task=task,
+                user=request.user,
+                ip=request.META['REMOTE_ADDR'],
+                host=request.META['REMOTE_HOST'],
+                user_agent=request.META['HTTP_USER_AGENT'],
+                message=message
+            )
+            event.save()
+
+    class Meta:
+        ordering = ['-date']
+        verbose_name = u'Событие в заявке'
+        verbose_name_plural = u'События в заявке'
