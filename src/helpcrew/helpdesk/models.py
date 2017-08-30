@@ -1,4 +1,5 @@
 import uuid
+import os
 from django.db import models
 
 from ..toolbox.models import Global
@@ -421,6 +422,25 @@ class CrewTask(models.Model):
         ordering = ['-date_in']
         verbose_name = u'Заявка'
         verbose_name_plural = u'Заявки'
+
+
+class TaskFiles(models.Model):
+    def file_path(instance, filename):
+        ext = filename.split('.')[-1]
+        filename = '{}.{}'.format(str(uuid.uuid1()), ext)
+        return os.path.join(os.path.join(instance.task.uuid, 'tasks'), filename)
+
+    task = models.ForeignKey(
+        CrewTask,
+        verbose_name=u'Заявка'
+    )
+    file = models.FileField(
+        blank=True,
+        null=True,
+        upload_to=file_path,
+        verbose_name=u'Вложение'
+    )
+
 
 
 class TaskEvent(models.Model):
