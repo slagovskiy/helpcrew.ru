@@ -81,6 +81,8 @@ class CrewEvent(models.Model):
     )
     user = models.ForeignKey(
         User,
+        null=True,
+        blank=True,
         verbose_name=u'Пользователь'
     )
     ip = models.GenericIPAddressField(
@@ -109,9 +111,12 @@ class CrewEvent(models.Model):
     @staticmethod
     def addEvent(request, crew, message):
         if request and crew:
+            user = request.user
+            if user.is_anonymous:
+                user = None
             event = CrewEvent(
                 crew=crew,
-                user=request.user,
+                user=user,
                 ip=request.META['REMOTE_ADDR'],
                 host=request.META['REMOTE_HOST'],
                 user_agent=request.META['HTTP_USER_AGENT'],
@@ -449,7 +454,6 @@ class TaskFiles(models.Model):
     )
 
 
-
 class TaskEvent(models.Model):
     task = models.ForeignKey(
         CrewTask,
@@ -461,6 +465,8 @@ class TaskEvent(models.Model):
     )
     user = models.ForeignKey(
         User,
+        null=True,
+        blank=True,
         verbose_name=u'Пользователь'
     )
     ip = models.GenericIPAddressField(
@@ -489,9 +495,12 @@ class TaskEvent(models.Model):
     @staticmethod
     def addEvent(request, task, message):
         if request and task:
+            user = request.user
+            if user.is_anonymous:
+                user = None
             event = TaskEvent(
                 task=task,
-                user=request.user,
+                user=user,
                 ip=request.META['REMOTE_ADDR'],
                 host=request.META['REMOTE_HOST'],
                 user_agent=request.META['HTTP_USER_AGENT'],
