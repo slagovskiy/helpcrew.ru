@@ -376,6 +376,13 @@ class CrewTask(models.Model):
         default='',
         verbose_name=u'Электронный адрес контакта'
     )
+    observer = models.ForeignKey(
+        User,
+        related_name='observer',
+        null=True,
+        blank=True,
+        verbose_name=u'Наблюдатель, подавший заявку'
+    )
     dispatcher_in = models.ForeignKey(
         User,
         related_name='dispatcher_in',
