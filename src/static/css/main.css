@@ -108,6 +108,8 @@ button {
 .font08 { font-size: 0.8em; }
 .font06 { font-size: 0.6em; }
 
+.nav-tabs { font-size: 0.8em; }
+.tab-pane { padding-top: 10px; }
 
 .panel-heading {
     padding: 5px 10px;

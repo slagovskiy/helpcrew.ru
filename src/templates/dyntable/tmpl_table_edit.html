@@ -1,0 +1,23 @@
+<script id="tmpl-crew-table-edit" type="text/x-jsrender">
+    <%for data%>
+    <form action="{% url 'api_table_edit' %}" method="post" id="form-crew-table-edit" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="crew" value="{{ crew.id }}" />
+        <div class="col-md-12">
+            <div class="col-md-12 form-label">
+                Наименование
+            </div>
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Наименование справочника" value="<%:fields.name onerror=''%>"
+                       data-validation="length" data-validation-length="2-100"
+                       data-validation-error-msg="Введите наименование справочника"
+                />
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="сохранить" onclick="saveTable('<%:pk onerror='0'%>');return false;" /></div>
+            <div class="col-md-6"><button data-fancybox-close class="form-control btn btn-default">отмена</button></div>
+        </div>
+    </form>
+    <%/for%>
+</script>

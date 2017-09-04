@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^u/', include('helpcrew.userext.urls')),
     url(r'^p/(?P<url>[-\w]+)/$', go_crew, name='crew_view_redirect'),
     url(r'^c/', include('helpcrew.helpdesk.urls')),
+    url(r'^t/', include('helpcrew.dyntable.urls')),
 
     url(r'^media/(?P<path>.*)$', media),
     url(r'^admin/', admin.site.urls),
