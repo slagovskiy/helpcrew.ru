@@ -1,5 +1,9 @@
 import uuid
 import os
+import datetime
+from holidays import HolidayBase
+import pytz
+import businesstimedelta
 from django.db import models
 
 from ..toolbox.models import Global
@@ -482,6 +486,53 @@ class CrewTask(models.Model):
 
     def __str__(self):
         return self.uuid
+
+    def date_finish_calc(self):
+        working_days = []
+        if self.crew.work_day_0:
+            working_days.append(0)
+        if self.crew.work_day_1:
+            working_days.append(1)
+        if self.crew.work_day_2:
+            working_days.append(2)
+        if self.crew.work_day_3:
+            working_days.append(3)
+        if self.crew.work_day_4:
+            working_days.append(4)
+        if self.crew.work_day_5:
+            working_days.append(5)
+        if self.crew.work_day_6:
+            working_days.append(6)
+
+        workday = businesstimedelta.WorkDayRule(
+            start_time=datetime.time(self.crew.work_start_time),
+            end_time=datetime.time(self.crew.work_start_time),
+            working_days=working_days)
+
+        lunchbreak = businesstimedelta.LunchTimeRule(
+            start_time=datetime.time(self.crew.launch_start_time),
+            end_time=datetime.time(self.crew.launch_end_time),
+            working_days=working_days)
+
+        holidays = HolidayBase()
+        btd = None
+
+        if self.crew.holidays:
+            holidays.append(self.crew.holidays.split('\n'))
+            btd = businesstimedelta.Rules([workday, lunchbreak, holidays])
+        else:
+            btd = businesstimedelta.Rules([workday, lunchbreak])
+
+        date_in = self.date_in
+        hours = 0
+        delta = None
+        if self.service:
+            hours = self.service.time2
+            delta = businesstimedelta.BusinessTimeDelta(btd, hours=hours)
+        else:
+            hours = self.crew.incident_time_two
+            delta = businesstimedelta.BusinessTimeDelta(btd, hours=hours)
+        return date_in + delta
 
     def save(self, *args, **kwargs):
         if not self.uuid:
