@@ -5,12 +5,29 @@
     <div class="col-md-12 crew-title">
         <span>Команда &laquo{{ task.crew.name }}&raquo; - Информация по заявке</span><br>
     </div>
-    <div class="col-md-12">
-        <div><b>Время подачи</b>: {{ task.date_in|date_from_now|safe }}</div>
-        <div><b>Статус</b>: {{ task.status }}</div>
-        <hr>
-        {% if task.service %}<div><b>Тип заявки</b>: {{ task.service.name }}</div>{% endif %}
-        <div><b>Описание</b>: {{ task.description|linebreaksbr }}</div>
+    <div class="col-md-12 task">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                {% if task.service %}<div class="panel-heading">{{ task.service.name }}</div>{% else %}Проблема{% endif %}
+                <div class="panel-body">{{ task.description|linebreaksbr }}</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-body panel-default">
+                <div>{{ task.status|task_status }}</div>
+                <div>{{ task.date_in|date_from_now|safe }}</div>
+                <div>{{ task.date_finish_calc }}</div>
+            </div>
+            <div class="panel panel-body panel-default">
+                {% if task.observer %}
+                    <div class="font08">{{ task.observer.name }}</div>
+                    <div class="font06">{{ task.observer.email }}</div>
+                {% else %}
+                    <div class="font08">{{ task.contact_name }}</div>
+                    <div class="font06">{{ task.contact_email }}</div>
+                {% endif %}
+            </div>
+        </div>
     </div>
     {% endif %}
 {% endblock %}

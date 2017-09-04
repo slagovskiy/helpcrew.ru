@@ -2,6 +2,7 @@ import uuid
 from django import template
 
 from ...helpdesk.utils import check_member_admin, check_member_dispatcher, check_member
+from ...helpdesk.models import CrewTask
 
 register = template.Library()
 
@@ -10,6 +11,24 @@ register = template.Library()
 def date_from_now(val):
     u = str(uuid.uuid4())
     return '<span id="date_' + u + '"><script>moment.locale(\'ru\');$("#date_' + u + '").html(moment("%s").fromNow());\n</script></span>' % val
+
+
+@register.filter
+def task_status(val):
+    if int(val) == CrewTask.TASK_STATUS_NEW:
+        return 'Новая'
+    elif int(val) == CrewTask.TASK_STATUS_WAITING:
+        return 'В ожидании'
+    elif int(val) == CrewTask.TASK_STATUS_IN_WORK:
+        return 'В работе'
+    elif int(val) == CrewTask.TASK_STATUS_CLOSED:
+        return 'Закрыта'
+    elif int(val) == CrewTask.TASK_STATUS_FINISHED:
+        return 'Завершена'
+    elif int(val) == CrewTask.TASK_STATUS_CANCELED:
+        return 'Отменена'
+    elif int(val) == CrewTask.TASK_STATUS_PAUSED:
+        return 'Приостановлена'
 
 
 @register.simple_tag(takes_context=True)

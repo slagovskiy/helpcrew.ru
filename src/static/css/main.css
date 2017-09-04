@@ -105,6 +105,19 @@ button {
 .color-dg { color: #333333; }
 .color-bl { color: #000000; }
 
+.font08 { font-size: 0.8em; }
+.font06 { font-size: 0.6em; }
+
+
+.panel-heading {
+    padding: 5px 10px;
+    font-weight: bold;
+}
+
+.panel-body {
+    padding: 10px;
+}
+
 /* header */
 /**********************************************************************************************************************/
 
