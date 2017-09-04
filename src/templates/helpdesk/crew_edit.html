@@ -34,8 +34,8 @@
             <div class="tab-content">
                 {% if is_admin %}
                 <div role="tabpanel" class="tab-pane" id="tab_crew">
-                    <div class="col-md-6">
-                        {% include 'helpdesk/form_edit_crew.html' %}
+                    <div class="col-md-12">
+                        <div id="crew-edit"></div>
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="tab_service">
@@ -83,6 +83,7 @@
 
 
         {% if is_admin %}
+            {% include 'helpdesk/tmpl_crew_edit.html' %}
             {% include 'helpdesk/tmpl_service_list.html' %}
             {% include 'helpdesk/tmpl_service_edit.html' %}
             {% include 'helpdesk/tmpl_price_list.html' %}
@@ -94,6 +95,47 @@
             {% include 'helpdesk/tmpl_priority_edit.html' %}
             {% include 'helpdesk/tmpl_events_list.html' %}
             <script>
+                function loadCrew() {
+                    $.getJSON( "{% url 'api_crew_edit' %}{{ crew.slug }}/", function( data ) {
+                        try {
+                            if (data['message'] == '') {
+                                var tmpl = $.templates("#tmpl-crew-edit");
+                                var html = tmpl.render(data);
+                                $('#crew-edit').html(html);
+                                $.validate({
+                                    form : '#form-crew-edit'
+                                });
+                            }
+                        }
+                        catch (err) {
+                            console.error(err);
+                        }
+                    });
+                }
+
+                function saveCrew(crew) {
+                    if (crew == '') crew = '0';
+                    $.ajax({
+                        type: 'POST',
+                        url: $('#form-crew-edit').attr('action') + crew + '/',
+                        data: $('#form-crew-edit').serialize()
+                    })
+                        .done(function(data){
+                            if(data=='ok') {
+                                $.fancybox.close();
+                                $.notify('Сохранено', 'success');
+                                loadCrew();
+                                loadEventsList(100);
+                            }
+                            else {
+                                $.notify(data, 'warn');
+                            }
+                        })
+                        .fail(function(){
+                            $.notify('Ошибка передачи данных', 'error');
+                        });
+                }
+
                 function loadServiceList() {
                     $.getJSON( "{% url 'api_service_list' %}{{ crew.slug }}/", function( data ) {
                         try {
@@ -482,6 +524,7 @@
                 }
 
                 function init() {
+                    loadCrew();
                     loadServiceList();
                     loadUserList();
                     loadPriorityList();

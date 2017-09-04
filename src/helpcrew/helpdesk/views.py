@@ -186,6 +186,53 @@ def task_info(request, uuid=None):
 
 
 @csrf_exempt
+def api_crew_edit(request, crew=None):
+    if request.method == 'GET':
+        crew = Crew.objects.filter(slug=crew).first()
+        if not check_member_admin(request.user, crew):
+            return JsonResponse({
+                'message': u'access denied!',
+                'data': ''
+            })
+        if crew:
+            data = serializers.serialize('json', [crew,])
+            return JsonResponse({
+                'message': '',
+                'data': json.loads(data)
+            })
+        else:
+            return JsonResponse({
+                'message': u'Команда не найдена',
+                'data': ''
+            })
+    if request.method == 'POST':
+        crew = Crew.objects.filter(slug=request.POST.get('slug', '')).first()
+        if check_member_admin(request.user, crew):
+            if crew:
+                crew.name = request.POST.get('name', '_')
+                crew.url = request.POST.get('url', crew.slug)
+                crew.work_start_time = request.POST.get('work_start_time', '9')
+                crew.work_stop_time = request.POST.get('work_stop_time', '18')
+                crew.launch_start_time = request.POST.get('launch_start_time', '12')
+                crew.launch_stop_time = request.POST.get('launch_stop_time', '13')
+                crew.holidays = request.POST.get('holidays', '')
+                crew.work_day_0 = request.POST.get('work_day_0', False)
+                crew.work_day_1 = request.POST.get('work_day_1', False)
+                crew.work_day_2 = request.POST.get('work_day_2', False)
+                crew.work_day_3 = request.POST.get('work_day_3', False)
+                crew.work_day_4 = request.POST.get('work_day_4', False)
+                crew.work_day_5 = request.POST.get('work_day_5', False)
+                crew.work_day_6 = request.POST.get('work_day_6', False)
+                crew.save()
+                CrewEvent.addEvent(request, crew, u'Изменены параметры команды')
+                return HttpResponse('ok')
+            else:
+                return HttpResponse('crew not found!')
+        else:
+            return HttpResponse('access denied!')
+
+
+@csrf_exempt
 def api_service_list(request, crew=None):
     crew = Crew.objects.filter(slug=crew).first()
     if crew:

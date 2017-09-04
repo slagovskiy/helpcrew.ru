@@ -1,0 +1,129 @@
+<script id="tmpl-crew-edit" type="text/x-jsrender">
+    <%for data%>
+    <form action="{% url 'api_crew_edit' %}" method="post" id="form-crew-edit" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="slug" value="<%:fields.slug%>">
+        <div class="col-md-6">
+            <div class="col-md-12">
+                <div class="col-md-12 form-label">
+                    Имя команды
+                </div>
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Имя" value="<%:fields.name onerror=''%>"
+                           data-validation="length" data-validation-length="2-100"
+                           data-validation-error-msg="Введите имя команды"
+                    />
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-12 form-label">
+                    Адрес команды
+                </div>
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="url" name="url" placeholder="Адрес" value="<%:fields.url onerror=''%>"
+                           data-validation="server" data-validation-url="{% url 'api_crew_check_url' %}"
+                           data-validation-optional="true" data-validation-ignore="<%:fields.url onerror=''%>"
+                           data-validation-error-msg="Введите адрес команды, используя латинские символы и цифры"
+                    />
+                </div>
+                <div class="col-md-12 form-comment">
+                    Для быстрого перехода на страницу команды http://helpcrew.ru/p/<span style="color: red">my_crew</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="col-md-6">
+                <div class="col-md-12 form-label">
+                    Начало рабочего дня
+                </div>
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="work_start_time" name="work_start_time" placeholder="8" value="<%:fields.work_start_time onerror=''%>"
+                           data-validation="number" data-validation-allowing="range[0;23]"
+                           data-validation-error-msg="Введите верное начало рабочего дня"
+                    />
+                </div>
+                <div class="col-md-12 form-label">
+                    Конец рабочего дня
+                </div>
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="work_end_time" name="work_end_time" placeholder="18" value="<%:fields.work_end_time onerror=''%>"
+                           data-validation="number" data-validation-allowing="range[0;23]"
+                           data-validation-error-msg="Введите верное окончание рабочего дня"
+                    />
+                </div>
+                <div class="col-md-12 form-label">
+                    Начало обеденного перерыва
+                </div>
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="launch_start_time" name="launch_start_time" placeholder="13" value="<%:fields.launch_start_time onerror=''%>"
+                           data-validation="number" data-validation-allowing="range[0;23]"
+                           data-validation-error-msg="Введите верное начало обеденного перерыва"
+                    />
+                </div>
+                <div class="col-md-12 form-label">
+                    Конец обеденного перерыва
+                </div>
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="launch_end_time" name="launch_end_time" placeholder="14" value="<%:fields.launch_end_time onerror=''%>"
+                           data-validation="number" data-validation-allowing="range[0;23]"
+                           data-validation-error-msg="Введите верное окончание обеденного перерыва"
+                    />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-12 form-label">
+                    Праздники
+                </div>
+                <div class="col-md-12">
+                    <textarea class="form-control font06" id="holidays" name="holidays" rows="9"><%:fields.holidays onerror=''%></textarea>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-12 form-label">
+                    Рабочие дни
+                </div>
+                <div class="col-md-12">
+                    <input type="checkbox" id="work_day_0" name="work_day_0" value="True" class="css-checkbox lrg"
+                     <%if fields%><%if fields.work_day_0%>checked="checked"<%/if%><%/if%>
+                     />
+                    <label for="work_day_0" name="work_day_0" class="css-label lrg web-two-style">Пн</label>&nbsp;&nbsp;
+
+                    <input type="checkbox" id="work_day_1" name="work_day_1" value="True" class="css-checkbox lrg"
+                     <%if fields%><%if fields.work_day_1%>checked="checked"<%/if%><%/if%>
+                     />
+                    <label for="work_day_1" name="work_day_1" class="css-label lrg web-two-style">Вт</label>&nbsp;&nbsp;
+
+                    <input type="checkbox" id="work_day_2" name="work_day_2" value="True" class="css-checkbox lrg"
+                     <%if fields%><%if fields.work_day_2%>checked="checked"<%/if%><%/if%>
+                     />
+                    <label for="work_day_2" name="work_day_2" class="css-label lrg web-two-style">Ср</label>&nbsp;&nbsp;
+
+                    <input type="checkbox" id="work_day_3" name="work_day_3" value="True" class="css-checkbox lrg"
+                     <%if fields%><%if fields.work_day_3%>checked="checked"<%/if%><%/if%>
+                     />
+                    <label for="work_day_3" name="work_day_3" class="css-label lrg web-two-style">Чт</label>&nbsp;&nbsp;
+
+                    <input type="checkbox" id="work_day_4" name="work_day_4" value="True" class="css-checkbox lrg"
+                     <%if fields%><%if fields.work_day_4%>checked="checked"<%/if%><%/if%>
+                     />
+                    <label for="work_day_4" name="work_day_4" class="css-label lrg web-two-style">Пт</label>&nbsp;&nbsp;
+
+                    <input type="checkbox" id="work_day_5" name="work_day_5" value="True" class="css-checkbox lrg"
+                     <%if fields%><%if fields.work_day_5%>checked="checked"<%/if%><%/if%>
+                     />
+                    <label for="work_day_5" name="work_day_5" class="css-label lrg web-two-style">Сб</label>&nbsp;&nbsp;
+
+                    <input type="checkbox" id="work_day_6" name="work_day_6" value="True" class="css-checkbox lrg"
+                     <%if fields%><%if fields.work_day_6%>checked="checked"<%/if%><%/if%>
+                     />
+                    <label for="work_day_6" name="work_day_6" class="css-label lrg web-two-style">Вс</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="сохранить" onclick="saveCrew('<%:pk onerror='0'%>');return false;"/></div>
+            <div class="col-md-6"><input type="button" class="form-control btn btn-danger" value="удалить" /></div>
+        </div>
+    </form>
+    <%/for%>
+</script>
