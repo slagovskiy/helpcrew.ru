@@ -77,7 +77,7 @@ class Field(models.Model):
     )
 
     def __str__(self):
-        return '%s %s' % (self.name, self.table.name)
+        return self.name
 
     def save(self, *args, **kwargs):
         if not self.uuid:
