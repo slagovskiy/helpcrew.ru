@@ -44,10 +44,33 @@ class Crew(models.Model):
         default=18,
         verbose_name=u'Конец рабочего дня'
     )
-    work_days = models.CharField(
-        max_length=15,
-        default='0,1,2,3,4',
-        verbose_name=u'Рабочие дни'
+    work_day_0 = models.BooleanField(
+        default=True,
+        verbose_name=u'Рабочий день 0'
+    )
+    work_day_1 = models.BooleanField(
+        default=True,
+        verbose_name=u'Рабочий день 1'
+    )
+    work_day_2 = models.BooleanField(
+        default=True,
+        verbose_name=u'Рабочий день 2'
+    )
+    work_day_3 = models.BooleanField(
+        default=True,
+        verbose_name=u'Рабочий день 3'
+    )
+    work_day_4 = models.BooleanField(
+        default=True,
+        verbose_name=u'Рабочий день 4'
+    )
+    work_day_5 = models.BooleanField(
+        default=False,
+        verbose_name=u'Рабочий день 5'
+    )
+    work_day_6 = models.BooleanField(
+        default=False,
+        verbose_name=u'Рабочий день 6'
     )
     launch_start_time = models.IntegerField(
         default=13,
