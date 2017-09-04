@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'helpcrew.toolbox',
     'helpcrew.taskqueue',
     'helpcrew.helpdesk',
+    'helpcrew.dyntable',
 ]
 
 MIDDLEWARE = [
