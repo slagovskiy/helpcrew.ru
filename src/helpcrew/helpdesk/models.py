@@ -36,6 +36,36 @@ class Crew(models.Model):
         default=0,
         verbose_name=u'Ограничение на количество членов команды'
     )
+    work_start_time = models.IntegerField(
+        default=9,
+        verbose_name=u'Начало рабочего дня'
+    )
+    work_end_time = models.IntegerField(
+        default=18,
+        verbose_name=u'Конец рабочего дня'
+    )
+    work_days = models.CharField(
+        max_length=15,
+        default='0,1,2,3,4',
+        verbose_name=u'Рабочие дни'
+    )
+    launch_start_time = models.IntegerField(
+        default=13,
+        verbose_name=u'Начало обеденного перерыва'
+    )
+    launch_end_time = models.IntegerField(
+        default=14,
+        verbose_name=u'Конец обеденного перерыва'
+    )
+    launch_days = models.CharField(
+        max_length=15,
+        default='0,1,2,3,4',
+        verbose_name=u'Дни обеденного перерыва'
+    )
+    holidays = models.TextField(
+        default='',
+        verbose_name=u'Праздники'
+    )
     start_task = models.IntegerField(default=0)
     incident_time_one = models.IntegerField(default=0)
     incident_time_two = models.IntegerField(default=0)
