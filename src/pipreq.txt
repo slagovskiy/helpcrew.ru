@@ -4,6 +4,8 @@ django-sendfile
 django-mptt
 django-debug-toolbar
 django-extensions
+businesstimedelta
+holidays
 user_agents
 html2text
 pillow
