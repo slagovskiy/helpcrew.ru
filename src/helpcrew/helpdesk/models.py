@@ -57,11 +57,6 @@ class Crew(models.Model):
         default=14,
         verbose_name=u'Конец обеденного перерыва'
     )
-    launch_days = models.CharField(
-        max_length=15,
-        default='0,1,2,3,4',
-        verbose_name=u'Дни обеденного перерыва'
-    )
     holidays = models.TextField(
         default='',
         verbose_name=u'Праздники'
