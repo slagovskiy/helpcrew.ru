@@ -17,13 +17,17 @@ class Table(models.Model):
         default='',
         verbose_name=u'Имя таблицы'
     )
+    deleted = models.BooleanField(
+        default=False,
+        verbose_name=u'Запись удалена'
+    )
 
     def __str__(self):
         return self.name
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = uuid.uuid1()
+        if not self.uuid:
+            self.uuid = uuid.uuid1()
         super(Table, self).save(*args, **kwargs)
 
     class Meta:
