@@ -1,5 +1,6 @@
 import uuid
 import os
+from django.utils import timezone
 import datetime
 from holidays import HolidayBase
 import pytz
@@ -506,13 +507,17 @@ class CrewTask(models.Model):
 
         workday = businesstimedelta.WorkDayRule(
             start_time=datetime.time(self.crew.work_start_time),
-            end_time=datetime.time(self.crew.work_start_time),
-            working_days=working_days)
+            end_time=datetime.time(self.crew.work_end_time),
+            working_days=working_days,
+            tz=timezone.get_current_timezone()
+        )
 
         lunchbreak = businesstimedelta.LunchTimeRule(
             start_time=datetime.time(self.crew.launch_start_time),
             end_time=datetime.time(self.crew.launch_end_time),
-            working_days=working_days)
+            working_days=working_days,
+            tz=timezone.get_current_timezone()
+        )
 
         holidays = HolidayBase()
         btd = None
@@ -523,16 +528,12 @@ class CrewTask(models.Model):
         else:
             btd = businesstimedelta.Rules([workday, lunchbreak])
 
-        date_in = self.date_in
-        hours = 0
         delta = None
         if self.service:
-            hours = self.service.time2
-            delta = businesstimedelta.BusinessTimeDelta(btd, hours=hours)
+            delta = businesstimedelta.BusinessTimeDelta(btd, hours=self.service.time2)
         else:
-            hours = self.crew.incident_time_two
-            delta = businesstimedelta.BusinessTimeDelta(btd, hours=hours)
-        return date_in + delta
+            delta = businesstimedelta.BusinessTimeDelta(btd, hours=self.crew.incident_time_two)
+        return self.date_in + delta
 
     def save(self, *args, **kwargs):
         if not self.uuid:

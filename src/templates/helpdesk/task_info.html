@@ -16,7 +16,8 @@
             <div class="panel panel-body panel-default">
                 <div>{{ task.status|task_status }}</div>
                 <div>{{ task.date_in|date_from_now|safe }}</div>
-                <div>{{ task.date_finish_calc }}</div>
+                <div>{{ task.date_in }}</div>
+                <div>{{ task.date_finish_calc|date_from_now|safe }}</div>
             </div>
             <div class="panel panel-body panel-default">
                 {% if task.observer %}
