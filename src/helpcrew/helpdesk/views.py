@@ -103,7 +103,7 @@ def task_new(request, url=None):
             'crew': crew
         }
         if check_member(request.user, crew):
-            pass
+            return render(request, 'helpdesk/task_new.html', content)
         else:
             return render(request, 'helpdesk/task_new.html', content)
     else:
@@ -595,6 +595,7 @@ def api_priority_delete(request, priority=None):
 
 @csrf_exempt
 def api_event_list(request, crew=None, limit=100):
+    import pytz
     crew = Crew.objects.filter(slug=crew).first()
     if crew:
         if check_member_admin(request.user, crew):
@@ -604,7 +605,7 @@ def api_event_list(request, crew=None, limit=100):
                     {
                         'id': item.id,
                         'crew_id': item.crew.id,
-                        'date': item.date.strftime('%Y/%m/%d %H:%M:%S'),
+                        'date': timezone.localtime(item.date, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S'),
                         'ip': item.ip,
                         'host': item.host,
                         'user_agent': item.user_agent,
