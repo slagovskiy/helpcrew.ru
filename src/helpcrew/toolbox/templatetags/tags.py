@@ -10,7 +10,7 @@ register = template.Library()
 @register.filter
 def date_from_now(val):
     u = str(uuid.uuid4())
-    return '<span id="date_' + u + '"><script>moment.locale(\'ru\');$("#date_' + u + '").html(moment("%s").fromNow());\n</script></span>' % val
+    return '<span id="date_%s" title="%s"><script>moment.locale(\'ru\');$("#date_%s").html(moment("%s").fromNow());\n</script></span>' % (u, val, u, val)
 
 
 @register.filter
