@@ -106,7 +106,14 @@ button {
 .color-bl { color: #000000; }
 
 .font08 { font-size: 0.8em; }
+.font07 { font-size: 0.7em; }
 .font06 { font-size: 0.6em; }
+
+.padding-top-10 { padding-top: 10px !important; }
+.padding-top-15 { padding-top: 15px !important; }
+.padding-top-20 { padding-top: 20px !important; }
+
+.nobold { font-weight: normal; }
 
 .nav-tabs { font-size: 0.8em; }
 .tab-pane { padding-top: 10px; }
@@ -114,6 +121,10 @@ button {
 .panel-heading {
     padding: 5px 10px;
     font-weight: bold;
+}
+
+.panel-heading .label {
+    font-weight: normal;
 }
 
 .panel-body {

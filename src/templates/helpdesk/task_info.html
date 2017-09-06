@@ -8,25 +8,66 @@
     <div class="col-md-12 task">
         <div class="col-md-9">
             <div class="panel panel-default">
-                {% if task.service %}<div class="panel-heading">{{ task.service.name }}</div>{% else %}Проблема{% endif %}
+                <div class="panel-heading">
+                    {% if task.service %}{{ task.service.name }}{% else %}Проблема{% endif %}
+                    <span class="label label-primary">{{ task.status|task_status }}</span>
+                    <span class="label label-default">{{ task.date_in | date:"Y/m/d G:i" }}</span>
+                    <div class="nobold font07">
+                    {% if task.observer %}
+                        {{ task.observer.firstname }} {{ task.observer.lastname }} {{ task.observer.email }}
+                    {% else %}
+                        {{ task.contact_name }} {{ task.contact_email }}
+                    {% endif %}
+                        - ожидаемое время выполнения {{ task.date_finish_calc | date:"Y/m/d G:i" }}
+                    </div>
+                </div>
+
                 <div class="panel-body">{{ task.description|linebreaksbr }}</div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <input type="button" name="work" value="В работу" class="btn btn-primary form-control">
+                </div>
+                <div class="col-md-4">
+                    <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control">
+                </div>
+                <div class="col-md-4">
+                    <input type="button" name="cancel" value="Отменить" class="btn btn-default form-control">
+                </div>
+            </div>
+            <div class="col-md-12 padding-top-20">
+                <form>
+                    <div class="col-md-12 form-label">
+                        Сообщение
+                    </div>
+                    <div class="col-md-12">
+                        <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-8"></div>
+                        <div class="col-md-4">
+                            <input type="button" value="Сохранить" class="btn btn-primary form-control">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-12">
+            {% for event in task.taskevent_set.all %}
+                <div class="panel panel-default panel-body">
+                    <div class="font06">
+                        {{ event.date | date:"Y/m/d G:i" }}
+                        {% if event.user %}
+                            {{ event.user.firstname }} {{ event.user.lastname }} {{ event.user.email }}
+                        {% endif %}
+                    </div>
+                    <div class="font08">{{ event.message }}</div>
+                </div>
+            {% endfor %}
             </div>
         </div>
         <div class="col-md-3">
             <div class="panel panel-body panel-default">
-                <div>{{ task.status|task_status }}</div>
-                <div>{{ task.date_in|date_from_now|safe }}</div>
-                <div>{{ task.date_in }}</div>
-                <div>{{ task.date_finish_calc|date_from_now|safe }}</div>
-            </div>
-            <div class="panel panel-body panel-default">
-                {% if task.observer %}
-                    <div class="font08">{{ task.observer.name }}</div>
-                    <div class="font06">{{ task.observer.email }}</div>
-                {% else %}
-                    <div class="font08">{{ task.contact_name }}</div>
-                    <div class="font06">{{ task.contact_email }}</div>
-                {% endif %}
+
             </div>
         </div>
     </div>
