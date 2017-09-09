@@ -93,13 +93,13 @@ def user_register(request):
 
 @authenticate_check
 def user_activate(request):
-    if request.method == 'GET':
+    code = request.POST.get('code', '') + request.GET.get('code', '')
+    if code == '':
         return redirect(reverse('user_profile'))
-    elif request.method == 'POST':
-        code = request.POST['code']
+    else:
         user = User.objects.filter(uuid=code)
         if not user:
-            messages.error(request, u'Ошибка активации')
+            messages.error(request, u'Ошибка подтверждения')
             return render(request, 'user/profile.html', {})
         else:
             if user[0].email == request.user.email:
