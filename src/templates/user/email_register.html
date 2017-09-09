@@ -1,42 +1,13 @@
-<div style="
-        font-size: 18px;
-        font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
-        height: 50px;
-        text-align: center;
-        background-color: #CCCCCC;
-        border: 1px solid #999999;
-        padding-top: 20px;">Код подтверждения для аккаунта helpcrew.ru</div>
-<div style="
-        font-size: 16px;
-        font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
-        border-left: 1px solid #999999;
-        border-right: 1px solid #999999;
-        padding: 10px;
-">Уважаемый {{ user.firstname }} {{ user.lastname }}, Вы зарегистрировались на сервисе helpcrew.ru, для завершения регистрации необходимо ввести код активации.</div>
-<div style="
-        font-size: 16px;
-        font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
-        border-left: 1px solid #999999;
-        border-right: 1px solid #999999;
-        padding: 10px;
-">Ваш код активации:</div>
-<div style="
-        font-size: 20px;
-        font-weight: bold;
-        font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
-        text-align: center;
-        border-left: 1px solid #999999;
-        border-right: 1px solid #999999;
-        padding: 10px;
-">{{ user.uuid }}</div>
-<div style="
-        font-size: 14px;
-        font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
-        border-left: 1px solid #999999;
-        border-right: 1px solid #999999;
-        border-bottom: 1px solid #999999;
-        padding: 10px;
-">
-    с уважением,<br>
-    Команда helpcrew.ru
-</div>
+{% extends "email.html" %}
+{% load tags %}
+{% block content %}
+<tr>
+    <td style="padding: 30px 30px 0 30px;">
+        <h1 style="color: #222222; font-weight: bold; font-size: 24px; margin: 0; padding: 0 0 20px 0; text-align: left; line-height: 1.15;">Подтвердите ваш email</h1>
+        <p style="color: #474747; font-weight: normal; font-size: 14px; margin: 0; padding: 0 0 0 0; text-align: left; line-height: 1.5;">Благодарим вас за регистрацию на HelpCrew!<br /><br /> Для активации вашего аккаунта, подтвердите, пожалуйста, ваш email-адрес.<br /><br /> Ваш код подтверждения: <strong style="color: #222222; font-size: 16px; font-weight: bold;">{{ user.uuid }}</strong> <br /><br />Вы также можете подтвердить ваш email, кликнув на кнопку, либо перейдя по ссылке {% site_url %}{% url "user_activate" %}?code={{ user.uuid }}</p>
+    </td>
+</tr>
+<tr>
+    <td style="padding: 30px 30px 30px 30px;"><a style="font-size: 16px; background: #45737E; padding: 12px 20px; margin: 0 auto 0 0; text-align: left; display: table; color: white; font-weight: bold; text-decoration: none; border-radius: 3px;" href="{% site_url %}{% url "user_activate" %}?code={{ user.uuid }}">Подтвердить сейчас</a></td>
+</tr>
+{% endblock %}
