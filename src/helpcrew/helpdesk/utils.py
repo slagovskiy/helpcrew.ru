@@ -26,8 +26,17 @@ def get_crews_list(user, flat=False):
     return content
 
 
-def check_member(user=None, crew=None):
+def __first_check(user=None):
     if user.is_anonymous:
+        return False
+    elif not user.is_checked:
+        return False
+    else:
+        return True
+
+
+def check_member(user=None, crew=None):
+    if not __first_check(user):
         return False
     cu = CrewUsers.objects.filter(crew=crew, user=user)
     if cu:
@@ -37,7 +46,7 @@ def check_member(user=None, crew=None):
 
 
 def check_member_admin(user=None, crew=None):
-    if user.is_anonymous:
+    if not __first_check(user):
         return False
     cu = CrewUsers.objects.filter(crew=crew, user=user)
     if cu:
@@ -49,8 +58,9 @@ def check_member_admin(user=None, crew=None):
     else:
         return False
 
+
 def check_member_dispatcher(user=None, crew=None):
-    if user.is_anonymous:
+    if not __first_check(user):
         return False
     cu = CrewUsers.objects.filter(crew=crew, user=user)
     if cu:

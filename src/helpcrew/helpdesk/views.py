@@ -15,8 +15,10 @@ from ..userext.decoretors import authenticate_check
 
 
 def crew_edit(request, url=None):
-    if not request.user.is_authenticated:
+    if request.user.is_anonymous:
         return redirect(reverse('user_login'))
+    if not request.user.is_checked:
+        return redirect(reverse('user_profile'))
     if request.method == 'GET':
         if url==None:
             content = {'action': request.GET.get('action', '')}
@@ -77,8 +79,11 @@ def crew_edit(request, url=None):
             return render(request, 'helpdesk/crew_edit.html', {})
 
 
-@authenticate_check
 def crew_view(request, url=None):
+    if request.user.is_anonymous:
+        return redirect(reverse('user_login'))
+    if not request.user.is_checked:
+        return redirect(reverse('user_profile'))
     crew = Crew.objects.filter(url=url)
     if crew:
         crew = crew[0]
