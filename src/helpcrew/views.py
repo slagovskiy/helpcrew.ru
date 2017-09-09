@@ -33,7 +33,7 @@ def go_crew(request, url=None):
 def test(request):
 
     content = {'user': request.user}
-    return render(request, 'user/email_register.html', content)
+    return render(request, 'user/email_password.html', content)
 
 #def captcha(request):
 #    request.session['CAPTCHA_CODE'] = captcha_code(4)

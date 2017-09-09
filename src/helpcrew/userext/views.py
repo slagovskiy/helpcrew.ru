@@ -72,7 +72,7 @@ def user_register(request):
                 login(request, user)
                 add_email(
                     msg_to=user.email,
-                    subject=u'Код подтверждения регистрации',
+                    subject=u'Регистрация на сайте HelpCrew',
                     body=render_to_string('user/email_register.html', {'user': user})
                 )
                 return redirect(reverse('user_profile'))
