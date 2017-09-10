@@ -78,7 +78,7 @@
                     <div id="crew-user-list"></div>
                     <div class="float-form" style="display: none;" id="hidden-crew-user-add"></div>
                     <div class="col-md-3">
-                        <input type="button" class="form-control btn btn-primary" value="пригласить нового участника" onclick="invaiteUser(); return false;" />
+                        <input type="button" class="form-control btn btn-primary" value="пригласить нового участника" onclick="openInvite(); return false;" />
                     </div>
                     <div class="col-md-3">
                         <input type="button" class="form-control btn btn-primary" value="добавить нового участника" onclick="addExistUser(); return false;" />
@@ -100,7 +100,7 @@
             {% include 'helpdesk/tmpl_price_list.html' %}
             {% include 'helpdesk/tmpl_price_edit.html' %}
             {% include 'helpdesk/tmpl_user_list.html' %}
-            {% include 'helpdesk/tmpl_user_invaite.html' %}
+            {% include 'helpdesk/tmpl_user_invite.html' %}
             {% include 'helpdesk/tmpl_user_add.html' %}
             {% include 'helpdesk/tmpl_priority_list.html' %}
             {% include 'helpdesk/tmpl_priority_edit.html' %}
@@ -396,8 +396,8 @@
                         });
                 }
 
-                function invaiteUser() {
-                    var tmpl = $.templates("#tmpl-crew-user-invaite");
+                function openInvite() {
+                    var tmpl = $.templates("#tmpl-crew-user-invite");
                     var html = tmpl.render('');
                     $('#hidden-crew-user-add').html(html);
                     $.fancybox.open({
@@ -406,8 +406,29 @@
                         opts: {modal: true}
                     });
                     $.validate({
-                        form : '#form-crew-user-invaite'
+                        form : '#form-crew-user-invite'
                     });
+                }
+
+                function saveInvite() {
+                    $.ajax({
+                        type: 'POST',
+                        url: $('#form-crew-user-invite').attr('action'),
+                        data: $('#form-crew-user-invite').serialize()
+                    })
+                        .done(function(data){
+                            if(data=='ok') {
+                                $.fancybox.close();
+                                $.notify('Приглашение отправлено', 'success');
+                                loadEventsList(100);
+                            }
+                            else {
+                                $.notify(data, 'warn');
+                            }
+                        })
+                        .fail(function(){
+                            $.notify('Ошибка передачи данных', 'error');
+                        });
                 }
 
                 function addExistUser() {

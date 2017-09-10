@@ -1,5 +1,5 @@
-<script id="tmpl-crew-user-invaite" type="text/x-jsrender">
-    <form action="{% url 'api_user_invaite' %}" method="post" id="form-crew-user-invaite" enctype="multipart/form-data">
+<script id="tmpl-crew-user-invite" type="text/x-jsrender">
+    <form action="{% url 'api_user_invite' %}" method="post" id="form-crew-user-invite" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="col-md-12">
             <div class="col-md-12 form-label">
@@ -13,7 +13,8 @@
             </div>
         </div>
         <div class="col-md-12">
-            <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="пригласить" onclick="return false;" /></div>
+            <input type="hidden" name="crew" value="{{ crew.slug }}" />
+            <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="пригласить" onclick="saveInvite(); return false;" /></div>
             <div class="col-md-6"><button data-fancybox-close class="form-control btn btn-default">отмена</button></div>
         </div>
     </form>

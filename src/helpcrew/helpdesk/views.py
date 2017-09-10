@@ -1,5 +1,7 @@
 import re
 import json
+
+from django.template.loader import render_to_string
 from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -8,6 +10,7 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
 from django.core import serializers
 
+from ..taskqueue.utils import add_email
 from .models import Crew, CrewUsers, CrewService, ServicePrice, TaskPriority, CrewEvent, CrewTask, TaskEvent, TaskFiles
 from ..userext.models import User
 from .utils import get_crews_list, check_member, check_member_admin
@@ -23,9 +26,9 @@ def crew_edit(request, url=None):
             content = {'action': request.GET.get('action', '')}
             return render(request, 'helpdesk/crew_edit.html', content)
         else:
-            crew = Crew.objects.filter(url=url)
-            if crew and check_member(request.user, crew[0]):
-                content = {'crew': crew[0]}
+            crew = Crew.objects.filter(url=url).first()
+            if crew and check_member(request.user, crew):
+                content = {'crew': crew}
                 return render(request, 'helpdesk/crew_edit.html', content)
             else:
                 messages.error(request, u'Команда не найдена')
@@ -74,6 +77,7 @@ def crew_edit(request, url=None):
                     cu.save()
                     CrewEvent.addEvent(request, crew, u'В команду добавлен оператор ' + request.user.email)
                 return redirect(reverse('crew_view_redirect', kwargs={'url': crew.url}))
+            return render(request, 'helpdesk/crew_edit.html', {})
         else:
             return render(request, 'helpdesk/crew_edit.html', {})
 
@@ -499,8 +503,22 @@ def api_user_delete(request, member=None):
 
 
 @csrf_exempt
-def api_user_invaite(request, email=None):
-    return HttpResponse('ok')
+def api_user_invite(request, email=None):
+    if request.method == 'POST':
+        email = request.POST.get('email', '')
+        crew = Crew.objects.filter(slug=request.POST.get('crew', '')).first()
+        if crew and email:
+            add_email(
+                msg_to=email,
+                subject=u'Приглашение к работе в команде',
+                body=render_to_string('helpdesk/email_invite.html', {'crew': crew})
+            )
+            CrewEvent.addEvent(request, crew, u'Отправлено приглашение на адрес ' + email)
+            return HttpResponse('ok')
+        else:
+            return HttpResponse('Команда не найдена')
+    else:
+        return HttpResponse('ok')
 
 
 @csrf_exempt

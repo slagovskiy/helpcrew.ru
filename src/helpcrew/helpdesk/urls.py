@@ -3,7 +3,7 @@ from django.conf.urls import url
 from .views import crew_edit, api_crew_check_url, crew_view
 from .views import task_new, task_save, task_info
 from .views import api_crew_edit
-from .views import api_user_list, api_user_edit, api_user_delete, api_user_invaite, api_user_add
+from .views import api_user_list, api_user_edit, api_user_delete, api_user_invite, api_user_add
 from .views import api_service_list, api_service_edit, api_service_delete
 from .views import api_priority_list, api_priority_edit, api_priority_delete
 from .views import api_service_price_edit, api_service_price_list
@@ -27,8 +27,7 @@ urlpatterns = [
     url(r'^api/user/edit/(?P<member>[-\w]+)/(?P<type>[-\w]+)/$', api_user_edit, name='api_user_edit'),
     url(r'^api/user/delete/$', api_user_delete, name='api_user_delete'),
     url(r'^api/user/delete/(?P<member>[-\w]+)/$', api_user_delete, name='api_user_delete'),
-    url(r'^api/user/invaite/$', api_user_invaite, name='api_user_invaite'),
-    url(r'^api/user/invaite/(?P<email>\w+|[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/$', api_user_invaite, name='api_user_invaite'),
+    url(r'^api/user/invite/$', api_user_invite, name='api_user_invite'),
     url(r'^api/user/add/$', api_user_add, name='api_user_add'),
     url(r'^api/user/add/(?P<email>\w+|[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/(?P<type>[-\w]+)/$', api_user_add, name='api_user_add'),
 
