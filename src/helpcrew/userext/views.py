@@ -54,6 +54,8 @@ def user_logout(request):
 
 
 def user_register(request):
+    if not request.user.is_anonymous:
+        return redirect(reverse('user_profile'))
     if request.method == 'GET':
         return redirect(reverse('user_login'))
     elif request.method == 'POST':
