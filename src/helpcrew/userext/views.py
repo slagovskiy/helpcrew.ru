@@ -6,7 +6,7 @@ from django.contrib import messages
 import os
 
 from .models import User
-from .decoretors import authenticate_check
+from .decorators import authenticate_check
 from ..settings import UPLOAD_DIR
 from ..taskqueue.utils import add_email
 from ..helpdesk.models import Crew, CrewUsers

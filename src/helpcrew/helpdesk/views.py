@@ -11,7 +11,6 @@ from django.core import serializers
 from .models import Crew, CrewUsers, CrewService, ServicePrice, TaskPriority, CrewEvent, CrewTask, TaskEvent, TaskFiles
 from ..userext.models import User
 from .utils import get_crews_list, check_member, check_member_admin
-from ..userext.decoretors import authenticate_check
 
 
 def crew_edit(request, url=None):
