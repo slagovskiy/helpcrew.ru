@@ -31,9 +31,9 @@ def go_crew(request, url=None):
 
 
 def test(request):
-
-    content = {'user': request.user}
-    return render(request, 'user/email_password.html', content)
+    c = Crew.objects.filter(slug='82428b08-9609-11e7-92c2-00158315a310').first()
+    content = {'crew': c}
+    return render(request, 'helpdesk/email_invite.html', content)
 
 #def captcha(request):
 #    request.session['CAPTCHA_CODE'] = captcha_code(4)
