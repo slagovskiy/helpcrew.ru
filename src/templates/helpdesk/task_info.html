@@ -3,7 +3,9 @@
 {% block content %}
     {% if task %}
     <div class="col-md-12 crew-title">
-        <span>Команда &laquo{{ task.crew.name }}&raquo; - Информация по заявке</span><br>
+        <span>
+            <a href="{% url 'crew_view' task.crew.url %}" title="Назад к команде"><i class="fa fa-arrow-left color-b" aria-hidden="true"></i></a>
+            Команда &laquo<a href="{% url 'crew_view' task.crew.url %}" title="Назад к команде">{{ task.crew.name }}</a>&raquo; - Информация по заявке</span><br>
     </div>
     <div class="col-md-12 task">
         <div class="col-md-9">

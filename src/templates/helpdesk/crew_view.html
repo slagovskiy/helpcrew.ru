@@ -14,6 +14,13 @@
                 <button class="btn btn-xs btn-success">новая задача</button>
             </div>
         </div>
-        <div></div>
+        <div>
+            {% for task in crew.crewtask_set.all %}
+                <div class="col-md-12">
+                    {{ task.uuid }}
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
+jalsksdiasdfgbalskjghoiokwtweitjnbzxcvbnkajsdiuewkjhfsadnbfdsaib28b8w7erbkqjwbr1
