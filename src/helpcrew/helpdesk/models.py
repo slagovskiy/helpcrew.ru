@@ -41,12 +41,14 @@ class Crew(models.Model):
         default=0,
         verbose_name=u'Ограничение на количество членов команды'
     )
-    work_start_time = models.IntegerField(
-        default=9,
+    work_start_time = models.CharField(
+        default='9:00',
+        max_length=5,
         verbose_name=u'Начало рабочего дня'
     )
-    work_end_time = models.IntegerField(
-        default=18,
+    work_end_time = models.CharField(
+        default='18:00',
+        max_length=5,
         verbose_name=u'Конец рабочего дня'
     )
     work_day_0 = models.BooleanField(
@@ -77,12 +79,14 @@ class Crew(models.Model):
         default=False,
         verbose_name=u'Рабочий день 6'
     )
-    launch_start_time = models.IntegerField(
-        default=13,
+    lunch_start_time = models.CharField(
+        default='13:00',
+        max_length=5,
         verbose_name=u'Начало обеденного перерыва'
     )
-    launch_end_time = models.IntegerField(
-        default=14,
+    lunch_end_time = models.CharField(
+        default='14:00',
+        max_length=5,
         verbose_name=u'Конец обеденного перерыва'
     )
     holidays = models.TextField(
@@ -506,15 +510,27 @@ class CrewTask(models.Model):
             working_days.append(6)
 
         workday = businesstimedelta.WorkDayRule(
-            start_time=datetime.time(self.crew.work_start_time),
-            end_time=datetime.time(self.crew.work_end_time),
+            start_time=datetime.time(
+                int(self.crew.work_start_time.split(':')[0]),
+                int(self.crew.work_start_time.split(':')[1])
+            ),
+            end_time=datetime.time(
+                int(self.crew.work_end_time.split(':')[0]),
+                int(self.crew.work_end_time.split(':')[1]),
+            ),
             working_days=working_days,
             tz=timezone.get_current_timezone()
         )
 
         lunchbreak = businesstimedelta.LunchTimeRule(
-            start_time=datetime.time(self.crew.launch_start_time),
-            end_time=datetime.time(self.crew.launch_end_time),
+            start_time=datetime.time(
+                int(self.crew.lunch_start_time.split(':')[0]),
+                int(self.crew.lunch_start_time.split(':')[1]),
+            ),
+            end_time=datetime.time(
+                int(self.crew.lunch_end_time.split(':')[0]),
+                int(self.crew.lunch_end_time.split(':')[1]),
+            ),
             working_days=working_days,
             tz=timezone.get_current_timezone()
         )
