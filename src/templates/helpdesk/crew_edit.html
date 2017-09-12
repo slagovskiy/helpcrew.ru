@@ -118,6 +118,22 @@
                                 $.validate({
                                     form : '#form-crew-edit'
                                 });
+                                $('#datetimepicker-work-start-time').datetimepicker({
+                                    format: 'HH:mm',
+                                    keepOpen: false
+                                });
+                                $('#datetimepicker-work-end-time').datetimepicker({
+                                    format: 'HH:mm',
+                                    keepOpen: false
+                                });
+                                $('#datetimepicker-lunch-start-time').datetimepicker({
+                                    format: 'HH:mm',
+                                    keepOpen: false
+                                });
+                                $('#datetimepicker-lunch-end-time').datetimepicker({
+                                    format: 'HH:mm',
+                                    keepOpen: false
+                                });
                             }
                         }
                         catch (err) {
