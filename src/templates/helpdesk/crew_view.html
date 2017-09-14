@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load tags %}
 
 {% block content %}
     <div class="col-md-12 crew-title">
@@ -7,20 +8,26 @@
     </div>
     <div class="col-md-12">
         <div class="crew-menu-title">
-            Заявки
-            <div class="btn-group" role="group" aria-label="...">
-                <button class="btn btn-xs btn-info">новая заявка</button>
-                <button class="btn btn-xs btn-danger">новый инцидент</button>
-                <button class="btn btn-xs btn-success">новая задача</button>
-            </div>
+            <span class="btn-group" role="group" aria-label="...">
+                <button class="btn btn-primary">новая заявка</button>
+                <button class="btn btn-danger">новый инцидент</button>
+                <button class="btn btn-info">новая подписка</button>
+            </span>
+            <button class="btn btn-default">обновить</button>
         </div>
-        <div>
+        <div class="col-md-12">
+            <table>
             {% for task in crew.crewtask_set.all %}
-                <div class="col-md-12">
-                    {{ task.uuid }}
-                </div>
+                <tr>
+                    <td width="10%">{{ task.date_in | date:"Y/m/d G:i" }}</td>
+                    <td width="10%">{{ task.priority.name }}</td>
+                    <td width="80%">{% if task.service %}{{ task.service.name }}{% else %}Проблема{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="3">{{ task.description }}</td>
+                </tr>
             {% endfor %}
+            </table>
         </div>
     </div>
 {% endblock %}
-jalsksdiasdfgbalskjghoiokwtweitjnbzxcvbnkajsdiuewkjhfsadnbfdsaib28b8w7erbkqjwbr1

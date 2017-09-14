@@ -20,6 +20,11 @@ def date_from_now(val):
 
 
 @register.filter
+def substring(val, count):
+    return val[0:count]
+
+
+@register.filter
 def task_status(val):
     if int(val) == CrewTask.TASK_STATUS_NEW:
         return 'Новая'

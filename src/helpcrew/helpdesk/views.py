@@ -193,6 +193,42 @@ def task_info(request, uuid=None):
         return redirect(reverse('home'))
 
 
+def api_task_list(request, crew=None):
+    crew = Crew.objects.filter(slug=crew).first()
+    if crew:
+        if check_member(request.user, crew):
+            list = []
+            for item in CrewTask.objects.filter(crew=crew).order_by('status', '-date_in'): #select_related('user', 'crew')
+                list.append(
+                    {
+                        'uuid': item.uuid,
+                        'type': item.type,
+                        'status': item.status,
+                        'description': item.description[0:100],
+                        'priority': item.priority.name,
+                        'date_in': timezone.localtime(item.date_in, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S'),
+                        'service': item.service.name if item.service else u'Проблема',
+                        'crew_id': item.crew.id,
+                        'crew_uuid': item.crew.slug
+                    }
+                )
+            data = json.dumps(list)
+            return JsonResponse({
+                'message': '',
+                'data': json.loads(data)
+            })
+        else:
+            return JsonResponse({
+                'message': u'Доступ запрещен',
+                'model': ''
+            })
+    else:
+        return JsonResponse({
+            'message': u'Команда не найдена',
+            'model': ''
+        })
+
+
 @csrf_exempt
 def api_crew_edit(request, crew=None):
     if request.method == 'GET':

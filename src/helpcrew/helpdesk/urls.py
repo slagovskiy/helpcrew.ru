@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from .views import crew_edit, api_crew_check_url, crew_view
-from .views import task_new, task_save, task_info
+from .views import task_new, task_save, task_info, api_task_list
 from .views import api_crew_edit
 from .views import api_user_list, api_user_edit, api_user_delete, api_user_invite, api_user_add
 from .views import api_service_list, api_service_edit, api_service_delete
@@ -17,6 +17,8 @@ urlpatterns = [
     url(r'^(?P<url>[-\w]+)/task/new/$', task_new, name='task_new'),
     url(r'^task/save/$', task_save, name='task_save'),
     url(r'^task/info/(?P<uuid>[-\w]+)/$', task_info, name='task_info'),
+
+    url(r'^api/task/list/(?P<crew>[-\w]+)/$', api_task_list, name='api_task_list'),
 
     url(r'^api/crew/edit/$', api_crew_edit, name='api_crew_edit'),
     url(r'^api/crew/edit/(?P<crew>[-\w]+)/$', api_crew_edit, name='api_crew_edit'),
