@@ -69,7 +69,8 @@ function deleteField(field) {
         .done(function(data){
             if (data=='ok') {
                 $.notify('Сохранено', 'success');
-                loadTableList();
+                $.fancybox.close();
+                loadFieldList($('#table-id').val());
                 loadEventsList(100);
             } else {
                 $.notify(data, 'warn');
