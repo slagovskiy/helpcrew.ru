@@ -1,3 +1,4 @@
+<script>
 function loadCrew() {
     $.getJSON( "{% url 'api_crew_edit' %}{{ crew.slug }}/", function( data ) {
         try {
@@ -54,3 +55,4 @@ function saveCrew(crew) {
             $.notify('Ошибка передачи данных', 'error');
         });
 }
+</script>

@@ -1,3 +1,4 @@
+<script>
 function loadTableList() {
     $.getJSON( "{% url 'api_table_list' %}{{ crew.slug }}/", function( data ) {
         try {
@@ -94,3 +95,4 @@ function saveTable(table) {
         });
 
 }
+</script>

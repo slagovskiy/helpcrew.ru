@@ -1,3 +1,4 @@
+<script>
 function getPrice(service) {
     $.getJSON( "{% url 'api_service_price_list' %}" + service + "/", function( data ) {
         try {
@@ -90,3 +91,4 @@ function savePrice(price) {
         });
 
 }
+</script>

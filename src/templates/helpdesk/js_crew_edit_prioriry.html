@@ -1,3 +1,4 @@
+<script>
 function loadPriorityList() {
     $.getJSON( "{% url 'api_priority_list' %}{{ crew.slug }}/", function( data ) {
         try {
@@ -94,3 +95,4 @@ function savePriority(priority) {
         });
 
 }
+</script>

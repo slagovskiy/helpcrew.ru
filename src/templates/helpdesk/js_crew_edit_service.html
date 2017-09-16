@@ -1,3 +1,4 @@
+<script>
 function loadServiceList() {
     $.getJSON( "{% url 'api_service_list' %}{{ crew.slug }}/", function( data ) {
         try {
@@ -94,3 +95,4 @@ function saveService(service) {
         });
 
 }
+</script>
