@@ -1,0 +1,23 @@
+<script id="tmpl-view-table-list" type="text/x-jsrender">
+    <ul class="nav nav-tabs" role="tablist">
+    <%for data%>
+        <%if fields.deleted%>
+        <%else%>
+        <li role="presentation">
+            <a href="#<%:fields.uuid%>" aria-controls="<%:fields.uuid%>" role="tab" data-toggle="tab" onclick="loadTableRowsView('<%:fields.uuid%>');">
+                <%:fields.name onerror='_table_'%>
+            </a>
+        </li>
+        <%/if%>
+    <%else%>
+        Нет данных
+    <%/for%>
+    </ul>
+    <div class="tab-content">
+    <%for data%>
+        <div role="tabpanel" class="tab-pane" id="<%:fields.uuid%>">
+            <%:fields.uuid%>
+        </div>
+    <%/for%>
+    </div>
+</script>
