@@ -184,10 +184,10 @@ def api_field_delete(request, field=None):
             field.save()
             if field.deleted:
                 CrewEvent.addEvent(request, field.table.crew, u'Поле ' + field.name +
-                                   'в справочнике ' + field.table.name + ' помечено удаленным')
+                                   ' в справочнике ' + field.table.name + ' помечено удаленным')
             else:
                 CrewEvent.addEvent(request, field.table.crew, u'Поле ' + field.name +
-                                   'в справочнике ' + field.table.name + ' восстановлено')
+                                   ' в справочнике ' + field.table.name + ' восстановлено')
             return HttpResponse('ok')
         else:
             return HttpResponse('access denied!')
