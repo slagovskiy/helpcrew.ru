@@ -2,21 +2,26 @@
 {% load tags %}
 
 {% block content %}
+    {% chk_member_admin crew as is_admin  %}
+    {% chk_member_dispatcher crew as is_dispatcher  %}
     <div class="col-md-12">
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
                     <span class="navbar-brand">Команда &laquo{{ crew.name }}&raquo;</span>
                 </div>
-                <div class="collapse navbar-collapse">
+                <div class="collapse navbar-collapse" id="navbar-collapse">
                     <ul class="nav navbar-nav" role="tablist">
-                        <li class="active"><a href="#task" aria-controls="home" role="tab" data-toggle="tab">Заявки</a></li>
-                        <li><a href="#table" aria-controls="profile" role="tab" data-toggle="tab">Справочники</a></li>
-                        <li><a href="#wiki" aria-controls="messages" role="tab" data-toggle="tab">Документация</a></li>
-                    </ul>
-
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="{% url 'crew_edit' crew.url %}">Настройки</a></li>
+                        <li class="active"><a href="#task" aria-controls="tab_task" role="tab" data-toggle="tab">Заявки</a></li>
+                        <li><a href="#table" role="tab" aria-controls="tab_table" data-toggle="tab">Справочники</a></li>
+                        <li><a href="#wiki" role="tab" aria-controls="tab_wiki" data-toggle="tab">Документация</a></li>
+                        <li><a href="#settings" role="tab" aria-controls="tab_settings" data-toggle="tab">Настройки</a></li>
                     </ul>
                 </div>
             </div>
@@ -55,6 +60,121 @@
             <div role="tabpanel" class="tab-pane" id="wiki">
                 comming soon...
             </div>
+
+
+
+            <div role="tabpanel" class="tab-pane" id="settings">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#tab_personal" aria-controls="tab_personal" role="tab" data-toggle="tab">Персональные настройки</a></li>
+                    {% if is_admin %}
+                        <li role="presentation"><a href="#tab_crew" aria-controls="tab_crew" role="tab" data-toggle="tab">Свойства команды</a></li>
+                        <li role="presentation"><a href="#tab_service" aria-controls="tab_service" role="tab" data-toggle="tab">Услуги</a></li>
+                        <li role="presentation"><a href="#tab_priority" aria-controls="tab_priority" role="tab" data-toggle="tab">Приоритеты</a></li>
+                        <li role="presentation"><a href="#tab_table" aria-controls="tab_table" role="tab" data-toggle="tab">Справочники</a></li>
+                        <li role="presentation"><a href="#tab_users" aria-controls="tab_users" role="tab" data-toggle="tab">Члены команды</a></li>
+                        <li role="presentation"><a href="#tab_events" aria-controls="tab_events" role="tab" data-toggle="tab">События</a></li>
+                    {% endif %}
+                </ul>
+                <div class="tab-content">
+                    {% if is_admin %}
+                        <div role="tabpanel" class="tab-pane" id="tab_crew">
+                            <div class="col-md-12">
+                                <div id="crew-edit"></div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="tab_table">
+                            <div id="crew-table-list"></div>
+                            <div class="float-form" style="display: none;" id="hidden-crew-table-edit"></div>
+                            <div class="float-form" style="display: none;" id="hidden-table-field-list"></div>
+                            <div class="float-form" style="display: none;" id="hidden-table-field-edit"></div>
+                            <div class="col-md-6">
+                                <a href="#" class="form-control btn btn-primary" onclick="editTable('0'); return false;">Добавить справочник</a>
+                            </div>
+
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="tab_service">
+                            <div id="crew-service-list"></div>
+                            <div class="float-form" style="display: none;" id="hidden-service-price-list"></div>
+                            <div class="float-form" style="display: none;" id="hidden-crew-service-edit"></div>
+                            <div class="float-form" style="display: none;" id="hidden-service-price-edit"></div>
+                            <div class="col-md-6">
+                                <a href="#" class="form-control btn btn-primary" onclick="editService('0'); return false;">Добавить услугу</a>
+                            </div>
+
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="tab_priority">
+                            <div id="task-priority-list"></div>
+                            <div class="float-form" style="display: none;" id="hidden-task-priority-edit"></div>
+                            <div class="col-md-6">
+                                <a href="#" class="form-control btn btn-primary" onclick="editPriority('0'); return false;">Добавить приоритет</a>
+                            </div>
+
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="tab_events">
+                            <div id="crew-events-list"></div>
+                            <div class="col-md-6">
+                                <a href="#" class="form-control btn btn-primary" onclick="loadEventsList(1000); return false;">Загрузить последние 1000 событий</a>
+                            </div>
+
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="tab_users">
+                            <div id="crew-user-list"></div>
+                            <div class="float-form" style="display: none;" id="hidden-crew-user-add"></div>
+                            <div class="col-md-3">
+                                <input type="button" class="form-control btn btn-primary" value="пригласить нового участника" onclick="openInvite(); return false;" />
+                            </div>
+                            <div class="col-md-3">
+                                <input type="button" class="form-control btn btn-primary" value="добавить нового участника" onclick="addExistUser(); return false;" />
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div role="tabpanel" class="tab-pane active" id="tab_personal">
+                        <form action="{% url 'crew_edit' %}" method="post" id="form-crewedit" enctype="multipart/form-data">
+                        </form>
+                    </div>
+                </div>
+
+                {% if is_admin %}
+                    {% include 'helpdesk/tmpl_crew_edit.html' %}
+                    {% include 'helpdesk/tmpl_service_list.html' %}
+                    {% include 'helpdesk/tmpl_service_edit.html' %}
+                    {% include 'helpdesk/tmpl_price_list.html' %}
+                    {% include 'helpdesk/tmpl_price_edit.html' %}
+                    {% include 'helpdesk/tmpl_user_list.html' %}
+                    {% include 'helpdesk/tmpl_user_invite.html' %}
+                    {% include 'helpdesk/tmpl_user_add.html' %}
+                    {% include 'helpdesk/tmpl_priority_list.html' %}
+                    {% include 'helpdesk/tmpl_priority_edit.html' %}
+                    {% include 'helpdesk/tmpl_events_list.html' %}
+                    {% include 'dyntable/tmpl_table_list.html' %}
+                    {% include 'dyntable/tmpl_table_edit.html' %}
+                    {% include 'dyntable/tmpl_field_list.html' %}
+                    {% include 'dyntable/tmpl_field_edit.html' %}
+                    <script>
+                        {% include 'helpdesk/crew_edit_crew.js' %}
+                        {% include 'helpdesk/crew_edit_service.js' %}
+                        {% include 'helpdesk/crew_edit_price.js' %}
+                        {% include 'helpdesk/crew_edit_user.js' %}
+                        {% include 'helpdesk/crew_edit_prioriry.js' %}
+                        {% include 'helpdesk/crew_edit_event.js' %}
+                        {% include 'dyntable/crew_edit_table.js' %}
+                        {% include 'dyntable/crew_edit_field.js' %}
+                    </script>
+                {% endif %}
+
+            </div>
         </div>
     </div>
+    <script>
+        function init() {
+            {% if is_admin %}
+                loadCrew();
+                loadServiceList();
+                loadUserList();
+                loadPriorityList();
+                loadTableList();
+                loadEventsList(100);
+            {% endif %}
+        }
+    </script>
 {% endblock %}
