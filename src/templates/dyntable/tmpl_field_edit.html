@@ -1,0 +1,74 @@
+<script id="tmpl-table-field-edit" type="text/x-jsrender">
+    <%for data%>
+    <form action="{% url 'api_field_edit' %}" method="post" id="form-table-field-edit" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="table" value="<%:fields.table onerror='0'%>" />
+        <div class="col-md-12">
+            <div class="col-md-12 form-label">
+                Наименование
+            </div>
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Наименование поля" value="<%:fields.name onerror=''%>"
+                       data-validation="length" data-validation-length="2-100"
+                       data-validation-error-msg="Введите наименование поля"
+                />
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12 form-label">
+                Тип поля
+            </div>
+            <div class="col-md-12">
+                <select class="form-control selectpicker" id="type" name="type">
+                    <option value="1"
+                    <%if field%>
+                        <%if field.type%>
+                            <%if field.type==1%> selected="selected"<%/if%>
+                        <%/if%>
+                    <%/if%>>Число</option>
+                    <option value="2"
+                    <%if field%>
+                        <%if field.type%>
+                            <%if field.type==2%> selected="selected"<%/if%>
+                        <%/if%>
+                    <%else%> selected="selected"
+                    <%/if%>>Строка</option>
+                    <option value="3"
+                    <%if field%>
+                        <%if field.type%>
+                            <%if field.type==3%> selected="selected"<%/if%>
+                        <%/if%>
+                    <%/if%>>Дата</option>
+                    <option value="4"
+                    <%if field%>
+                        <%if field.type%>
+                            <%if field.type==4%> selected="selected"<%/if%>
+                        <%/if%>
+                    <%/if%>>IP адрес</option>
+                    <option value="5"
+                    <%if field%>
+                        <%if field.type%>
+                            <%if field.type==5%> selected="selected"<%/if%>
+                        <%/if%>
+                    <%/if%>>Пароль</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12 form-label">
+                Порядок в справочнике
+            </div>
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="order" name="order" placeholder="Порядок поля" value="<%:fields.order onerror=''%>"
+                       data-validation="length" data-validation-length="2-100"
+                       data-validation-error-msg="Введите число для сортировки полей"
+                />
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="сохранить" onclick="saveField('<%:pk onerror='0'%>');return false;" /></div>
+            <div class="col-md-6"><button data-fancybox-close class="form-control btn btn-default">отмена</button></div>
+        </div>
+    </form>
+    <%/for%>
+</script>
