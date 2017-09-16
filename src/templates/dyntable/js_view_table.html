@@ -15,6 +15,29 @@
     }
 
     function loadTableRowsView(table) {
-        
+
+    }
+
+    function openTableFormView(table) {
+        $.getJSON( "{% url 'api_field_list' %}" + table + "/", function( data ) {
+            try {
+                if (data['message'] == '') {
+                    var tmpl = $.templates("#tmpl-view-table-form");
+                    var html = tmpl.render(data);
+                    $('#hidden-view-table-form' + table).html(html);
+                    $.fancybox.open({
+                        src: '#hidden-view-table-form' + table,
+                        type: 'inline',
+                        opts: {modal: true}
+                    });
+                    $.validate({
+                        form : '#form-view-table' + table
+                    });
+                }
+            }
+            catch (err) {
+                console.error(err);
+            }
+        });
     }
 </script>
