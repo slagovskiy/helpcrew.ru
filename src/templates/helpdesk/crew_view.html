@@ -14,7 +14,13 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <span class="navbar-brand">Команда &laquo{{ crew.name }}&raquo;</span>
+                    <span class="navbar-brand">
+                        <select class="selectpicker" data-width="fit">
+                            {% for c in crews %}
+                                <option value="{{ c.url }}">Команда &laquo{{ c.name }}&raquo;</option>
+                            {% endfor %}
+                        </select>
+                    </span>
                 </div>
                 <div class="collapse navbar-collapse" id="navbar-collapse">
                     <ul class="nav navbar-nav" role="tablist">
@@ -151,14 +157,14 @@
                     {% include 'dyntable/tmpl_field_list.html' %}
                     {% include 'dyntable/tmpl_field_edit.html' %}
                     <script>
-                        {% include 'helpdesk/crew_edit_crew.js' %}
-                        {% include 'helpdesk/crew_edit_service.js' %}
-                        {% include 'helpdesk/crew_edit_price.js' %}
-                        {% include 'helpdesk/crew_edit_user.js' %}
-                        {% include 'helpdesk/crew_edit_prioriry.js' %}
-                        {% include 'helpdesk/crew_edit_event.js' %}
-                        {% include 'dyntable/crew_edit_table.js' %}
-                        {% include 'dyntable/crew_edit_field.js' %}
+                        {% include 'helpdesk/js_crew_edit_crew.html' %}
+                        {% include 'helpdesk/js_crew_edit_service.html' %}
+                        {% include 'helpdesk/js_crew_edit_price.html' %}
+                        {% include 'helpdesk/js_crew_edit_user.html' %}
+                        {% include 'helpdesk/js_crew_edit_prioriry.html' %}
+                        {% include 'helpdesk/js_crew_edit_event.html' %}
+                        {% include 'dyntable/js_crew_edit_table.html' %}
+                        {% include 'dyntable/js_crew_edit_field.html' %}
                     </script>
                 {% endif %}
 
