@@ -15,9 +15,9 @@
                         <span class="icon-bar"></span>
                     </button>
                     <span class="navbar-brand">
-                        <select class="selectpicker" data-width="fit">
+                        <select class="selectpicker" data-width="fit" onchange="if (this.value) window.location.href=this.value">
                             {% for c in crews %}
-                                <option value="{{ c.url }}">Команда &laquo{{ c.name }}&raquo;</option>
+                                <option value="{%  url 'crew_view' c.url %}"{% ifequal crew.slug c.slug %} selected="selected"{% endifequal %}>Команда &laquo{{ c.name }}&raquo;</option>
                             {% endfor %}
                         </select>
                     </span>
