@@ -2,32 +2,59 @@
 {% load tags %}
 
 {% block content %}
-    <div class="col-md-12 crew-title">
-        <span>Команда &laquo{{ crew.name }}&raquo;</span>
-        <a href="{% url 'crew_edit' crew.url %}" aria-haspopup="true" title="Настройка команды"><i class="fa fa-cog color-b" aria-hidden="true"></i></a>
-    </div>
     <div class="col-md-12">
-        <div class="crew-menu-title">
-            <span class="btn-group" role="group" aria-label="...">
-                <button class="btn btn-primary">новая заявка</button>
-                <button class="btn btn-danger">новый инцидент</button>
-                <button class="btn btn-info">новая подписка</button>
-            </span>
-            <button class="btn btn-default">обновить</button>
-        </div>
-        <div class="col-md-12">
-            <table>
-            {% for task in crew.crewtask_set.all %}
-                <tr>
-                    <td width="10%">{{ task.date_in | date:"Y/m/d G:i" }}</td>
-                    <td width="10%">{{ task.priority.name }}</td>
-                    <td width="80%">{% if task.service %}{{ task.service.name }}{% else %}Проблема{% endif %}</td>
-                </tr>
-                <tr>
-                    <td colspan="3">{{ task.description }}</td>
-                </tr>
-            {% endfor %}
-            </table>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <span class="navbar-brand">Команда &laquo{{ crew.name }}&raquo;</span>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav" role="tablist">
+                        <li class="active"><a href="#task" aria-controls="home" role="tab" data-toggle="tab">Заявки</a></li>
+                        <li><a href="#table" aria-controls="profile" role="tab" data-toggle="tab">Справочники</a></li>
+                        <li><a href="#wiki" aria-controls="messages" role="tab" data-toggle="tab">Документация</a></li>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="{% url 'crew_edit' crew.url %}">Настройки</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="task">
+                <div class="crew-menu-title">
+                    <span class="btn-group" role="group" aria-label="...">
+                        <button class="btn btn-primary">новая заявка</button>
+                        <button class="btn btn-danger">новый инцидент</button>
+                        <button class="btn btn-info">новая подписка</button>
+                    </span>
+                    <button class="btn btn-default">обновить</button>
+                </div>
+                <div class="col-md-12">
+                    <table>
+                    {% for task in crew.crewtask_set.all %}
+                        <tr>
+                            <td width="10%">{{ task.date_in | date:"Y/m/d G:i" }}</td>
+                            <td width="10%">{{ task.priority.name }}</td>
+                            <td width="80%">{% if task.service %}{{ task.service.name }}{% else %}Проблема{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">{{ task.description }}</td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="table">
+            </div>
+
+
+            <div role="tabpanel" class="tab-pane" id="wiki">
+                comming soon...
+            </div>
         </div>
     </div>
 {% endblock %}
