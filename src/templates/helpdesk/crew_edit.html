@@ -6,9 +6,10 @@
         <div class="col-md-2"></div>
         <div class="col-md-8">
             {% ifequal action 'new' %}
-            <h2>Новая команда</h2>
+                <h2>Добавить команду</h2>
                 {% include 'helpdesk/form_add_crew.html' %}
             {% else %}
+                <h2>Новая команда</h2>
                 {% include 'helpdesk/form_new_crew.html' %}
             {% endifequal %}
         </div>
