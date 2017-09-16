@@ -566,7 +566,7 @@ def api_user_add(request, email=None, type=None):
 def api_priority_list(request, crew=None):
     crew = Crew.objects.filter(slug=crew).first()
     if crew:
-        data = serializers.serialize('json', crew.taskpriority_set.all().order_by('deleted', 'name'))
+        data = serializers.serialize('json', crew.taskpriority_set.all().order_by('time_factor', 'name'))
         return JsonResponse({
             'message': '',
             'data': json.loads(data)
