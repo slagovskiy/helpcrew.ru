@@ -352,7 +352,7 @@ class TaskPriority(models.Model):
         return '%s [%s %s]' % (self.name, self.time_factor, self.cost_factor)
 
     class Meta:
-        ordering = ['crew', 'name']
+        ordering = ['crew', 'time_factor']
         verbose_name = u'Приоритет выполнения'
         verbose_name_plural = u'Приоритеты выполнения'
 
