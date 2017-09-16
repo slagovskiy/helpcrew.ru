@@ -62,6 +62,7 @@ function deleteTable(table) {
             if (data=='ok') {
                 $.notify('Сохранено', 'success');
                 loadTableList();
+                loadTableView();
                 loadEventsList(100);
             } else {
                 $.notify(data, 'warn');
@@ -84,6 +85,7 @@ function saveTable(table) {
                 $.fancybox.close();
                 $.notify('Сохранено', 'success');
                 loadTableList();
+                loadTableView();
                 loadEventsList(100);
             }
             else {
