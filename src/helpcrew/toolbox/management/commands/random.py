@@ -8,7 +8,7 @@ import os
 import uuid
 
 from ....userext.models import User
-from ....helpdesk.models import Crew, CrewUsers
+from ....helpdesk.models import *
 
 fake_ru = Factory.create('ru-RU')
 fake_en = Factory.create('en-US')
@@ -145,6 +145,100 @@ def crews(count):
                     print('Added operator ' + c.user.email + ' in crew ' + c.name)
 
 
+def roga():
+    user = User.objects.filter(email='slagovskiy@gmail.com').first()
+    c = Crew.objects.create(
+        name=u'Рога и Копыта inc',
+        url='roga',
+        user=user
+    )
+    c.save()
+    print('Created crew ' + c.name)
+    cu = CrewUsers.objects.create(
+        crew=c,
+        user=user,
+        type=CrewUsers.ADMINISTRATOR_TYPE
+    )
+    cu.save()
+    print('Added user ' + cu.user.email + ' in crew ' + c.name)
+    for _ in range(1, 5):
+        user = choice(User.objects.all())
+        if not user.id in CrewUsers.objects.filter(crew=c).values_list('user', flat=True):
+            cu = CrewUsers.objects.create(
+                crew=c,
+                user=user,
+                type=randint(0, 3)
+            )
+            cu.save()
+            print('Added user ' + cu.user.email + ' in crew ' + c.name)
+    for _ in range(1, 30):
+        name = ' '.join(fake_ru.words(randint(2, 5)))
+        time = randint(10, 20)
+        cs = CrewService.objects.create(
+            crew=c,
+            name=name,
+            time1=time,
+            time2=time*2,
+            time3=time*3,
+            unit=u'шт',
+            template=' '.join(fake_ru.words(randint(3, 15)))
+        )
+        cs.save()
+        print('Added service ' + cs.name)
+        for _ in range(1, randint(3, 10)):
+            p = ServicePrice.objects.create(
+                service=cs,
+                start_date=timezone.now()-datetime.timedelta(randint(5, 600)),
+                cost=randint(500, 1000)/randint(1, 4),
+                prepay=randint(100, 500)/randint(1, 4),
+                fine1=0.15,
+                fine2=0.25
+            )
+            p.save()
+            print('Added price to ' + cs.name)
+    sp = TaskPriority.objects.create(
+        crew=c,
+        name='Очень низкий',
+        time_factor=2,
+        cost_factor=1,
+        default=False
+    )
+    sp.save()
+    sp = TaskPriority.objects.create(
+        crew=c,
+        name='Низкий',
+        time_factor=1.5,
+        cost_factor=1,
+        default=False
+    )
+    sp.save()
+    sp = TaskPriority.objects.create(
+        crew=c,
+        name='Нормальный',
+        time_factor=1,
+        cost_factor=1,
+        default=True
+    )
+    sp.save()
+    sp = TaskPriority.objects.create(
+        crew=c,
+        name='Высокий',
+        time_factor=0.75,
+        cost_factor=1.25,
+        default=False
+    )
+    sp.save()
+    sp = TaskPriority.objects.create(
+        crew=c,
+        name='Очень высокий',
+        time_factor=0.5,
+        cost_factor=1.5,
+        default=False
+    )
+    sp.save()
+
+
+
 class Command(BaseCommand):
     help = 'generate random data'
 
@@ -152,3 +246,4 @@ class Command(BaseCommand):
         clean()
         users()
         crews(20)
+        roga()
