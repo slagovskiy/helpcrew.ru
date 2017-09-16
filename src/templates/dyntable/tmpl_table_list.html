@@ -1,7 +1,7 @@
 <script id="tmpl-crew-table-list" type="text/x-jsrender">
     <%for data%>
         <div class="crew-table-list">
-            <%if fields.deleted%><strike><%/if%><%:fields.name%><%if fields.deleted%></strike><%/if%>
+            <%if fields.deleted%><strike><%/if%><%:fields.name onerror='_table_'%><%if fields.deleted%></strike><%/if%>
             <div class="btn-group" role="group">
                 <a href="#" class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-cog color-dg" aria-hidden="true"></i>
@@ -13,7 +13,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" onclick="loadRows('<%:pk%>'); return false;">
+                        <a href="#" onclick="loadFieldList('<%:pk%>'); return false;">
                             <i class="fa fa-table" aria-hidden="true"></i> Поля
                         </a>
                     </li>
