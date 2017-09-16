@@ -60,6 +60,7 @@
             </div>
 
             <div role="tabpanel" class="tab-pane" id="table">
+                <div id="view-table-list"></div>
             </div>
 
 
@@ -140,32 +141,35 @@
                     </div>
                 </div>
 
-                {% if is_admin %}
-                    {% include 'helpdesk/tmpl_admin_crew_edit.html' %}
-                    {% include 'helpdesk/tmpl_admin_service_list.html' %}
-                    {% include 'helpdesk/tmpl_admin_service_edit.html' %}
-                    {% include 'helpdesk/tmpl_admin_price_list.html' %}
-                    {% include 'helpdesk/tmpl_admin_price_edit.html' %}
-                    {% include 'helpdesk/tmpl_admin_user_list.html' %}
-                    {% include 'helpdesk/tmpl_admin_user_invite.html' %}
-                    {% include 'helpdesk/tmpl_admin_user_add.html' %}
-                    {% include 'helpdesk/tmpl_admin_priority_list.html' %}
-                    {% include 'helpdesk/tmpl_admin_priority_edit.html' %}
-                    {% include 'helpdesk/tmpl_admin_events_list.html' %}
-                    {% include 'dyntable/tmpl_admin_table_list.html' %}
-                    {% include 'dyntable/tmpl_admin_table_edit.html' %}
-                    {% include 'dyntable/tmpl_admin_field_list.html' %}
-                    {% include 'dyntable/tmpl_admin_field_edit.html' %}
+            {% if is_admin %}
+                {% include 'helpdesk/tmpl_admin_crew_edit.html' %}
+                {% include 'helpdesk/tmpl_admin_service_list.html' %}
+                {% include 'helpdesk/tmpl_admin_service_edit.html' %}
+                {% include 'helpdesk/tmpl_admin_price_list.html' %}
+                {% include 'helpdesk/tmpl_admin_price_edit.html' %}
+                {% include 'helpdesk/tmpl_admin_user_list.html' %}
+                {% include 'helpdesk/tmpl_admin_user_invite.html' %}
+                {% include 'helpdesk/tmpl_admin_user_add.html' %}
+                {% include 'helpdesk/tmpl_admin_priority_list.html' %}
+                {% include 'helpdesk/tmpl_admin_priority_edit.html' %}
+                {% include 'helpdesk/tmpl_admin_events_list.html' %}
+                {% include 'dyntable/tmpl_admin_table_list.html' %}
+                {% include 'dyntable/tmpl_admin_table_edit.html' %}
+                {% include 'dyntable/tmpl_admin_field_list.html' %}
+                {% include 'dyntable/tmpl_admin_field_edit.html' %}
 
-                    {% include 'helpdesk/js_admin_crew.html' %}
-                    {% include 'helpdesk/js_admin_service.html' %}
-                    {% include 'helpdesk/js_admin_price.html' %}
-                    {% include 'helpdesk/js_admin_user.html' %}
-                    {% include 'helpdesk/js_admin_prioriry.html' %}
-                    {% include 'helpdesk/js_admin_event.html' %}
-                    {% include 'dyntable/js_admin_table.html' %}
-                    {% include 'dyntable/js_admin_field.html' %}
-                {% endif %}
+                {% include 'helpdesk/js_admin_crew.html' %}
+                {% include 'helpdesk/js_admin_service.html' %}
+                {% include 'helpdesk/js_admin_price.html' %}
+                {% include 'helpdesk/js_admin_user.html' %}
+                {% include 'helpdesk/js_admin_prioriry.html' %}
+                {% include 'helpdesk/js_admin_event.html' %}
+                {% include 'dyntable/js_admin_table.html' %}
+                {% include 'dyntable/js_admin_field.html' %}
+            {% endif %}
+            {% include 'dyntable/tmpl_table_list.html' %}
+            {% include 'dyntable/js_view_table.html' %}
+
 
             </div>
         </div>
@@ -180,6 +184,7 @@
                 loadTableList();
                 loadEventsList(100);
             {% endif %}
+            loadTableView();
         }
     </script>
 {% endblock %}
