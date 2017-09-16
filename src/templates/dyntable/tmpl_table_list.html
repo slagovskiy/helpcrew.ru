@@ -12,10 +12,17 @@
     <%else%>
         Нет данных
     <%/for%>
+        <li>
+            <a href="#" onclick="loadTableView(); return false;">
+                Обновить
+            </a>
+        </li>
     </ul>
     <div class="tab-content">
     <%for data%>
+        <div class="float-form" style="display: none;" id="hidden-view-table-form<%:pk%>"></div>
         <div role="tabpanel" class="tab-pane" id="<%:fields.uuid%>">
+            <input type="button" value="добавить запись" class="btn btn-primary" onclick="openTableFormView('<%:pk%>');" />
             <%:fields.uuid%>
         </div>
     <%/for%>
