@@ -114,6 +114,7 @@ button {
 .padding-top-20 { padding-top: 20px !important; }
 
 .nobold { font-weight: normal; }
+.bold { font-weight: bold; }
 
 .nav-tabs { font-size: 0.8em; }
 .tab-pane { padding-top: 10px; }
