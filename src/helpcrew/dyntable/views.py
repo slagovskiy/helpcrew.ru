@@ -280,6 +280,7 @@ def api_record_save(request, table=None):
                         record.save()
                     else:
                         raise NameError('Field not found')
+            CrewEvent.addEvent(request, table.crew, 'Добавлена новая запись в справочник ' + table.name)
             return HttpResponse('ok')
         else:
             return HttpResponse('access denied!')
