@@ -88,3 +88,50 @@ class Field(models.Model):
         ordering = ['name']
         verbose_name = u'Поле таблицы'
         verbose_name_plural = u'Поля таблицы'
+
+
+class Index(models.Model):
+    table = models.ForeignKey(
+        Table,
+        verbose_name=u'Таблица'
+    )
+    num = models.IntegerField(
+        default=0,
+        verbose_name=u'Номер строки'
+    )
+    deleted = models.BooleanField(
+        default=False,
+        verbose_name=u'Строка удалена'
+    )
+
+    def __str__(self):
+        return str(self.num)
+
+    class Meta:
+        ordering = ['table', 'num']
+        verbose_name = u'Номер строки'
+        verbose_name_plural = u'Номера строк'
+
+
+class Record(models.Model):
+    index = models.ForeignKey(
+        Index,
+        verbose_name=u'Номер строки'
+    )
+    field = models.ForeignKey(
+        Field,
+        verbose_name=u'Поле'
+    )
+    value = models.CharField(
+        max_length=255,
+        default='',
+        verbose_name=u'Значение'
+    )
+
+    def __str__(self):
+        return self.value
+
+    class Meta:
+        ordering = ['index', 'field']
+        verbose_name = u'Значение поля'
+        verbose_name_plural = u'Значения полей'
