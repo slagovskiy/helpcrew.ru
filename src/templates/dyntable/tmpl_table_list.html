@@ -4,7 +4,7 @@
         <%if fields.deleted%>
         <%else%>
         <li role="presentation">
-            <a href="#<%:fields.uuid%>" aria-controls="<%:fields.uuid%>" role="tab" data-toggle="tab" onclick="loadTableRowsView('<%:fields.uuid%>');">
+            <a href="#<%:fields.uuid%>" aria-controls="<%:fields.uuid%>" role="tab" data-toggle="tab" onclick="loadTableRowsView('<%:pk%>');">
                 <%:fields.name onerror='_table_'%>
             </a>
         </li>
@@ -23,7 +23,7 @@
         <div class="float-form" style="display: none;" id="hidden-view-table-form<%:pk%>"></div>
         <div role="tabpanel" class="tab-pane" id="<%:fields.uuid%>">
             <input type="button" value="добавить запись" class="btn btn-primary" onclick="openTableFormView('<%:pk%>');" />
-            <%:fields.uuid%>
+            <div id="table-record-list<%:pk%>"></div>
         </div>
     <%/for%>
     </div>
