@@ -1,0 +1,22 @@
+<script id="tmpl-table-record-list" type="text/x-jsrender">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td></td>
+                <%for header%>
+                <td><%:value%></td>
+                <%/for%>
+            </tr>
+        </thead>
+        <tbody>
+        <%for data%>
+            <tr>
+                <td><%:row%></td>
+                <%for records%>
+                <td><%:value%></td>
+                <%/for%>
+            </tr>
+        <%/for%>
+        </tbody>
+    </table>
+</script>
