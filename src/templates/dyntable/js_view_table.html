@@ -15,7 +15,19 @@
     }
 
     function loadTableRowsView(table) {
-
+        $.getJSON( "{% url 'api_record_list' %}" + table + "/", function( data ) {
+            try {
+                if (data['message'] == '') {
+                    var tmpl = $.templates("#tmpl-table-record-list");
+                    var html = tmpl.render(data);
+                    console.log(data);
+                    $('#table-record-list' + table).html(html);
+                }
+            }
+            catch (err) {
+                console.error(err);
+            }
+        });
     }
 
     function openTableFormView(table) {
