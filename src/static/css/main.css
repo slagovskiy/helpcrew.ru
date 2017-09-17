@@ -121,6 +121,7 @@ button {
 .navbar-brand .btn-default { color: #333; background-color: transparent; border-color: transparent; }
 .navbar-brand button span { font-size: 1.4em; }
 .navbar-brand button { padding-left: .5em !important; padding-right: 1em !important;}
+.input-group-btn button { padding-left: .5em !important; padding-right: .5em !important;}
 
 .panel-heading {
     padding: 5px 10px;
