@@ -197,6 +197,58 @@ def api_field_delete(request, field=None):
         return HttpResponse('field not found!')
 
 
+def api_record_list(request, table=None):
+    table = Table.objects.filter(id=table).first()
+    if table:
+        if check_member(request.user, table.crew):
+            flds = Field.objects.filter(table=table, deleted=False)
+            indxs = Index.objects.filter(table=table, deleted=False)
+            records = Record.objects.select_related('index', 'field').filter(index__table=table).order_by('index__num')
+            data = [{
+                'index_id': rec.index.id,
+                'index_num': rec.index.num,
+                'index_deleted': rec.index.deleted,
+                'field_id': rec.field.id,
+                'field_name': rec.field.name,
+                'field_type': rec.field.type,
+                'field_order': rec.field.order,
+                'record_value': rec.value
+            } for rec in records]
+            row_num = 1
+            found = False
+            _data = []
+            for index in indxs:
+                _records = []
+                for field in flds:
+                    val = ''
+                    found = False
+                    for row in data:
+                        if row['index_id'] == index.id and row['field_id'] == field.id:
+                            val = row['record_value']
+                            found = True
+                            break
+                    tmp = {
+                        'field': field.name,
+                        'value': val
+                    }
+                    _records.append(tmp)
+                tmp = {
+                    'row': row_num,
+                    'records': _records
+                }
+                _data.append(tmp)
+                row_num = row_num + 1
+            return JsonResponse({
+                'message': '',
+                'table': table.id,
+                'data': _data
+            })
+        else:
+            return HttpResponse('access denied!')
+    else:
+        return HttpResponse('table not found!')
+
+
 @csrf_exempt
 @transaction.atomic
 def api_record_save(request, table=None):
