@@ -1,6 +1,6 @@
 <script id="tmpl-table-record-list" type="text/x-jsrender">
-    <table class="table table-striped">
-        <thead>
+    <table class="table table-striped table-hover font08">
+        <thead class="bold">
             <tr>
                 <td></td>
                 <%for header%>
@@ -10,7 +10,7 @@
         </thead>
         <tbody>
         <%for data%>
-            <tr>
+            <tr onclick="alert('1');">
                 <td><%:row%></td>
                 <%for records%>
                 <td><%:value%></td>
