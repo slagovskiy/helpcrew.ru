@@ -64,6 +64,8 @@
                 if(data=='ok') {
                     $.fancybox.close();
                     $.notify('Сохранено', 'success');
+                    loadTableRowsView(table);
+                    loadEventsList(100);
                 }
                 else {
                     $.notify(data, 'warn');
