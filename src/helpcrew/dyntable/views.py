@@ -214,9 +214,14 @@ def api_record_list(request, table=None):
                 'field_order': rec.field.order,
                 'record_value': rec.value
             } for rec in records]
-            row_num = 1
             found = False
             _data = []
+            _header = []
+            for field in flds:
+                _header.append({
+                    'field': field.id,
+                    'value': field.name
+                })
             for index in indxs:
                 _records = []
                 for field in flds:
@@ -227,21 +232,19 @@ def api_record_list(request, table=None):
                             val = row['record_value']
                             found = True
                             break
-                    tmp = {
+                    _records.append({
                         'field': field.name,
                         'value': val
-                    }
-                    _records.append(tmp)
-                tmp = {
-                    'row': row_num,
+                    })
+                _data.append({
+                    'row': index.num,
                     'records': _records
-                }
-                _data.append(tmp)
-                row_num = row_num + 1
+                })
             return JsonResponse({
                 'message': '',
                 'table': table.id,
-                'data': _data
+                'data': _data,
+                'header': _header
             })
         else:
             return HttpResponse('access denied!')
