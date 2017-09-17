@@ -1,10 +1,12 @@
 import json
+from django.db import transaction
+from django.db.models import Max
 from django.core import serializers
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Table, Field
+from .models import Table, Field, Index, Record
 from ..helpdesk.utils import check_member, check_member_admin
 from ..helpdesk.models import Crew, CrewEvent
 
@@ -193,3 +195,38 @@ def api_field_delete(request, field=None):
             return HttpResponse('access denied!')
     else:
         return HttpResponse('field not found!')
+
+
+@csrf_exempt
+@transaction.atomic
+def api_record_save(request, table=None):
+    table = Table.objects.filter(id=table).first()
+    if table:
+        if check_member(request.user, table.crew):
+            index_num = Index.objects.filter(table=table).aggregate(Max('num'))
+            if index_num['num__max']:
+                index_num = index_num['num__max'] + 1
+            else:
+                index_num = 1
+            index = Index.objects.create(
+                table=table,
+                num=index_num
+            )
+            index.save()
+            for fld in request.POST:
+                if fld[0:5] == 'field':
+                    field = Field.objects.filter(id=int(fld[6:])).first()
+                    if field:
+                        record = Record.objects.create(
+                            index=index,
+                            field=field,
+                            value=request.POST[fld]
+                        )
+                        record.save()
+                    else:
+                        raise NameError('Field not found')
+            return HttpResponse('ok')
+        else:
+            return HttpResponse('access denied!')
+    else:
+        return HttpResponse('table not found!')

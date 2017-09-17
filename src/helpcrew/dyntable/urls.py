@@ -2,6 +2,7 @@ from django.conf.urls import url
 
 from .views import api_table_list, api_table_edit, api_table_delete
 from .views import api_field_list, api_field_edit, api_field_delete
+from .views import api_record_save
 
 urlpatterns = [
     url(r'^api/table/list/$', api_table_list, name='api_table_list'),
@@ -17,4 +18,7 @@ urlpatterns = [
     url(r'^api/field/edit/(?P<field>[-\w]+)/$', api_field_edit, name='api_field_edit'),
     url(r'^api/field/delete/$', api_field_delete, name='api_field_delete'),
     url(r'^api/field/delete/(?P<field>[-\w]+)/?$', api_field_delete, name='api_field_delete'),
+
+    url(r'^api/record/save/$', api_record_save, name='api_record_save'),
+    url(r'^api/record/save/(?P<table>[-\w]+)/?$', api_record_save, name='api_record_save'),
 ]
