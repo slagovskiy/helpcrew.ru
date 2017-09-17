@@ -1,5 +1,5 @@
 <script id="tmpl-view-table-form" type="text/x-jsrender">
-    <form action="{% url 'api_service_price_edit' %}" method="post" id="form-view-table<%:table onerror='0'%>" enctype="multipart/form-data">
+    <form action="{% url 'api_record_save' %}" method="post" id="form-view-table<%:table onerror='0'%>" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="table" value="<%:table onerror='0'%>" />
         <%for data%>
@@ -9,18 +9,74 @@
                 <%:fields.name onerror=''%>
             </div>
             <div class="col-md-12">
-                <input type="text" class="form-control" id="field-<%:pk onerror=''%>" name="field-<%:pk onerror=''%>"  value=""
-                    <%if fields.type==1%>data-validation="number" data-validation-error-msg="Введите число"<%/if%>
-                    <%if fields.type==2%><%/if%>
-                    <%if fields.type==3%>data-validation="date" data-validation-format="yyyy/mm/dd"  data-validation-error-msg="Введите дату в формате гггг/мм/дд"<%/if%>
-                    <%if fields.type==4%>data-validation="custom" data-validation-regexp="^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\/(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))?$" data-validation-error-msg="Введите ip адрес"<%/if%>
-                    <%if fields.type==5%><%/if%>
+            <%if fields.type==1%>
+                <input type="text" class="form-control" id="field-<%:pk onerror=''%>" name="field-<%:pk onerror=''%>" value=""
+                    data-validation="custom" data-validation-regexp="^([\+\-]?\d*\.?\d+(?:[Ee][\+\-]?\d+)?)?$"
+                    data-validation-error-msg="Введите число"
                 />
+            <%/if%>
+            <%if fields.type==2%>
+                <input type="text" class="form-control" id="field-<%:pk onerror=''%>" name="field-<%:pk onerror=''%>" value=""
+                />
+            <%/if%>
+            <%if fields.type==3%>
+                <input type="text" class="form-control" id="field-<%:pk onerror=''%>" name="field-<%:pk onerror=''%>" value=""
+                    data-validation="date" data-validation-format="yyyy/mm/dd"
+                    data-validation-error-msg="Введите дату в формате гггг/мм/дд"
+                />
+            <%/if%>
+            <%if fields.type==4%>
+                <input type="text" class="form-control" id="field-<%:pk onerror=''%>" name="field-<%:pk onerror=''%>" value=""
+                    data-validation="custom" data-validation-regexp="^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\/(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))?)?$"
+                    data-validation-error-msg="Введите ip адрес"
+                />
+            <%/if%>
+            <%if fields.type==5%>
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" class="form-control"
+                        id="field-<%:pk onerror=''%>" name="field-<%:pk onerror=''%>" value=""
+                    />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default"
+                            onclick="$('#field-<%:pk onerror=''%>').val(generatePassword(6));"
+                            title="Сгенерировать пароль длинной 6 символов"
+                        >
+                            6
+                        </button>
+                        <button type="button" class="btn btn-default"
+                            onclick="$('#field-<%:pk onerror=''%>').val(generatePassword(12));"
+                            title="Сгенерировать пароль длинной 12 символов"
+                        >
+                            12
+                        </button>
+                        <button type="button" class="btn btn-default"
+                            onclick="$('#field-<%:pk onerror=''%>').val(generatePassword(18));"
+                            title="Сгенерировать пароль длинной 18 символов"
+                        >
+                            18
+                        </button>
+                        <button type="button" class="btn btn-default"
+                            onclick="$('#field-<%:pk onerror=''%>').val(generatePassword(24));"
+                            title="Сгенерировать пароль длинной 24 символа"
+                        >
+                            24
+                        </button>
+                        <button type="button" class="btn btn-default"
+                            onclick="$('#field-<%:pk onerror=''%>').val('<%:fields.value onerror=''%>');"
+                            title="Вернуть изначальный пароль"
+                        >
+                            <i class="fa fa-undo" aria-hidden="true"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <%/if%>
             </div>
         </div>
         <%/for%>
         <div class="col-md-12">
-            <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="сохранить" onclick="('<%:pk onerror='0'%>');return false;" /></div>
+            <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="сохранить" onclick="saveRecord('<%:table onerror='0'%>');return false;" /></div>
             <div class="col-md-6"><button data-fancybox-close class="form-control btn btn-default">отмена</button></div>
         </div>
     </form>

@@ -40,4 +40,25 @@
             }
         });
     }
+
+    function saveRecord(table) {
+        if (table == '') table = '0';
+        $.ajax({
+            type: 'POST',
+            url: $('#form-view-table' + table).attr('action') + table + '/',
+            data: $('#form-view-table' + table).serialize()
+        })
+            .done(function(data){
+                if(data=='ok') {
+                    $.fancybox.close();
+                    $.notify('Сохранено', 'success');
+                }
+                else {
+                    $.notify(data, 'warn');
+                }
+            })
+            .fail(function(){
+                $.notify('Ошибка передачи данных', 'error');
+            });
+    }
 </script>
