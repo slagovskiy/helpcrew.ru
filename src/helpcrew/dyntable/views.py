@@ -201,7 +201,7 @@ def api_record_list(request, table=None):
     table = Table.objects.filter(id=table).first()
     if table:
         if check_member(request.user, table.crew):
-            flds = Field.objects.filter(table=table, deleted=False)
+            flds = Field.objects.filter(table=table, deleted=False).order_by('order')
             indxs = Index.objects.filter(table=table, deleted=False)
             records = Record.objects.select_related('index', 'field').filter(index__table=table).order_by('index__num')
             data = [{
