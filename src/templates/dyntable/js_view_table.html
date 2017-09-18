@@ -20,8 +20,8 @@
                 if (data['message'] == '') {
                     var tmpl = $.templates("#tmpl-table-record-list");
                     var html = tmpl.render(data);
-                    console.log(data);
                     $('#table-record-list' + table).html(html);
+                    $('.table').footable();
                 }
             }
             catch (err) {
