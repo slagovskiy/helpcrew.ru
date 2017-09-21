@@ -2,23 +2,25 @@
     <div class="col-md-12">
         <table class="data-table">
             <thead><tr>
-                <td width="19%">Дата начала действия</td>
-                <td width="19%">Цена</td>
-                <td width="19%">Преодплата</td>
-                <td width="19%">Штраф за невыполнение заявки в срок</td>
-                <td width="19%">Штраф за просроченную заявку</td>
-                <td width="5%">&nbsp;</td>
+                <td width="18%">Дата начала действия</td>
+                <td width="18%">Цена</td>
+                <td width="18%">Преодплата</td>
+                <td width="18%">Штраф за невыполнение заявки в срок</td>
+                <td width="18%">Штраф за просроченную заявку</td>
+                <td width="10%">&nbsp;</td>
             </tr></thead>
             <%for data%>
             <tr>
-                <td width="19%"><%:fields.start_date onerror=''%></td>
-                <td width="19%"><%:fields.cost onerror=''%></td>
-                <td width="19%"><%:fields.prepay onerror=''%></td>
-                <td width="19%"><%:fields.fine1 onerror=''%></td>
-                <td width="19%"><%:fields.fine2 onerror=''%></td>
+                <td><%:fields.start_date onerror=''%></td>
+                <td><%:fields.cost onerror=''%></td>
+                <td><%:fields.prepay onerror=''%></td>
+                <td><%:fields.fine1 onerror=''%></td>
+                <td><%:fields.fine2 onerror=''%></td>
                 <td>
-                    <a href="#" onclick="editPrice(<%:pk%>); return false;"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                    <a href="#" onclick="deletePrice(<%:pk%>); return false;"><i class="fa fa-times" aria-hidden="true"></i></a>
+                    <div class="btn-group" role="group">
+                        <button onclick="editPrice(<%:pk%>); return false;" class="btn btn-default btn-xs"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                        <button href="#" onclick="deletePrice(<%:pk%>); return false;" class="btn btn-default btn-xs"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                    </div>
                 </td>
             </tr>
             <%/for%>
