@@ -125,6 +125,7 @@ button {
 .input-group-btn button { padding-left: .5em !important; padding-right: .5em !important;}
 .input-group-btn button { padding-left: .5em !important; padding-right: .5em !important;}
 .data-table .btn-group button { padding-left: .5em !important; padding-right: .5em !important;}
+table .btn-group button { padding-left: .5em !important; padding-right: .5em !important;}
 
 .panel-heading {
     padding: 5px 10px;

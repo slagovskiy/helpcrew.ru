@@ -1,8 +1,9 @@
 <script id="tmpl-view-table-form" type="text/x-jsrender">
-    <form action="{% url 'api_record_save' %}" method="post" id="form-view-table<%:table onerror='0'%>" enctype="multipart/form-data">
+    <form action="{% url 'api_record_save' %}" method="post" id="form-view-record<%:table onerror='0'%>" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="table" value="<%:table onerror='0'%>" />
-        <%for data%>
+        <input type="hidden" name="index" value="0" />
+        <%for fields%>
 
         <div class="col-md-12">
             <div class="col-md-12 form-label">

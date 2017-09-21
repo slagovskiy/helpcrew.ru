@@ -122,6 +122,31 @@ def api_field_list(request, table=None):
 
 
 @csrf_exempt
+def api_index_data(request, table=None, index=None):
+    table = Table.objects.filter(id=table).first()
+    index = Index.objects.filter(id=index).first()
+    if table:
+        if not check_member(request.user, table.crew):
+            return JsonResponse({
+                'message': u'access denied!',
+                'data': ''
+            })
+        fields = serializers.serialize('json', table.field_set.all().order_by('order'))
+        records = serializers.serialize('json', Record.objects.filter(index=index))
+        return JsonResponse({
+            'message': '',
+            'table': table.id,
+            'fields': json.loads(fields),
+            'records': json.loads(records)
+        })
+    else:
+        return JsonResponse({
+            'message': 'table not found',
+            'data': [],
+        })
+
+
+@csrf_exempt
 def api_field_edit(request, field=None):
     if request.method == 'GET':
         field = Field.objects.filter(id=field).first()
@@ -237,7 +262,9 @@ def api_record_list(request, table=None):
                         'value': val
                     })
                 _data.append({
+                    'table': table.id,
                     'row': index.num,
+                    'index': index.id,
                     'records': _records
                 })
             return JsonResponse({
@@ -258,30 +285,54 @@ def api_record_save(request, table=None):
     table = Table.objects.filter(id=table).first()
     if table:
         if check_member(request.user, table.crew):
-            index_num = Index.objects.filter(table=table).aggregate(Max('num'))
-            if index_num['num__max']:
-                index_num = index_num['num__max'] + 1
+            if request.POST.get('index', 0):
+                index_num = Index.objects.filter(table=table).aggregate(Max('num'))
+                if index_num['num__max']:
+                    index_num = index_num['num__max'] + 1
+                else:
+                    index_num = 1
+                index = Index.objects.create(
+                    table=table,
+                    num=index_num
+                )
+                index.save()
+                for fld in request.POST:
+                    if fld[0:5] == 'field':
+                        field = Field.objects.filter(id=int(fld[6:])).first()
+                        if field:
+                            record = Record.objects.create(
+                                index=index,
+                                field=field,
+                                value=request.POST[fld]
+                            )
+                            record.save()
+                        else:
+                            raise NameError('Field not found')
+                CrewEvent.addEvent(request, table.crew, 'Добавлена новая запись #' + str(index.num) + ' в справочник ' + table.name)
+                return HttpResponse('ok')
             else:
-                index_num = 1
-            index = Index.objects.create(
-                table=table,
-                num=index_num
-            )
-            index.save()
-            for fld in request.POST:
-                if fld[0:5] == 'field':
-                    field = Field.objects.filter(id=int(fld[6:])).first()
-                    if field:
-                        record = Record.objects.create(
-                            index=index,
-                            field=field,
-                            value=request.POST[fld]
-                        )
-                        record.save()
-                    else:
-                        raise NameError('Field not found')
-            CrewEvent.addEvent(request, table.crew, 'Добавлена новая запись в справочник ' + table.name)
-            return HttpResponse('ok')
+                index = Index.objects.filter(id=request.POST.get('index', 0)).first()
+                if index:
+                    for fld in request.POST:
+                        if fld[0:5] == 'field':
+                            field = Field.objects.filter(id=int(fld[6:])).first()
+                            if field:
+                                record = Record.objects.filter(index=index, field=field)
+                                if record:
+                                    record.value = request.POST[fld]
+                                else:
+                                    record = Record.objects.create(
+                                        index=index,
+                                        field=field,
+                                        value=request.POST[fld]
+                                    )
+                                record.save()
+                            else:
+                                raise NameError('Field not found')
+                    CrewEvent.addEvent(request, table.crew, 'Изменена запись #' + str(index.num) + ' в справочник ' + table.name)
+                    return HttpResponse('ok')
+                else:
+                    HttpResponse('index not found!')
         else:
             return HttpResponse('access denied!')
     else:

@@ -20,7 +20,7 @@
     <%for data%>
         <div class="float-form" style="display: none;" id="hidden-view-table-form<%:pk%>"></div>
         <div role="tabpanel" class="tab-pane" id="<%:fields.uuid%>">
-            <input type="button" value="добавить запись" class="btn btn-primary" onclick="openTableFormView('<%:pk%>');" />
+            <input type="button" value="добавить запись" class="btn btn-primary" onclick="openTableFormView('<%:pk%>', 0);" />
             <div id="table-record-list<%:pk%>"></div>
         </div>
     <%else%>
