@@ -21,6 +21,7 @@
         <div class="float-form" style="display: none;" id="hidden-view-table-form<%:pk%>"></div>
         <div role="tabpanel" class="tab-pane" id="<%:fields.uuid%>">
             <input type="button" value="добавить запись" class="btn btn-primary" onclick="openTableFormView('<%:pk%>', 0);" />
+            <input type="button" value="импортировать из csv" class="btn btn-default" onclick="importFromCSV('<%:pk%>');" />
             <div id="table-record-list<%:pk%>"></div>
         </div>
     <%else%>
