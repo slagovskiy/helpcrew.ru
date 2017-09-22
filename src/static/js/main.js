@@ -16,5 +16,9 @@ function generatePassword(len) {
     return retVal;
 };
 
+function nyi() {
+    $.fancybox.open('<h1 class="float-form">Not yet implemented</h1>');
+}
+
 $(document).ready(function() {
 });
