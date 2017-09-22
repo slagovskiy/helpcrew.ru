@@ -4,7 +4,7 @@
         <input type="hidden" name="table" value="<%:table onerror='0'%>" />
         <input type="hidden" name="index" value="0" />
         <%for fields%>
-
+        <%if !fields.deleted%>
         <div class="col-md-12">
             <div class="col-md-12 form-label">
                 <%:fields.name onerror=''%>
@@ -83,6 +83,7 @@
             <%/if%>
             </div>
         </div>
+        <%/if%>
         <%/for%>
         <%:"<"%>script>
         try {
