@@ -24,14 +24,10 @@
                     <%:fields.order onerror=''%>
                 </td>
                 <td width="5%">
-                    <a href="#" onclick="editField(<%:pk%>); return false;"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                    <a href="#" onclick="deleteField(<%:pk%>); return false;">
-                        <%if fields.deleted%>
-                            <i class="fa fa-plus" aria-hidden="true"></i>
-                        <%else%>
-                            <i class="fa fa-times" aria-hidden="true"></i>
-                        <%/if%>
-                    </a>
+                    <div class="btn-group" role="group">
+                        <button onclick="editField(<%:pk%>);return false;" class="btn btn-default btn-xs" title="Редактировать"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                        <button href="#" onclick="deleteField(<%:pk%>); return false;" class="btn btn-default btn-xs" title="<%if fields.deleted%>Восстановить<%else%>Удалить<%/if%>"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                    </div>
                 </td>
             </tr>
             <%/for%>
