@@ -227,7 +227,7 @@ def api_record_list(request, table=None):
     if table:
         if check_member(request.user, table.crew):
             flds = Field.objects.filter(table=table, deleted=False).order_by('order')
-            indxs = Index.objects.filter(table=table, deleted=False)
+            indxs = Index.objects.filter(table=table)
             records = Record.objects.select_related('index', 'field').filter(index__table=table).order_by('index__num')
             data = [{
                 'index_id': rec.index.id,
@@ -265,6 +265,7 @@ def api_record_list(request, table=None):
                     'table': table.id,
                     'row': index.num,
                     'index': index.id,
+                    'deleted': index.deleted,
                     'records': _records
                 })
             return JsonResponse({
@@ -332,7 +333,29 @@ def api_record_save(request, table=None):
                     CrewEvent.addEvent(request, table.crew, 'Изменена запись #' + str(index.num) + ' в справочник ' + table.name)
                     return HttpResponse('ok')
                 else:
-                    HttpResponse('index not found!')
+                    return HttpResponse('index not found!')
+        else:
+            return HttpResponse('access denied!')
+    else:
+        return HttpResponse('table not found!')
+
+
+@csrf_exempt
+def api_record_delete(request, table=None, index=None):
+    table = Table.objects.filter(id=table).first()
+    if table:
+        if check_member(request.user, table.crew):
+            index = Index.objects.filter(id=index).first()
+            if index:
+                index.deleted = not index.deleted
+                index.save()
+                if index.deleted:
+                    CrewEvent.addEvent(request, table.crew, 'Удалена запись #' + str(index.num) + ' в справочник ' + table.name)
+                else:
+                    CrewEvent.addEvent(request, table.crew, 'Восстановлена запись #' + str(index.num) + ' в справочник ' + table.name)
+                return HttpResponse('ok')
+            else:
+                return HttpResponse('index not found!')
         else:
             return HttpResponse('access denied!')
     else:

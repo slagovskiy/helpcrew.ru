@@ -77,6 +77,25 @@
             });
     }
 
+    function deleteRecord(table, index) {
+        $.ajax({
+            type: 'GET',
+            url: '{% url 'api_record_delete' %}' + table + '/' + index + '/'
+        })
+            .done(function(data){
+                if (data=='ok') {
+                    $.notify('Сохранено', 'success');
+                    loadTableRowsView(table);
+                    loadEventsList(table);
+                } else {
+                    $.notify(data, 'warn');
+                }
+            })
+            .fail(function(){
+                $.notify('Ошибка передачи данных');
+            });
+    }
+
     function importFromCSV(table) {
         nyi();
     }

@@ -11,15 +11,15 @@
         </thead>
         <tbody>
         <%for data%>
-            <tr>
+            <tr<%if deleted%> class="strike"<%/if%>>
                 <td><%:row%></td>
                 <%for records%>
                 <td><%:value%></td>
                 <%/for%>
                 <td style="text-align: right;">
                     <div class="btn-group" role="group">
-                        <button onclick="openTableFormView('<%:table%>', <%:index%>);return false;" class="btn btn-default btn-xs"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                        <button href="#" onclick="confirm('Удалить запись?'); return false;" class="btn btn-default btn-xs"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                        <button onclick="openTableFormView('<%:table%>', <%:index%>);return false;" class="btn btn-default btn-xs" title="Редактировать запись"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                        <button href="#" onclick="if(confirm('<%if deleted%>Восстановить<%else%>Удалить<%/if%> запись?')) deleteRecord('<%:table%>', <%:index%>); return false;" class="btn btn-default btn-xs" title="<%if deleted%>Восстановить<%else%>Удалить<%/if%> запись"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                     </div>
                 </td>
             </tr>
