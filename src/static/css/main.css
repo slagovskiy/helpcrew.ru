@@ -148,8 +148,8 @@ table .btn-group button { padding-left: .5em !important; padding-right: .5em !im
 
 .head-row {
     font-size: 1.5em;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 0px;
+    padding-bottom: 0px;
     font-family: "RobotoMedium", sans-serif;
     text-transform: uppercase;
 }
