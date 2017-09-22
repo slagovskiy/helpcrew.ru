@@ -10,34 +10,48 @@
                 <%:fields.name onerror=''%>
             </div>
             <div class="col-md-12">
-            <%if fields.type==1%>
+            <%if fields.type==5%>
+            <div class="form-group">
+                <div class="input-group">
+            <%/if%>
+            <%if fields.type==3%>
+            <div class="form-group">
+                <div class="input-group date"  id="datetimepicker-<%:pk onerror=''%>">
+            <%/if%>
                 <input type="text" class="form-control" id="field-<%:pk onerror=''%>" name="field-<%:pk onerror=''%>" value=""
+            <%if fields.type==1%>
                     data-validation="custom" data-validation-regexp="^([\+\-]?\d*\.?\d+(?:[Ee][\+\-]?\d+)?)?$"
                     data-validation-error-msg="Введите число"
                 />
             <%/if%>
             <%if fields.type==2%>
-                <input type="text" class="form-control" id="field-<%:pk onerror=''%>" name="field-<%:pk onerror=''%>" value=""
                 />
             <%/if%>
             <%if fields.type==3%>
-                <input type="text" class="form-control" id="field-<%:pk onerror=''%>" name="field-<%:pk onerror=''%>" value=""
                     data-validation="date" data-validation-format="yyyy/mm/dd"
                     data-validation-error-msg="Введите дату в формате гггг/мм/дд"
                 />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+                </div>
+            </div>
+                <%:"<"%>script>
+                try {
+                    $('#datetimepicker-<%:pk onerror=''%>').datetimepicker({
+                        format: 'YYYY-MM-DD',
+                        keepOpen: false
+                    });
+                } catch(e) { }
+                <%:"<"%>/script>
             <%/if%>
             <%if fields.type==4%>
-                <input type="text" class="form-control" id="field-<%:pk onerror=''%>" name="field-<%:pk onerror=''%>" value=""
                     data-validation="custom" data-validation-regexp="^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\/(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))?)?$"
                     data-validation-error-msg="Введите ip адрес"
                 />
             <%/if%>
             <%if fields.type==5%>
-            <div class="form-group">
-                <div class="input-group">
-                    <input type="text" class="form-control"
-                        id="field-<%:pk onerror=''%>" name="field-<%:pk onerror=''%>" value=""
-                    />
+                />
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default"
                             onclick="$('#field-<%:pk onerror=''%>').val(generatePassword(6));"
@@ -63,12 +77,6 @@
                         >
                             24
                         </button>
-                        <button type="button" class="btn btn-default"
-                            onclick="$('#field-<%:pk onerror=''%>').val('<%:fields.value onerror=''%>');"
-                            title="Вернуть изначальный пароль"
-                        >
-                            <i class="fa fa-undo" aria-hidden="true"></i>
-                        </button>
                     </span>
                 </div>
             </div>
@@ -76,6 +84,19 @@
             </div>
         </div>
         <%/for%>
+        <%:"<"%>script>
+        try {
+            $('.datetimepicker').datetimepicker({
+                format: 'YYYY-MM-DD',
+                keepOpen: false
+            });
+        <%for records%>
+        $('#field-<%:fields.field%>').val('<%>fields.value%>');
+        <%/for%>
+        } catch(e) {
+            alert('Ошибка заполнения полей');
+        }
+        <%:"<"%>/script>
         <div class="col-md-12">
             <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="сохранить" onclick="saveRecord('<%:table onerror='0'%>');return false;" /></div>
             <div class="col-md-6"><button data-fancybox-close class="form-control btn btn-default">отмена</button></div>

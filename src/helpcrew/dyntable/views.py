@@ -285,7 +285,7 @@ def api_record_save(request, table=None):
     table = Table.objects.filter(id=table).first()
     if table:
         if check_member(request.user, table.crew):
-            if request.POST.get('index', 0):
+            if request.POST.get('index', '0') == '0':
                 index_num = Index.objects.filter(table=table).aggregate(Max('num'))
                 if index_num['num__max']:
                     index_num = index_num['num__max'] + 1
@@ -317,7 +317,7 @@ def api_record_save(request, table=None):
                         if fld[0:5] == 'field':
                             field = Field.objects.filter(id=int(fld[6:])).first()
                             if field:
-                                record = Record.objects.filter(index=index, field=field)
+                                record = Record.objects.filter(index=index, field=field).first()
                                 if record:
                                     record.value = request.POST[fld]
                                 else:
