@@ -1,0 +1,86 @@
+<script id="tmpl-crew-service-edit" type="text/x-jsrender">
+<form action="{% url 'task_save' %}" method="post" id="form-task_new" enctype="multipart/form-data">
+    {% csrf_token %}
+    <%if task%>
+    <div class="col-md-12">
+        <div class="col-md-12 form-label">
+            Тип заявки
+        </div>
+        <div class="col-md-12">
+            <select class="form-control selectpicker" onchange="changeService(this.value);" id="service" name="service">
+                <%for service%>
+                    <%if !fields.deleted%>
+                        <option value="<%:pk%>"><%:fields.name%></option>
+                    <%/if%>
+                <%/for%>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-12" id="field-priority">
+        <div class="col-md-12 form-label">
+            Приоритет
+        </div>
+        <div class="col-md-12">
+            <select class="form-control selectpicker" id="priority" name="priority">
+                <%for priority%>
+                    <%if !fields.deleted%>
+                        <option value="<%:pk%>"<%if fields.default%> selected="selected"<%/if%>><%fields.name%></option>
+                    <%/if%>
+                <%/for%>
+            </select>
+        </div>
+    </div>
+    <%else%>
+        <input type="hidden" name="service" id="service" value="-1">
+        <input type="hidden" name="priority" id="priority"
+            value="<%for priority%><%if !fields.deleted and fields.default%><%:pk%><%/if%><%/for%>">
+    <%/if%>
+    <div class="col-md-12">
+        <div class="col-md-12 form-label">
+            <%if task%>Дополнительная информация<%else%>Описание проблемы<%/if%>
+        </div>
+        <div class="col-md-12">
+            <textarea rows="7" class="form-control" id="description" name="description" placeholder="Введите описание проблемы"></textarea>
+        </div>
+    </div>
+    <div class="col-md-12 form-label">
+        Добавить вложения
+    </div>
+    <div class="col-md-12">
+        <input type="file" class="filestyle" id="files" name="files" multiple="multiple"
+               data-text="Выбрать файлы" data-btnClass="btn-primary"
+               data-validation="size" data-validation-max-size="2M"
+               data-validation-error-msg-size="Вы не можете загружать файлы размером более 2Мб"
+        />
+    </div>
+    {% if request.user.is_anonymous %}
+        <div class="col-md-12 form-label">
+            Ваше имя
+        </div>
+        <div class="col-md-12">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Ваше имя"
+                   data-validation="required"
+                   data-validation-error-msg="Введите свое имя"
+            />
+        </div>
+        <div class="col-md-12 form-label">
+            Адрес электронной почты
+        </div>
+        <div class="col-md-12">
+            <input type="text" class="form-control" id="email" name="email" placeholder="Эл. почта"
+                   data-validation="email"
+                   data-validation-error-msg="Введите верный электронный адрес"
+            />
+        </div>
+    {% endif %}
+    <div class="col-md-12">
+        <input type="hidden" name="crew" value="{{ crew.slug }}">
+        <div class="col-md-6">
+            <input type="submit" class="form-control btn btn-primary" value="отправить" />
+        </div>
+        <div class="col-md-6">
+            <button data-fancybox-close class="form-control btn btn-default">отмена</button>
+        </div>
+    </div>
+</form>
+</script>

@@ -689,6 +689,22 @@ def api_event_list(request, crew=None, limit=100):
         })
 
 
+def api_task_new(request, crew=None):
+    crew = Crew.objects.filter(slug=crew).first()
+    if crew:
+        service = crew.crewservice_set.filter(deleted=False)
+        priority = crew.taskpriority_set.filter(deleted=False)
+        return JsonResponse({
+            'message': u'Доступ запрещен',
+            'model': ''
+        })
+    else:
+        return JsonResponse({
+            'message': u'Команда не найдена',
+            'model': ''
+        })
+
+
 @csrf_exempt
 def api_crew_check_url(request):
     message = ''
