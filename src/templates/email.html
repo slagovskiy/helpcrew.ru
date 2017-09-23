@@ -1,3 +1,5 @@
+{% load static %}
+{% load tags %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +10,7 @@
 <table style="width: 100%; max-width: 600px; border: 1px solid #dbdbdb; border-radius: 5px; box-shadow: 2px 2px 3px rgba(0,0,0,0.05); background: #fff; padding: 0px; margin: 0 auto 0px auto;" border="0" cellspacing="0" cellpadding="0">
     <tbody>
     <tr>
-        <td style="padding: 30px; border-bottom: 1px solid #dbdbdb;"><a style="text-decoration: none;" title="HelpCrew" href="https://helpcrew.ru"><img style="width: auto; max-width: 100%; margin: 0 auto; font-weight: bold; color: #222; font-size: 38px; text-decoration: none;" src="http://127.0.0.1:8000/static/img/logo.png" alt="HelpCrew" /></a></td>
+        <td style="padding: 30px; border-bottom: 1px solid #dbdbdb;"><a style="text-decoration: none;" title="HelpCrew" href="https://helpcrew.ru"><img style="width: auto; max-width: 100%; margin: 0 auto; font-weight: bold; color: #222; font-size: 38px; text-decoration: none;" src="{% site_url %}{% static 'img/logo.png' %}" alt="HelpCrew" /></a></td>
     </tr>
     {% block content %}
     {% endblock %}
