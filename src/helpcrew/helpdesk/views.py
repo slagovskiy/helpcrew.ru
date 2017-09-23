@@ -665,7 +665,6 @@ def api_event_list(request, crew=None, limit=100):
                         'crew_id': item.crew.id,
                         'date': timezone.localtime(item.date, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S'),
                         'ip': item.ip,
-                        'host': item.host,
                         'user_agent': item.user_agent,
                         'message': item.message,
                         'user_firstname': item.user.firstname,

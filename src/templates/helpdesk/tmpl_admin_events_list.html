@@ -11,7 +11,7 @@
                 <td width="80%" class="text-left"><%:message onerror=''%></td>
             </tr>
             <tr>
-                <td colspan="2" class="info"><%if user_firstname or user_lastname%><%:user_firstname%> <%:user_lastname%> <%else%><%:user_email%><%/if%> from: <%:host%> <%:ip%> <%:user_agent%></td>
+                <td colspan="2" class="info"><%if user_firstname or user_lastname%><%:user_firstname onerror=''%> <%:user_lastname onerror=''%> <%else%><%:user_email onerror=''%><%/if%> from: <%:ip onerror=''%> <%:user_agent onerror=''%></td>
             </tr>
             <%/for%>
         </table>

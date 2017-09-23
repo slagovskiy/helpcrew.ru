@@ -7,6 +7,7 @@ import pytz
 import businesstimedelta
 from django.db import models
 
+from ..toolbox.utils import getUserHostAddress
 from ..toolbox.models import Global
 from ..userext.models import User
 
@@ -147,11 +148,6 @@ class CrewEvent(models.Model):
         max_length=60,
         verbose_name=u'IP адрес пользователя'
     )
-    host = models.CharField(
-        default='',
-        max_length=60,
-        verbose_name=u'Хост пользователя'
-    )
     user_agent = models.CharField(
         default='',
         max_length=200,
@@ -174,8 +170,7 @@ class CrewEvent(models.Model):
             event = CrewEvent(
                 crew=crew,
                 user=user,
-                ip=request.META['REMOTE_ADDR'],
-                host=request.META['REMOTE_HOST'],
+                ip=getUserHostAddress(request),
                 user_agent=request.META['HTTP_USER_AGENT'],
                 message=message
             )
@@ -600,11 +595,6 @@ class TaskEvent(models.Model):
         max_length=60,
         verbose_name=u'IP адрес пользователя'
     )
-    host = models.CharField(
-        default='',
-        max_length=60,
-        verbose_name=u'Хост пользователя'
-    )
     user_agent = models.CharField(
         default='',
         max_length=200,
@@ -627,8 +617,7 @@ class TaskEvent(models.Model):
             event = TaskEvent(
                 task=task,
                 user=user,
-                ip=request.META['REMOTE_ADDR'],
-                host=request.META['REMOTE_HOST'],
+                ip=getUserHostAddress(request),
                 user_agent=request.META['HTTP_USER_AGENT'],
                 message=message
             )
