@@ -37,13 +37,14 @@
             <div role="tabpanel" class="tab-pane active" id="task">
                 <div class="crew-menu-title">
                     <span class="btn-group" role="group" aria-label="...">
-                        <button class="btn btn-primary" onclick="openNewTask(); return false;">новая заявка</button>
-                        <button class="btn btn-danger" onclick="openNewTask(); return false;">новый инцидент</button>
-                        <button class="btn btn-info">новая подписка</button>
+                        <button class="btn btn-primary" onclick="openNewTask('1'); return false;">новая заявка</button>
+                        <button class="btn btn-danger" onclick="openNewTask('2'); return false;">новый инцидент</button>
+                        <button class="btn btn-info" onclick="openNewTask('3'); return false;">новая подписка</button>
                     </span>
                     <button class="btn btn-default">обновить</button>
                 </div>
                 <div class="col-md-12">
+                    <div class="float-form" style="display: none;" id="hidden-task-new"></div>
                     <table>
                     {% for task in crew.crewtask_set.all %}
                         <tr>
@@ -170,6 +171,7 @@
             {% include 'dyntable/tmpl_table_list.html' %}
             {% include 'dyntable/tmpl_table_form.html' %}
             {% include 'dyntable/tmpl_record_list.html' %}
+            {% include 'helpdesk/tmpl_task_new.html' %}
             {% include 'dyntable/js_view_table.html' %}
             {% include 'helpdesk/js_crew_view.html' %}
 

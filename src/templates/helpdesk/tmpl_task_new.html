@@ -1,13 +1,13 @@
-<script id="tmpl-crew-service-edit" type="text/x-jsrender">
-<form action="{% url 'task_save' %}" method="post" id="form-task_new" enctype="multipart/form-data">
+<script id="tmpl-task-new" type="text/x-jsrender">
+<form action="{% url 'task_save' %}" method="post" id="form-task-new" enctype="multipart/form-data">
     {% csrf_token %}
-    <%if task%>
+    <%if task || subscribe%>
     <div class="col-md-12">
         <div class="col-md-12 form-label">
             Тип заявки
         </div>
         <div class="col-md-12">
-            <select class="form-control selectpicker" onchange="changeService(this.value);" id="service" name="service">
+            <select class="form-control selectpicker" id="service" name="service">
                 <%for service%>
                     <%if !fields.deleted%>
                         <option value="<%:pk%>"><%:fields.name%></option>
@@ -16,6 +16,11 @@
             </select>
         </div>
     </div>
+    <%else%>
+        <input type="hidden" name="service" id="service" value="-1">
+    <%/if%>
+
+    <%if task%>
     <div class="col-md-12" id="field-priority">
         <div class="col-md-12 form-label">
             Приоритет
@@ -24,17 +29,18 @@
             <select class="form-control selectpicker" id="priority" name="priority">
                 <%for priority%>
                     <%if !fields.deleted%>
-                        <option value="<%:pk%>"<%if fields.default%> selected="selected"<%/if%>><%fields.name%></option>
+                        <option value="<%:pk%>"<%if fields.default%> selected="selected"<%/if%>><%:fields.name%></option>
                     <%/if%>
                 <%/for%>
             </select>
         </div>
     </div>
     <%else%>
-        <input type="hidden" name="service" id="service" value="-1">
         <input type="hidden" name="priority" id="priority"
             value="<%for priority%><%if !fields.deleted and fields.default%><%:pk%><%/if%><%/for%>">
     <%/if%>
+
+    <%if !subscribe%>
     <div class="col-md-12">
         <div class="col-md-12 form-label">
             <%if task%>Дополнительная информация<%else%>Описание проблемы<%/if%>
@@ -43,6 +49,42 @@
             <textarea rows="7" class="form-control" id="description" name="description" placeholder="Введите описание проблемы"></textarea>
         </div>
     </div>
+    <%/if%>
+
+    <%if subscribe%>
+    <div class="col-md-12 form-label">
+        Начало подписки
+    </div>
+    <div class="col-md-12">
+        <div class='input-group date' id='datetimepicker-start-date'>
+            <input type='text' class="form-control" id="start_date" name="start_date" placeholder="YYYY-MM-DD" value=""
+               data-validation="date" data-validation-require-leading-zero="true" data-validation-format="yyyy-mm-dd"
+               data-validation-error-msg="Введите дату начала подписки" data-validation-error-msg-container="#datetimepicker-start-date-error"
+               />
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+        <span id="datetimepicker-start-date-error"></span>
+    </div>
+    <div class="col-md-12 form-label">
+        Оконание подписки
+    </div>
+    <div class="col-md-12">
+        <div class='input-group date' id='datetimepicker-end-date'>
+            <input type='text' class="form-control" id="end_date" name="end_date" placeholder="YYYY-MM-DD" value=""
+               data-validation="date" data-validation-require-leading-zero="true" data-validation-format="yyyy-mm-dd"
+               data-validation-error-msg="Введите дату окончания подписки" data-validation-error-msg-container="#datetimepicker-end-date-error"
+               />
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+        <span id="datetimepicker-end-date-error"></span>
+    </div>
+    <%/if%>
+
+    <%if task%>
     <div class="col-md-12 form-label">
         Добавить вложения
     </div>
@@ -53,6 +95,7 @@
                data-validation-error-msg-size="Вы не можете загружать файлы размером более 2Мб"
         />
     </div>
+    <%/if%>
     {% if request.user.is_anonymous %}
         <div class="col-md-12 form-label">
             Ваше имя

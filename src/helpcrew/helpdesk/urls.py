@@ -1,10 +1,10 @@
 from django.conf.urls import url
 
 from .views import crew_edit, api_crew_check_url, crew_view
-from .views import task_new, task_save, task_info, api_task_list
+from .views import task_new, task_save, task_info, api_task_list, api_task_new
 from .views import api_crew_edit
 from .views import api_user_list, api_user_edit, api_user_delete, api_user_invite, api_user_add
-from .views import api_service_list, api_service_edit, api_service_delete
+from .views import api_service_list, api_service_edit, api_service_delete, api_service_template
 from .views import api_priority_list, api_priority_edit, api_priority_delete
 from .views import api_service_price_edit, api_service_price_list
 from .views import api_event_list
@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^task/info/(?P<uuid>[-\w]+)/$', task_info, name='task_info'),
 
     url(r'^api/task/list/(?P<crew>[-\w]+)/$', api_task_list, name='api_task_list'),
+    url(r'^api/task/new/(?P<crew>[-\w]+)/$', api_task_new, name='api_task_new'),
 
     url(r'^api/crew/edit/$', api_crew_edit, name='api_crew_edit'),
     url(r'^api/crew/edit/(?P<crew>[-\w]+)/$', api_crew_edit, name='api_crew_edit'),
@@ -33,6 +34,8 @@ urlpatterns = [
     url(r'^api/user/add/$', api_user_add, name='api_user_add'),
     url(r'^api/user/add/(?P<email>\w+|[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/(?P<type>[-\w]+)/$', api_user_add, name='api_user_add'),
 
+    url(r'^api/service/template/$', api_service_template, name='api_service_template'),
+    url(r'^api/service/template/(?P<service>[-\w]+)/$', api_service_template, name='api_service_template'),
     url(r'^api/service/list/$', api_service_list, name='api_service_list'),
     url(r'^api/service/list/(?P<crew>[-\w]+)/$', api_service_list, name='api_service_list'),
     url(r'^api/service/edit/$', api_service_edit, name='api_service_edit'),

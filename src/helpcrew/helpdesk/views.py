@@ -293,6 +293,16 @@ def api_service_list(request, crew=None):
 
 
 @csrf_exempt
+def api_service_template(request, service=None):
+    s = CrewService.objects.filter(id=service).first()
+    if s:
+        data = s.template
+        return HttpResponse(data)
+    else:
+        return HttpResponse('')
+
+
+@csrf_exempt
 def api_service_edit(request, service=None):
     if request.method == 'GET':
         serv = CrewService.objects.filter(id=service).first()
@@ -692,10 +702,14 @@ def api_event_list(request, crew=None, limit=100):
 def api_task_new(request, crew=None):
     crew = Crew.objects.filter(slug=crew).first()
     if crew:
-        service = crew.crewservice_set.filter(deleted=False)
-        priority = crew.taskpriority_set.filter(deleted=False)
+        service = serializers.serialize('json', CrewService.objects.filter(crew=crew, deleted=False))
+        priority = serializers.serialize('json', TaskPriority.objects.filter(crew=crew, deleted=False))
         return JsonResponse({
-            'message': u'Доступ запрещен',
+            'message': u'',
+            'service': json.loads(service),
+            'priority': json.loads(priority),
+            'task': True if request.GET.get('type', '0') == '1' else False,
+            'subscribe': True if request.GET.get('type', '0') == '3' else False,
             'model': ''
         })
     else:

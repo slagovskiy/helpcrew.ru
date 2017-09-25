@@ -1,5 +1,71 @@
 <script>
-    function openNewTask() {
-        window.location.href = '{% url 'task_new' crew.url %}'
+    function openNewTask(type) {
+        $.getJSON( "{% url 'api_task_new' crew.slug %}?type=" + type, function( data ) {
+            try {
+                if (data['message'] == '') {
+                    var tmpl = $.templates("#tmpl-task-new");
+                    var html = tmpl.render(data);
+                    $('#hidden-task-new').html(html);
+                    $.fancybox.open({
+                        src: '#hidden-task-new',
+                        type: 'inline',
+                        opts: {modal: true}
+                    });
+                    $.validate({
+                        form : '#form-task-new'
+                    });
+                    try {
+                        $('#service').on("change", function() {
+                            $.ajax({ url: "{% url 'api_service_template' %}" + $('#service').val() })
+                                .done(function (data) {
+                                    $('#description').val(data);
+                                })
+                        }).change();
+                    } catch (e) { }
+                    try {
+                        $('select').selectpicker();
+                    } catch (e) { }
+                    try {
+                        $('#datetimepicker-start-date').datetimepicker({
+                            format: 'YYYY-MM-DD',
+                            keepOpen: false
+                        });
+                        $('#datetimepicker-end-date').datetimepicker({
+                            format: 'YYYY-MM-DD',
+                            keepOpen: false
+                        });
+                        $("#datetimepicker-start-date").on("dp.change", function (e) {
+                            $('#datetimepicker-end-date').data("DateTimePicker").minDate(e.date);
+                        });
+                        $("#datetimepicker-end-date").on("dp.change", function (e) {
+                            $('#datetimepicker-start-date').data("DateTimePicker").maxDate(e.date);
+                        });
+                    } catch (e) { }
+                    try {
+
+                        $(":file").filestyle({
+                            btnClass: 'btn-primary',
+                            text: 'Выбрать файл'
+                        });
+                    } catch (e) { }
+                } else {
+                    $.notify(data['message'], 'error');
+                }
+            }
+            catch (err) {
+                console.error(err);
+            }
+        });
     }
+
+    /*function changeService(e) {
+        $.getJSON( "{% url 'api_service_template' %}" + e, function( data ) {
+            try {
+                alert(data);
+                $('#description').val(data);
+            } catch (ex) {
+                console.log('a');
+            }
+        });
+    }*/
 </script>
