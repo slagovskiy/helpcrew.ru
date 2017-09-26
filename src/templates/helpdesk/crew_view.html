@@ -175,7 +175,7 @@
         var taskUpdateInterval = 30; // seconds
         var taskUpdatePB = 1;
         var taskUpdateTimer;
-        //$('#taskPB').attr('width', '35%');
+        var prevTaskList = '';
 
         var taskUpdateTimer = setTimeout(function() { reloadTaskList(); }, 1000);
 

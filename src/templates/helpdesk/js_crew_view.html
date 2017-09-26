@@ -88,8 +88,12 @@
                 if (data['message'] == '') {
                     var tmpl = $.templates("#tmpl-task-list");
                     var html = tmpl.render(data);
-                    $('#task-list').html(html);
-                    $('#table-task-list').footable();
+                    if (JSON.stringify(data)!=JSON.stringify(prevTaskList))
+                    {
+                        prevTaskList = data;
+                        $('#task-list').html(html);
+                        $('#table-task-list').footable();
+                    }
                 }
             }
             catch (err) {
