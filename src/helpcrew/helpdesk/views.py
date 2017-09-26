@@ -119,68 +119,6 @@ def task_new(request, url=None):
         return redirect(reverse('home'))
 
 
-def task_save(request):
-    crew = Crew.objects.filter(slug=request.POST.get('crew', '')).first()
-    if crew:
-        service = CrewService.objects.filter(id=int(request.POST.get('service', '-1'))).first()
-        status = CrewTask.TASK_STATUS_NEW
-        priority = TaskPriority.objects.filter(id=int(request.POST.get('priority', '-1'))).first()
-        description = request.POST.get('description', '')
-        task_type = CrewTask.TASK_TYPE_NORMAL
-        contact_name = request.POST.get('name', '')
-        contact_email = request.POST.get('email', '')
-        if not service:
-            task_type = CrewTask.TASK_TYPE_INCIDENT
-        observer = None
-        if not request.user.is_anonymous:
-            observer = request.user
-
-        task = CrewTask.objects.create(
-            crew=crew,
-            type=task_type,
-            status=status,
-            service=service,
-            description=description,
-            priority=priority,
-            date_in=timezone.now(),
-            contact_name=contact_name,
-            contact_email=contact_email,
-            observer=observer
-        )
-        task.save()
-
-        messages.error(request, u'Заявка успешно сохранена')
-
-        CrewEvent.addEvent(request, crew, u'Добавлена новая заявка ' + str(task.uuid))
-        TaskEvent.addEvent(request, task, u'Добавлена новая заявка ' + str(task.uuid))
-
-        if service and service.auto_wait_status:
-            task.status = CrewTask.TASK_STATUS_WAITING
-            task.save()
-            TaskEvent.addEvent((request, task, u'Заявка автоматически переведена в статус "В ожидании"'))
-
-        if service and task.type == CrewTask.TASK_TYPE_SUBSCRIBE:
-            task.status = CrewTask.TASK_STATUS_IN_WORK
-            task.save()
-            TaskEvent.addEvent((request, task, u'Подписка автоматически переведена в статус "В работе"'))
-
-        if observer and not check_member(request.user, crew):
-            cu = CrewUsers.objects.create(
-                crew=crew,
-                user=observer,
-                type=CrewUsers.OBSERVER_TYPE
-            )
-            cu.save()
-            CrewEvent.addEvent(request, crew, u'В команду добавлен наблюдатель ' + observer.email)
-            return redirect(reverse('crew_view', kwargs={'url': crew.url}))
-        else:
-            messages.error(request, u'Заявка успешно сохранена')
-            return redirect(reverse('task_info', kwargs={'uuid': str(task.uuid)}))
-    else:
-        messages.error(request, u'Команда не найдена')
-        return redirect(reverse('home'))
-
-
 def task_info(request, uuid=None):
     task = CrewTask.objects.filter(uuid=uuid).first()
     if task:
@@ -192,41 +130,6 @@ def task_info(request, uuid=None):
         messages.error(request, u'Заявка не найдена')
         return redirect(reverse('home'))
 
-
-def api_task_list(request, crew=None):
-    crew = Crew.objects.filter(slug=crew).first()
-    if crew:
-        if check_member(request.user, crew):
-            list = []
-            for item in CrewTask.objects.filter(crew=crew).order_by('status', '-date_in'): #select_related('user', 'crew')
-                list.append(
-                    {
-                        'uuid': item.uuid,
-                        'type': item.type,
-                        'status': item.status,
-                        'description': item.description[0:100],
-                        'priority': item.priority.name,
-                        'date_in': timezone.localtime(item.date_in, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S'),
-                        'service': item.service.name if item.service else u'Проблема',
-                        'crew_id': item.crew.id,
-                        'crew_uuid': item.crew.slug
-                    }
-                )
-            data = json.dumps(list)
-            return JsonResponse({
-                'message': '',
-                'data': json.loads(data)
-            })
-        else:
-            return JsonResponse({
-                'message': u'Доступ запрещен',
-                'model': ''
-            })
-    else:
-        return JsonResponse({
-            'message': u'Команда не найдена',
-            'model': ''
-        })
 
 
 @csrf_exempt
@@ -699,6 +602,43 @@ def api_event_list(request, crew=None, limit=100):
         })
 
 
+@csrf_exempt
+def api_task_list(request, crew=None):
+    crew = Crew.objects.filter(slug=crew).first()
+    if crew:
+        if check_member(request.user, crew):
+            list = []
+            for item in CrewTask.objects.filter(crew=crew).order_by('status', '-date_in'): #select_related('user', 'crew')
+                list.append(
+                    {
+                        'uuid': item.uuid,
+                        'type': item.type,
+                        'status': item.status,
+                        'description': item.description[0:100],
+                        'priority': item.priority.name,
+                        'date_in': timezone.localtime(item.date_in, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S'),
+                        'service': item.service.name if item.service else u'Проблема',
+                        'crew_id': item.crew.id,
+                        'crew_uuid': item.crew.slug
+                    }
+                )
+            data = json.dumps(list)
+            return JsonResponse({
+                'message': '',
+                'data': json.loads(data)
+            })
+        else:
+            return JsonResponse({
+                'message': u'Доступ запрещен',
+                'model': ''
+            })
+    else:
+        return JsonResponse({
+            'message': u'Команда не найдена',
+            'model': ''
+        })
+
+@csrf_exempt
 def api_task_new(request, crew=None):
     crew = Crew.objects.filter(slug=crew).first()
     if crew:
@@ -708,8 +648,9 @@ def api_task_new(request, crew=None):
             'message': u'',
             'service': json.loads(service),
             'priority': json.loads(priority),
-            'task': True if request.GET.get('type', '0') == '1' else False,
-            'subscribe': True if request.GET.get('type', '0') == '3' else False,
+            'task': True if request.GET.get('type', '0') == '0' else False,
+            'subscribe': True if request.GET.get('type', '0') == '2' else False,
+            'type': request.GET.get('type', '0'),
             'model': ''
         })
     else:
@@ -717,6 +658,75 @@ def api_task_new(request, crew=None):
             'message': u'Команда не найдена',
             'model': ''
         })
+
+
+def api_task_save(request):
+    crew = Crew.objects.filter(slug=request.POST.get('crew', '')).first()
+    type = int(request.POST.get('type', 0))
+    if crew:
+        service = None
+        if type != CrewTask.TASK_TYPE_INCIDENT:
+            service = CrewService.objects.filter(id=int(request.POST.get('service', '-1'))).first()
+        status = CrewTask.TASK_STATUS_NEW
+        priority = None
+        if type == CrewTask.TASK_TYPE_NORMAL:
+            priority = TaskPriority.objects.filter(id=int(request.POST.get('priority', '-1'))).first()
+        else:
+            priority = TaskPriority.objects.filter(default=True).first()
+        description = request.POST.get('description', '')
+        task_type = type
+        contact_name = request.POST.get('name', '')
+        contact_email = request.POST.get('email', '')
+        date_in = None
+        date_end = None
+        if type == CrewTask.TASK_TYPE_SUBSCRIBE:
+            date_in = request.POST.get('start_date', timezone.now())
+            date_end = request.POST.get('end_date', timezone.now())
+        else:
+            date_in = timezone.now()
+
+        task = CrewTask.objects.create(
+            crew=crew,
+            type=task_type,
+            status=status,
+            service=service,
+            description=description,
+            priority=priority,
+            date_in=date_in,
+            date_end=date_end,
+            contact_name=contact_name,
+            contact_email=contact_email
+        )
+        task.save()
+
+        CrewEvent.addEvent(request, crew, u'Добавлена новая заявка ' + str(task.uuid))
+        TaskEvent.addEvent(request, task, u'Добавлена новая заявка ' + str(task.uuid))
+
+        if service and service.auto_wait_status:
+            task.status = CrewTask.TASK_STATUS_WAITING
+            task.save()
+            TaskEvent.addEvent(request, task, u'Заявка автоматически переведена в статус "В ожидании"')
+
+        if service and task.type == CrewTask.TASK_TYPE_SUBSCRIBE:
+            task.status = CrewTask.TASK_STATUS_IN_WORK
+            task.save()
+            TaskEvent.addEvent(request, task, u'Подписка автоматически переведена в статус "В работе"')
+
+        #if observer and not check_member(request.user, crew):
+        #    cu = CrewUsers.objects.create(
+        #        crew=crew,
+        #        user=observer,
+        #        type=CrewUsers.OBSERVER_TYPE
+        #    )
+        #    cu.save()
+        #    CrewEvent.addEvent(request, crew, u'В команду добавлен наблюдатель ' + observer.email)
+        #    return redirect(reverse('crew_view', kwargs={'url': crew.url}))
+        #else:
+        #messages.error(request, u'Заявка успешно сохранена')
+        #return redirect(reverse('task_info', kwargs={'uuid': str(task.uuid)}))
+        return HttpResponse('ok')
+    else:
+        return HttpResponse(u'Команда не найдена')
 
 
 @csrf_exempt
