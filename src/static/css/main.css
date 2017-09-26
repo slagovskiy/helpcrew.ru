@@ -103,6 +103,15 @@ button {
 .color-dg { color: #333333; }
 .color-bl { color: #000000; }
 
+.bg-y { background-color: #FFC811; }
+.bg-lb { background-color: #3AA4A4; }
+.bg-o { background-color: #EA7128; }
+.bg-g { background-color: #B3B31C; }
+.bg-b { background-color: #45737E; }
+.bg-gr { background-color: #555555; }
+.bg-dg { background-color: #333333; }
+.bg-bl { background-color: #000000; }
+
 .font08 { font-size: 0.8em; }
 .font07 { font-size: 0.7em; }
 .font06 { font-size: 0.6em; }
