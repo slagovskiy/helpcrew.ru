@@ -53,6 +53,11 @@ class Crew(models.Model):
         default='',
         verbose_name=u'Текст для пользователя'
     )
+    password = models.CharField(
+        default='',
+        max_length=255,
+        verbose_name=u'Пароль для подачи заявок'
+    )
     deleted = models.BooleanField(
         default=False,
         verbose_name=u'Команда удалена'
