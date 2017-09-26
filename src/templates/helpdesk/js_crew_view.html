@@ -58,6 +58,46 @@
         });
     }
 
+    function saveNewTask() {
+        $.ajax({
+            type: 'POST',
+            url: $('#form-task-new').attr('action'),
+            data: $('#form-task-new').serialize()
+        })
+            .done(function(data){
+                if(data=='ok') {
+                    $.fancybox.close();
+                    $.notify('Сохранено', 'success');
+                    try {
+                        loadTaskList();
+                        loadEventsList(100);
+                    } catch (e) {}
+                }
+                else {
+                    $.notify(data, 'warn');
+                }
+            })
+            .fail(function(){
+                $.notify('Ошибка передачи данных', 'error');
+            });
+    }
+
+    function loadTaskList() {
+        $.getJSON( "{% url 'api_task_list' crew.slug %}", function( data ) {
+            try {
+                if (data['message'] == '') {
+                    var tmpl = $.templates("#tmpl-task-list");
+                    var html = tmpl.render(data);
+                    $('#task-list').html(html);
+                    $('#table-task-list').footable();
+                }
+            }
+            catch (err) {
+                console.error(err);
+            }
+        });
+    }
+
     /*function changeService(e) {
         $.getJSON( "{% url 'api_service_template' %}" + e, function( data ) {
             try {
