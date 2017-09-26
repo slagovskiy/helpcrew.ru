@@ -13,6 +13,11 @@ from ..userext.models import User
 
 
 class Crew(models.Model):
+    def logo_path(instance, filename):
+        ext = filename.split('.')[-1]
+        filename = '{}.{}'.format(str(uuid.uuid1()), ext)
+        return os.path.join(os.path.join('crew', instance.slug), filename)
+
     slug = models.SlugField(
         unique=True,
         verbose_name=u'Ключ'
@@ -33,6 +38,12 @@ class Crew(models.Model):
     )
     added = models.DateTimeField(
         auto_now_add=True
+    )
+    logo = models.ImageField(
+        'Logo',
+        blank=True,
+        null=True,
+        upload_to=logo_path
     )
     deleted = models.BooleanField(
         default=False,

@@ -3,7 +3,7 @@ from django import template
 
 from ...helpdesk.utils import check_member_admin, check_member_dispatcher, check_member
 from ...helpdesk.models import CrewTask
-from ...settings import SITE_URL
+from ...settings import SITE_URL, UPLOAD_URL
 
 register = template.Library()
 
@@ -11,6 +11,11 @@ register = template.Library()
 @register.simple_tag()
 def site_url():
     return SITE_URL
+
+
+@register.simple_tag()
+def upload_url():
+    return UPLOAD_URL
 
 
 @register.filter

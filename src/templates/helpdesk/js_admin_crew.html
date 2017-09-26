@@ -25,6 +25,10 @@ function loadCrew() {
                     format: 'HH:mm',
                     keepOpen: false
                 });
+                $(":file").filestyle({
+                    btnClass: 'btn-primary',
+                    text: 'Выбрать файл'
+                });
             }
         }
         catch (err) {
@@ -38,7 +42,9 @@ function saveCrew(crew) {
     $.ajax({
         type: 'POST',
         url: $('#form-crew-edit').attr('action') + crew + '/',
-        data: $('#form-crew-edit').serialize()
+        data: new FormData($('#form-crew-edit')[0]),
+        processData: false,
+        contentType: false//$('#form-crew-edit').serialize()
     })
         .done(function(data){
             if(data=='ok') {

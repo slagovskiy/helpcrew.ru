@@ -1,6 +1,7 @@
 import re
 import json
 
+import os
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.shortcuts import render, redirect
@@ -10,6 +11,7 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
 from django.core import serializers
 
+from ..settings import UPLOAD_DIR
 from ..taskqueue.utils import add_email
 from .models import Crew, CrewUsers, CrewService, ServicePrice, TaskPriority, CrewEvent, CrewTask, TaskEvent, TaskFiles
 from ..userext.models import User
@@ -171,7 +173,19 @@ def api_crew_edit(request, crew=None):
                 crew.work_day_5 = request.POST.get('work_day_5', False)
                 crew.work_day_6 = request.POST.get('work_day_6', False)
                 crew.save()
-                CrewEvent.addEvent(request, crew, u'Изменены параметры команды')
+                if 'logo' in request.FILES:
+                    up_file = request.FILES['logo']
+                    file = os.path.join(UPLOAD_DIR, Crew.logo_path(crew, up_file.name))
+                    filename = os.path.basename(file)
+                    if not os.path.exists(os.path.dirname(file)):
+                        os.makedirs(os.path.dirname(file))
+                    destination = open(file, 'wb+')
+                    for chunk in up_file.chunks():
+                        destination.write(chunk)
+                    crew.logo.save(filename, destination, save=False)
+                    crew.save()
+                    destination.close()
+                    CrewEvent.addEvent(request, crew, u'Изменены параметры команды')
                 return HttpResponse('ok')
             else:
                 return HttpResponse('crew not found!')

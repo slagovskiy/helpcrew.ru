@@ -1,3 +1,4 @@
+{% load tags %}
 <script id="tmpl-crew-edit" type="text/x-jsrender">
     <%for data%>
     <form action="{% url 'api_crew_edit' %}" method="post" id="form-crew-edit" enctype="multipart/form-data">
@@ -30,6 +31,31 @@
                            data-validation="server" data-validation-url="{% url 'api_crew_check_url' %}"
                            data-validation-optional="true" data-validation-ignore="<%:fields.url onerror=''%>"
                            data-validation-error-msg="Введите адрес команды, используя латинские символы и цифры"
+                    />
+                </div>
+                <div class="col-md-12 form-comment">
+                    Для быстрого перехода на страницу команды http://helpcrew.ru/p/<span style="color: red">my_crew</span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-3">
+                </div>
+                <div class="col-md-6">
+                    <%if fields.logo%><img src="{% upload_url %}<%:fields.logo%>?w=150"><%/if%>
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-12 form-label">
+                    Логотип
+                </div>
+                <div class="col-md-12">
+                    <input type="file" class="filestyle" id="logo" name="logo"
+                           data-text="Выбрать файл" data-btnClass="btn-primary"
+                           data-validation="size" data-validation-allowing="jpg, png, gif"
+                           data-validation-max-size="2M"
+                           data-validation-error-msg="Выберите графический файл, размером не более 2Мб"
                     />
                 </div>
                 <div class="col-md-12 form-comment">
