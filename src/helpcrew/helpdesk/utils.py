@@ -1,4 +1,4 @@
-from .models import Crew, CrewUsers
+from .models import Crew, CrewUsers, CrewTask
 
 
 def get_crews_list(user, flat=False):
@@ -24,6 +24,25 @@ def get_crews_list(user, flat=False):
                 'crews_o': crews_o
         }
     return content
+
+
+def statusLikeText(status):
+    str = ''
+    if status == CrewTask.TASK_STATUS_PAUSED:
+        str = 'Приостановлена'
+    elif status == CrewTask.TASK_STATUS_CANCELED:
+        str = 'Отменена'
+    elif status == CrewTask.TASK_STATUS_FINISHED:
+        str = 'Завершена'
+    elif status == CrewTask.TASK_STATUS_CLOSED:
+        str = 'Закрыта'
+    elif status == CrewTask.TASK_STATUS_IN_WORK:
+        str = 'В работе'
+    elif status == CrewTask.TASK_STATUS_WAITING:
+        str = 'Ожидает'
+    elif status == CrewTask.TASK_STATUS_NEW:
+        str = 'Новая'
+    return str
 
 
 def __first_check(user=None):

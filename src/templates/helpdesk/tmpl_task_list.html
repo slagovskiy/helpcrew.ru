@@ -4,6 +4,7 @@
         <tr>
             <td>Дата подачи</td>
             <td>Приоритет</td>
+            <td>Статус</td>
             <td>Описание</td>
         </tr>
     </thead>
@@ -11,8 +12,20 @@
     <%for data%>
         <tr>
             <td><%:date_in%></td>
-            <td><%:priority%></td>
-            <td><%:service%></td>
+            <td class="text-center"><%:priority%></td>
+            <td class="text-center"><span class="label nobold
+            <%if status_code=='0'%> label-primary<%/if%>
+            <%if status_code=='1'%> label-danger<%/if%>
+            <%if status_code=='2'%> label-default<%/if%>
+            <%if status_code=='3'%> label-warning<%/if%>
+            <%if status_code=='4'%> label-default<%/if%>
+            <%if status_code=='5'%> label-success<%/if%>
+            <%if status_code=='6'%> label-default<%/if%>
+            "><%:status%></span></td>
+            <td>
+                <div><%:service%></div>
+                <div class="font06 color-gr"><%:description%>...</div>
+            </td>
         </tr>
     <%/for%>
     </tbody>

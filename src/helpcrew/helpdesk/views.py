@@ -13,7 +13,7 @@ from django.core import serializers
 from ..taskqueue.utils import add_email
 from .models import Crew, CrewUsers, CrewService, ServicePrice, TaskPriority, CrewEvent, CrewTask, TaskEvent, TaskFiles
 from ..userext.models import User
-from .utils import get_crews_list, check_member, check_member_admin
+from .utils import get_crews_list, check_member, check_member_admin, statusLikeText
 
 
 def crew_edit(request, url=None):
@@ -613,8 +613,9 @@ def api_task_list(request, crew=None):
                     {
                         'uuid': item.uuid,
                         'type': item.type,
-                        'status': item.status,
-                        'description': item.description[0:100],
+                        'status': statusLikeText(item.status),
+                        'status_code': item.status,
+                        'description': item.description[0:150],
                         'priority': item.priority.name,
                         'date_in': timezone.localtime(item.date_in, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S'),
                         'service': item.service.name if item.service else u'Проблема',
