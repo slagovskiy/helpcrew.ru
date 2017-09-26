@@ -160,6 +160,8 @@ def api_crew_edit(request, crew=None):
             if crew:
                 crew.name = request.POST.get('name', '_')
                 crew.url = request.POST.get('url', crew.slug)
+                crew.description = request.POST.get('description', '')
+                crew.user_page = request.POST.get('user_page', '')
                 crew.work_start_time = request.POST.get('work_start_time', '9:00')
                 crew.work_end_time = request.POST.get('work_end_time', '18:00')
                 crew.lunch_start_time = request.POST.get('lunch_start_time', '12:00')

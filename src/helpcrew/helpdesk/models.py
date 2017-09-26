@@ -45,6 +45,14 @@ class Crew(models.Model):
         null=True,
         upload_to=logo_path
     )
+    description = models.TextField(
+        default='',
+        verbose_name=u'Описание'
+    )
+    user_page = models.TextField(
+        default='',
+        verbose_name=u'Текст для пользователя'
+    )
     deleted = models.BooleanField(
         default=False,
         verbose_name=u'Команда удалена'
