@@ -37,26 +37,17 @@
             <div role="tabpanel" class="tab-pane active" id="task">
                 <div class="crew-menu-title">
                     <span class="btn-group" role="group" aria-label="...">
-                        <button class="btn btn-primary" onclick="openNewTask('1'); return false;">новая заявка</button>
-                        <button class="btn btn-danger" onclick="openNewTask('2'); return false;">новый инцидент</button>
-                        <button class="btn btn-info" onclick="openNewTask('3'); return false;">новая подписка</button>
+                        <button class="btn btn-primary" onclick="openNewTask('0'); return false;">новая заявка</button>
+                        <button class="btn btn-danger" onclick="openNewTask('1'); return false;">новый инцидент</button>
+                        <button class="btn btn-info" onclick="openNewTask('2'); return false;">новая подписка</button>
                     </span>
-                    <button class="btn btn-default">обновить</button>
+                    <button class="btn btn-default" onclick="taskUpdatePB = 1; loadTaskList(); return false;">обновить
+                    <table width="100%" style="min-height: 1px; max-height: 1px;"><tr><td width="1%" class="bg-b" id="taskPB"></td><td></td></tr></table>
+                    </button>
                 </div>
                 <div class="col-md-12">
                     <div class="float-form" style="display: none;" id="hidden-task-new"></div>
-                    <table>
-                    {% for task in crew.crewtask_set.all %}
-                        <tr>
-                            <td width="10%">{{ task.date_in | date:"Y/m/d G:i" }}</td>
-                            <td width="10%">{{ task.priority.name }}</td>
-                            <td width="80%">{% if task.service %}{{ task.service.name }}{% else %}Проблема{% endif %}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">{{ task.description }}</td>
-                        </tr>
-                    {% endfor %}
-                    </table>
+                    <div id="task-list"></div>
                 </div>
             </div>
 
@@ -172,6 +163,7 @@
             {% include 'dyntable/tmpl_table_form.html' %}
             {% include 'dyntable/tmpl_record_list.html' %}
             {% include 'helpdesk/tmpl_task_new.html' %}
+            {% include 'helpdesk/tmpl_task_list.html' %}
             {% include 'dyntable/js_view_table.html' %}
             {% include 'helpdesk/js_crew_view.html' %}
 
@@ -180,6 +172,28 @@
         </div>
     </div>
     <script>
+        var taskUpdateInterval = 30; // seconds
+        var taskUpdatePB = 1;
+        var taskUpdateTimer;
+        //$('#taskPB').attr('width', '35%');
+
+        var taskUpdateTimer = setTimeout(function() { reloadTaskList(); }, 1000);
+
+
+        function reloadTaskList()
+        {
+            clearTimeout(taskUpdateTimer);
+            taskUpdatePB += 100 / taskUpdateInterval;
+            if (taskUpdatePB >= 100)
+            {
+                loadTaskList();
+                taskUpdatePB = 1;
+            }
+
+            $('#taskPB').attr('width', taskUpdatePB + '%');
+            taskUpdateTimer = setTimeout(function() { reloadTaskList(); }, 1000);
+        }
+
         function init() {
             {% if is_admin %}
                 loadCrew();
@@ -190,6 +204,7 @@
                 loadEventsList(100);
             {% endif %}
             loadTableView();
+            loadTaskList();
         }
     </script>
 {% endblock %}
