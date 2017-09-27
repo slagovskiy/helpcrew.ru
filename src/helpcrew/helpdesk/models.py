@@ -511,7 +511,7 @@ class CrewTask(models.Model):
     def __str__(self):
         return self.uuid
 
-    def date_finish_calc(self):
+    def date_prepare(self):
         working_days = []
         if self.crew.work_day_0:
             working_days.append(0)
@@ -569,10 +569,33 @@ class CrewTask(models.Model):
             btd = businesstimedelta.Rules([workday, lunchbreak, holidays])
         else:
             btd = businesstimedelta.Rules([workday, lunchbreak])
+        return btd
 
+    def date1_calc(self):
+        btd = self.date_prepare()
+        delta = None
+        if self.service:
+            delta = businesstimedelta.BusinessTimeDelta(btd, hours=self.service.time1)
+        else:
+            delta = businesstimedelta.BusinessTimeDelta(btd, hours=self.crew.incident_time_one)
+        rez = self.date_in + delta
+        return rez
+
+    def date2_calc(self):
+        btd = self.date_prepare()
         delta = None
         if self.service:
             delta = businesstimedelta.BusinessTimeDelta(btd, hours=self.service.time2)
+        else:
+            delta = businesstimedelta.BusinessTimeDelta(btd, hours=self.crew.incident_time_two)
+        rez = self.date_in + delta
+        return rez
+
+    def date3_calc(self):
+        btd = self.date_prepare()
+        delta = None
+        if self.service:
+            delta = businesstimedelta.BusinessTimeDelta(btd, hours=self.service.time3)
         else:
             delta = businesstimedelta.BusinessTimeDelta(btd, hours=self.crew.incident_time_two)
         rez = self.date_in + delta

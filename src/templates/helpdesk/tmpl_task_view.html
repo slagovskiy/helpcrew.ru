@@ -2,7 +2,34 @@
 <div class="col-md-12">
 <%for task%>
     <div class="col-md-12">
-        <div class="col-md-9">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body font06">
+                    Статус: <%:status%><br>
+                    Приоритет: <%:priority%><br>
+                    <hr style="margin-top: 3px; margin-bottom: 3px;">
+                    Дата подачи: <%:date_in%><br>
+                    Срок принятия в работу: <%:date__reaction%><br>
+                    Срок исполнения: <%:date__finish%><br>
+                    <hr style="margin-top: 3px; margin-bottom: 3px;">
+                    <a href="#">изменить приоритет</a> | <a href="#">изменить дату подачи</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body font06">
+                    Заявитель: Sergey Lagovskiy<br>
+                    Диспетчер: Sergey Lagovskiy<br>
+                    Исполнители: Sergey Lagovskiy, Sergey Lagovskiy<br>
+                    Ответственный: Sergey Lagovskiy
+                    <hr style="margin-top: 3px; margin-bottom: 3px;">
+                    <a href="#">изменить</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <%:service%>
@@ -13,48 +40,58 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
-                <div class="col-md-4">
-                    <input type="button" name="work" value="В работу" class="btn btn-primary form-control">
-                </div>
-                <div class="col-md-4">
-                    <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control">
-                </div>
-                <div class="col-md-4">
-                    <input type="button" name="cancel" value="Отменить" class="btn btn-default form-control">
-                </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <input type="button" name="work" value="В работу" class="btn btn-primary form-control">
             </div>
-            <div class="col-md-12 padding-top-20">
-                <form>
-                    <div class="col-md-12 form-label">
-                        Сообщение
-                    </div>
-                    <div class="col-md-12">
-                        <textarea class="form-control" rows="3"></textarea>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="col-md-8"></div>
-                        <div class="col-md-4">
-                            <input type="button" value="Сохранить" class="btn btn-primary form-control">
-                        </div>
-                    </div>
-                </form>
+            <div class="col-md-4">
+                <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control">
+            </div>
+            <div class="col-md-4">
+                <input type="button" name="cancel" value="Отменить" class="btn btn-default form-control">
             </div>
         </div>
-        <div class="col-md-3">
+
+        <div class="col-md-12 padding-top-20">
             <div class="panel panel-default">
-                <div class="panel-body font06">
-                    Статус: <%:status%><br>
-                    Дата подачи: <%:date_in%><br>
-                    Срок исполнения: <%:date_calc%>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-body font06">
-                    Заявитель: Sergey Lagovskiy<br>
-                    Диспетчер: Sergey Lagovskiy<br>
-                    Исполнители: Sergey Lagovskiy, Sergey Lagovskiy<br>
-                    Ответственный: Sergey Lagovskiy
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <div class="scroll150">
+                            <table class="table font06">
+                                <thead>
+                                    <tr>
+                                        <td>Дата</td>
+                                        <td>Пользователь</td>
+                                        <td>Событие</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <%for events%>
+                                    <tr>
+                                        <td><%:date%></td>
+                                        <td><%:user%></td>
+                                        <td><%:message%></td>
+                                    </tr>
+                                <%/for%>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <form>
+                        <div class="col-md-12 form-label">
+                            Добавить cообщение в журнал заявки
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-8">
+                                <textarea class="form-control" rows="1"></textarea>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="button" value="Сохранить" class="btn btn-default form-control">
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

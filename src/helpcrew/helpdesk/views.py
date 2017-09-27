@@ -670,7 +670,18 @@ def api_task_view(request, uuid=None):
     if task:
         list = []
         events = []
-        date_finish = task.date_finish_calc()
+        for event in task.taskevent_set.select_related('user'):
+            events.append({
+                'date': timezone.localtime(event.date, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if event.date else '',
+                'user': event.user.name(),
+                'ip': event.ip,
+                'user_agent': event.user_agent,
+                'message': event.message
+            })
+
+        date_reaction = task.date1_calc()
+        date_finish = task.date2_calc()
+        date_fail = task.date3_calc()
         list.append({
             'uuid': task.uuid,
             'crew_id': task.crew.id,
@@ -686,24 +697,18 @@ def api_task_view(request, uuid=None):
             'date_end': timezone.localtime(task.date_end, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_end else '',
             'date_finish': timezone.localtime(task.date_finish, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_finish else '',
             'date_close': timezone.localtime(task.date_close, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_close else '',
-            'date_calc': timezone.localtime(date_finish, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_in else '',
+            'date__reaction': timezone.localtime(date_reaction, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_in else '',
+            'date__finish': timezone.localtime(date_finish, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_in else '',
+            'date__fail': timezone.localtime(date_fail, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_in else '',
             'contact_name': task.contact_name,
             'contact_email': task.contact_email,
             'qty': str(task.qty),
-            'fine': str(task.fine)
+            'fine': str(task.fine),
+            'events': events
         })
-        for event in task.taskevent_set.select_related('user'):
-            events.append({
-                'date': timezone.localtime(event.date, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if event.date else '',
-                'user': event.user.name(),
-                'ip': event.ip,
-                'user_agent': event.user_agent,
-                'message': event.message
-            })
         return JsonResponse({
             'message': u'',
             'task': json.loads(json.dumps(list)),
-            'events': json.loads(json.dumps(events)),
             'model': ''
         })
     else:
