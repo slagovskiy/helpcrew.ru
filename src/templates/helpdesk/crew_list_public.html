@@ -6,7 +6,13 @@
     <tbody>
         {% for crew in crews %}
         <tr onclick="location.href='{% url 'crew_view_redirect' crew.url %}'" style="cursor: pointer;">
-            <td>{% if crew.logo %}<img src="{{ crew.logo.url }}?w=150">{% endif %}</td>
+            <td>
+                {% if crew.logo %}
+                    <img src="{{ crew.logo.url }}?w=150">
+                {% else %}
+                    <img src="{% static 'img/logo150.png' %}">
+                {% endif %}
+            </td>
             <td>{{ crew.name }}</td>
             <td>{{ crew.description|escapebr|safe }}</td>
         </tr>
