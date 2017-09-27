@@ -116,17 +116,29 @@ def crew_list_public(request):
 
 def task_new(request, url=None):
     crew = Crew.objects.filter(url=url).first()
-    if crew:
-        content = {
-            'crew': crew
-        }
-        if check_member(request.user, crew):
+    if request.method == 'GET':
+        if crew:
+            if crew.password == request.session.get(crew.slug, ''):
+                content = {
+                    'crew': crew,
+                    'password': 'ok'
+                }
+            else:
+                content = {
+                    'crew': crew,
+                    'password': 'no'
+                }
             return render(request, 'helpdesk/task_new.html', content)
         else:
-            return render(request, 'helpdesk/task_new.html', content)
-    else:
-        messages.error(request, u'Команда не найдена')
-        return redirect(reverse('home'))
+            messages.error(request, u'Команда не найдена')
+            return redirect(reverse('home'))
+    elif request.method == 'POST':
+        if 'password' in request.POST:
+            if crew.password == request.POST.get('password', ''):
+                request.session[crew.slug] = crew.password
+            else:
+                request.session[crew.slug] = ''
+        return redirect(reverse('crew_view_redirect', kwargs={'url': crew.url}))
 
 
 @csrf_exempt

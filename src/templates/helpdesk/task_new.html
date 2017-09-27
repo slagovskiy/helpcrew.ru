@@ -1,107 +1,42 @@
 {% extends 'base.html' %}
 {% load tags %}
 {% block content %}
-    <div class="col-md-12 crew-title">
-        <span>Команда &laquo{{ crew.name }}&raquo; - Новая заявка</span><br>
-    </div>
-    <div class="col-md-12">
-        <form action="" id="form-task-new" method="post" enctype="multipart/form-data">
+    {% ifequal password 'ok' %}
+        <div class="col-md-12 crew-title">
+            <span>Команда &laquo{{ crew.name }}&raquo; - Новая заявка</span><br>
+            {% ifnotequal crew.password '' %}
+            <form action="{% url 'task_new' crew.url %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="password" value="" class="form-control">
+                <div class="col-md-12">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="выйти из гостевого режима"/></div>
+                    <div class="col-md-3"></div>
+                </div>
+            </form>
+            {% endifnotequal %}
+        </div>
+    {% else %}
+        <div>Админисратор ограничил гостевой доступ к команде</div>
+        <form action="{% url 'task_new' crew.url %}" method="post">
             {% csrf_token %}
             <div class="col-md-12">
-                <div class="col-md-12 form-label">
-                    Тип заявки
-                </div>
-                <div class="col-md-12">
-                    <select class="form-control selectpicker" onchange="changeService(this.value);" id="service" name="service">
-                        <option value="-1" selected="selected">Проблема</option>
-                        {% for service in crew.crewservice_set.all %}
-                            {% if not service.deleted %}
-                                <option value="{{ service.id }}">{{ service.name }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-12" id="field-priority">
-                <div class="col-md-12 form-label">
-                    Приоритет
-                </div>
-                <div class="col-md-12">
-                    <select class="form-control selectpicker" id="priority" name="priority">
-                        {% for priority in crew.taskpriority_set.all %}
-                            {% if not priority.deleted %}
-                                <option value="{{ priority.id }}"{% if priority.default %} selected="selected"{% endif %}>{{ priority.name }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="col-md-12 form-label">
-                    Дополнительная информация
-                </div>
-                <div class="col-md-12">
-                    <textarea rows="7" class="form-control" id="description" name="description" placeholder="Введите описание проблемы"></textarea>
-                </div>
-            </div>
-            <div class="col-md-12 form-label">
-                Добавить вложения
-            </div>
-            <div class="col-md-12">
-                <input type="file" class="filestyle" id="files" name="files" multiple="multiple"
-                       data-text="Выбрать файлы" data-btnClass="btn-primary"
-                       data-validation="size" data-validation-max-size="2M"
-                       data-validation-error-msg-size="Вы не можете загружать файлы размером более 2Мб"
-                />
-            </div>
-            {% if request.user.is_anonymous %}
-                <div class="col-md-12 form-label">
-                    Ваше имя
-                </div>
-                <div class="col-md-12">
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Ваше имя"
-                           data-validation="required"
-                           data-validation-error-msg="Введите свое имя"
-                    />
-                </div>
-                <div class="col-md-12 form-label">
-                    Адрес электронной почты
-                </div>
-                <div class="col-md-12">
-                    <input type="text" class="form-control" id="email" name="email" placeholder="Эл. почта"
-                           data-validation="email"
-                           data-validation-error-msg="Введите верный электронный адрес"
-                    />
-                </div>
-            {% endif %}
-            <div class="col-md-12">
-                <input type="hidden" name="crew" value="{{ crew.slug }}">
+                <div class="col-md-3"></div>
                 <div class="col-md-6">
-                    <input type="submit" class="form-control btn btn-primary" value="отправить" />
+                    <div class="col-md-12 form-label">
+                        Введите пароль для гостевого доступа к команде "{{ crew.name }}"
+                    </div>
+                    <div class="col-md-12">
+                        <input type="password" name="password" value="" class="form-control">
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <input type="button" class="form-control btn btn-default" value="отмена" onclick="window.history.back();" />
-                </div>
+                <div class="col-md-3"></div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-3"></div>
+                <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="отправить"/></div>
+                <div class="col-md-3"></div>
             </div>
         </form>
-    </div>
-    <script>
-        function changeService(service) {
-            var serviceTemplate = {};
-            serviceTemplate[-1] = '';
-            {% for service in crew.crewservice_set.all %}
-                serviceTemplate[{{ service.id }}] = '{{ service.template|jsmultiline }}';
-            {% endfor %}
-            if (service != -1)
-                $('#field-priority').show();
-            else
-                $('#field-priority').hide();
-            $('#description').val(serviceTemplate[service]);
-        }
-
-        function init()
-        {
-            $('#field-priority').hide();
-        }
-    </script>
+    {% endifequal %}
 {% endblock %}
