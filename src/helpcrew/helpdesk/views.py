@@ -694,7 +694,7 @@ def api_task_view(request, uuid=None):
         for event in task.taskevent_set.select_related('user'):
             events.append({
                 'date': timezone.localtime(event.date, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if event.date else '',
-                'user': event.user.name(),
+                'user': event.user.name() if event.user else u'Гость',
                 'ip': event.ip,
                 'user_agent': event.user_agent,
                 'message': event.message
