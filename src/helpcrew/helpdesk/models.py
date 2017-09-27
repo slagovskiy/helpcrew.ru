@@ -554,11 +554,18 @@ class CrewTask(models.Model):
             tz=timezone.get_current_timezone()
         )
 
-        holidays = HolidayBase()
+        _holidays = HolidayBase()
         btd = None
 
+        # not work!
         if self.crew.holidays:
-            holidays.append(self.crew.holidays.split('\n'))
+            for day in self.crew.holidays.split('\n'):
+                if day != '':
+                    _holidays.append({day: 'day'})
+            holidays = businesstimedelta.HolidayRule(
+                holidays=_holidays,
+                tz=timezone.get_current_timezone()
+            )
             btd = businesstimedelta.Rules([workday, lunchbreak, holidays])
         else:
             btd = businesstimedelta.Rules([workday, lunchbreak])
@@ -568,7 +575,8 @@ class CrewTask(models.Model):
             delta = businesstimedelta.BusinessTimeDelta(btd, hours=self.service.time2)
         else:
             delta = businesstimedelta.BusinessTimeDelta(btd, hours=self.crew.incident_time_two)
-        return self.date_in + delta
+        rez = self.date_in + delta
+        return rez
 
     def save(self, *args, **kwargs):
         if not self.uuid:
