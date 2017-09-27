@@ -1,9 +1,37 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load tags %}
 {% block content %}
     {% ifequal password 'ok' %}
         <div class="col-md-12 crew-title">
             <span>Команда &laquo{{ crew.name }}&raquo; - Новая заявка</span><br>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-3">
+                {% if crew.logo %}
+                    <img src="{{ crew.logo.url }}?w=200">
+                {% else %}
+                    <img src="{% static 'img/logo256.png' %}">
+                {% endif %}</div>
+            <div class="col-md-9">
+                {{ crew.description|escapebr|safe }}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <span class="btn-group" role="group" aria-label="...">
+                    <button class="btn btn-primary" onclick="openNewTask('0'); return false;">новая заявка</button>
+                    <button class="btn btn-danger" onclick="openNewTask('1'); return false;">новый инцидент</button>
+                    <button class="btn btn-info" onclick="openNewTask('2'); return false;">новая подписка</button>
+                </span>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <div class="col-md-12">
+            <hr>
+        </div>
+        <div class="col-md-12">
             {% ifnotequal crew.password '' %}
             <form action="{% url 'task_new' crew.url %}" method="post">
                 {% csrf_token %}
@@ -16,6 +44,12 @@
             </form>
             {% endifnotequal %}
         </div>
+        <div class="float-form" style="display: none;" id="hidden-task-new"></div>
+        <div class="float-form float-form-w" style="display: none;" id="hidden-task-view"></div>
+        {% include 'helpdesk/tmpl_task_new.html' %}
+        {% include 'helpdesk/tmpl_task_view.html' %}
+        {% include 'helpdesk/js_crew_view.html' %}
+
     {% else %}
         <div>Админисратор ограничил гостевой доступ к команде</div>
         <form action="{% url 'task_new' crew.url %}" method="post">
