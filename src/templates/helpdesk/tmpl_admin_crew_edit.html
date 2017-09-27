@@ -212,6 +212,12 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-12">
+                <input type="checkbox" id="is_public" name="is_public" value="True" class="css-checkbox lrg"
+                 <%if fields%><%if fields.is_public%>checked="checked"<%/if%><%/if%>
+                 />
+                <label for="is_public" name="is_public" class="css-label lrg web-two-style">Команда будет показываться в списке на главной странице</label>
+            </div>
         </div>
         <div class="col-md-12">
             <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="сохранить" onclick="saveCrew('<%:pk onerror='0'%>');return false;"/></div>

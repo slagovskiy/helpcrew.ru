@@ -58,6 +58,10 @@ class Crew(models.Model):
         max_length=255,
         verbose_name=u'Пароль для подачи заявок'
     )
+    is_public = models.BooleanField(
+        default=True,
+        verbose_name=u'Команда видна в списке команд на главной странице'
+    )
     deleted = models.BooleanField(
         default=False,
         verbose_name=u'Команда удалена'

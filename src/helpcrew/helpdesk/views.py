@@ -107,7 +107,7 @@ def crew_view(request, url=None):
 
 
 def crew_list_public(request):
-    crews = Crew.objects.filter(deleted=False)
+    crews = Crew.objects.filter(deleted=False, is_public=True)
     content = {
         'crews': crews
     }
@@ -163,6 +163,7 @@ def api_crew_edit(request, crew=None):
                 crew.lunch_start_time = request.POST.get('lunch_start_time', '12:00')
                 crew.lunch_end_time = request.POST.get('lunch_end_time', '13:00')
                 crew.holidays = request.POST.get('holidays', '')
+                crew.is_public = request.POST.get('is_public', False)
                 crew.work_day_0 = request.POST.get('work_day_0', False)
                 crew.work_day_1 = request.POST.get('work_day_1', False)
                 crew.work_day_2 = request.POST.get('work_day_2', False)
