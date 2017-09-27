@@ -605,9 +605,9 @@ def api_event_list(request, crew=None, limit=100):
                         'ip': item.ip,
                         'user_agent': item.user_agent,
                         'message': item.message,
-                        'user_firstname': item.user.firstname,
-                        'user_lastname': item.user.lastname,
-                        'user_email': item.user.email,
+                        'user_firstname': item.user.firstname if item.user else u'Гость',
+                        'user_lastname': item.user.lastname if item.user else '',
+                        'user_email': item.user.email if item.user else '',
                     }
                 )
             data = json.dumps(list)
