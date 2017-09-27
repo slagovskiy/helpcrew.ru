@@ -1,0 +1,71 @@
+<script id="tmpl-task-view" type="text/x-jsrender">
+<div class="col-md-12">
+<%for task%>
+    <div class="col-md-12">
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <%:service%>
+                </div>
+                <div class="panel-body">
+                    <div class="scroll150">
+                        <%:description%>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <input type="button" name="work" value="В работу" class="btn btn-primary form-control">
+                </div>
+                <div class="col-md-4">
+                    <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control">
+                </div>
+                <div class="col-md-4">
+                    <input type="button" name="cancel" value="Отменить" class="btn btn-default form-control">
+                </div>
+            </div>
+            <div class="col-md-12 padding-top-20">
+                <form>
+                    <div class="col-md-12 form-label">
+                        Сообщение
+                    </div>
+                    <div class="col-md-12">
+                        <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-8"></div>
+                        <div class="col-md-4">
+                            <input type="button" value="Сохранить" class="btn btn-primary form-control">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body font06">
+                    Статус: <%:status%><br>
+                    Дата подачи: <%:date_in%><br>
+                    Срок исполнения: <%:date_calc%>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body font06">
+                    Заявитель: Sergey Lagovskiy<br>
+                    Диспетчер: Sergey Lagovskiy<br>
+                    Исполнители: Sergey Lagovskiy, Sergey Lagovskiy<br>
+                    Ответственный: Sergey Lagovskiy
+                </div>
+            </div>
+        </div>
+    </div>
+<%/for%>
+    <div class="col-md-12">
+        <div class="col-md-6">
+        </div>
+        <div class="col-md-6">
+            <button data-fancybox-close class="form-control btn btn-default">отмена</button>
+        </div>
+    </div>
+</div>
+</script>

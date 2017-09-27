@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from .views import crew_edit, api_crew_check_url, crew_view
-from .views import task_new, api_task_save, task_info, api_task_list, api_task_new
+from .views import task_new, api_task_save, api_task_view, api_task_list, api_task_new
 from .views import api_crew_edit
 from .views import api_user_list, api_user_edit, api_user_delete, api_user_invite, api_user_add
 from .views import api_service_list, api_service_edit, api_service_delete, api_service_template
@@ -15,11 +15,12 @@ urlpatterns = [
     url(r'^edit/(?P<url>[-\w]+)/$', crew_edit, name='crew_edit'),
 
     url(r'^(?P<url>[-\w]+)/task/new/$', task_new, name='task_new'),
-    url(r'^task/info/(?P<uuid>[-\w]+)/$', task_info, name='task_info'),
 
     url(r'^api/task/list/(?P<crew>[-\w]+)/$', api_task_list, name='api_task_list'),
     url(r'^api/task/new/(?P<crew>[-\w]+)/$', api_task_new, name='api_task_new'),
     url(r'^api/task/save/$', api_task_save, name='api_task_save'),
+    url(r'^api/task/view/$', api_task_view, name='api_task_view'),
+    url(r'^api/task/view/(?P<uuid>[-\w]+)/$', api_task_view, name='api_task_view'),
 
     url(r'^api/crew/edit/$', api_crew_edit, name='api_crew_edit'),
     url(r'^api/crew/edit/(?P<crew>[-\w]+)/$', api_crew_edit, name='api_crew_edit'),

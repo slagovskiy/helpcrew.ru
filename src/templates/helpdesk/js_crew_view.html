@@ -58,6 +58,30 @@
         });
     }
 
+    function openTask(task) {
+        $.getJSON( "{% url 'api_task_view' %}" + task, function( data ) {
+            try {
+                if (data['message'] == '') {
+                    var tmpl = $.templates("#tmpl-task-view");
+                    var html = tmpl.render(data);
+                    console.log(data);
+                    console.log(html);
+                    $('#hidden-task-view').html(html);
+                    $.fancybox.open({
+                        src: '#hidden-task-view',
+                        type: 'inline',
+                        opts: {modal: true}
+                    });
+                } else {
+                    $.notify(data['message'], 'error');
+                }
+            }
+            catch (err) {
+                console.error(err);
+            }
+        });
+    }
+
     function saveNewTask() {
         $.ajax({
             type: 'POST',

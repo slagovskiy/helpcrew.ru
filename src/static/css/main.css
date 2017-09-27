@@ -150,6 +150,12 @@ table .btn-group button { padding-left: .5em !important; padding-right: .5em !im
     padding: 10px;
 }
 
+.scroll100 { overflow-y: scroll; max-height:100px; min-height: 50px; }
+.scroll150 { overflow-y: scroll; max-height:150px; min-height: 50px; }
+.scroll200 { overflow-y: scroll; max-height:200px; min-height: 50px; }
+.scroll300 { overflow-y: scroll; max-height:300px; min-height: 50px; }
+.scroll400 { overflow-y: scroll; max-height:400px; min-height: 50px; }
+
 /* header */
 /**********************************************************************************************************************/
 
@@ -447,6 +453,10 @@ a.btn-link {
     transform: translateY(-50px);
     transition: all .33s;
     font-size: 1.5em;
+}
+.float-form-w{
+    max-width: 1100px;
+    min-width: 900px;
 }
 .float-form .col-md-12 {
     padding-bottom: 5px;

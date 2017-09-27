@@ -47,6 +47,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="float-form" style="display: none;" id="hidden-task-new"></div>
+                    <div class="float-form float-form-w" style="display: none;" id="hidden-task-view"></div>
                     <div id="task-list"></div>
                 </div>
             </div>
@@ -164,6 +165,7 @@
             {% include 'dyntable/tmpl_record_list.html' %}
             {% include 'helpdesk/tmpl_task_new.html' %}
             {% include 'helpdesk/tmpl_task_list.html' %}
+            {% include 'helpdesk/tmpl_task_view.html' %}
             {% include 'dyntable/js_view_table.html' %}
             {% include 'helpdesk/js_crew_view.html' %}
 

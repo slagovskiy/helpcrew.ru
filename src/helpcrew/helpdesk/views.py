@@ -121,19 +121,6 @@ def task_new(request, url=None):
         return redirect(reverse('home'))
 
 
-def task_info(request, uuid=None):
-    task = CrewTask.objects.filter(uuid=uuid).first()
-    if task:
-        content = {
-            'task': task
-        }
-        return render(request, 'helpdesk/task_info.html', content)
-    else:
-        messages.error(request, u'Заявка не найдена')
-        return redirect(reverse('home'))
-
-
-
 @csrf_exempt
 def api_crew_edit(request, crew=None):
     if request.method == 'GET':
@@ -676,6 +663,52 @@ def api_task_new(request, crew=None):
             'message': u'Команда не найдена',
             'model': ''
         })
+
+
+def api_task_view(request, uuid=None):
+    task = CrewTask.objects.select_related('crew', 'service', 'priority').filter(uuid=uuid).first()
+    if task:
+        list = []
+        events = []
+        date_finish = task.date_finish_calc()
+        list.append({
+            'uuid': task.uuid,
+            'crew_id': task.crew.id,
+            'type': task.type,
+            'status': statusLikeText(task.status),
+            'status_code': task.status,
+            'priority': task.priority.name,
+            'priority_code': task.priority.id,
+            'service': task.service.name if task.service else u'Проблема',
+            'service_code': task.service.id if task.service else '',
+            'description': task.description,
+            'date_in': timezone.localtime(task.date_in, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_in else '',
+            'date_end': timezone.localtime(task.date_end, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_end else '',
+            'date_finish': timezone.localtime(task.date_finish, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_finish else '',
+            'date_close': timezone.localtime(task.date_close, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_close else '',
+            'date_calc': timezone.localtime(date_finish, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_in else '',
+            'contact_name': task.contact_name,
+            'contact_email': task.contact_email,
+            'qty': str(task.qty),
+            'fine': str(task.fine)
+        })
+        for event in task.taskevent_set.select_related('user'):
+            events.append({
+                'date': timezone.localtime(event.date, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if event.date else '',
+                'user': event.user.name(),
+                'ip': event.ip,
+                'user_agent': event.user_agent,
+                'message': event.message
+            })
+        return JsonResponse({
+            'message': u'',
+            'task': json.loads(json.dumps(list)),
+            'events': json.loads(json.dumps(events)),
+            'model': ''
+        })
+    else:
+        messages.error(request, u'Заявка не найдена')
+        return redirect(reverse('home'))
 
 
 def api_task_save(request):
