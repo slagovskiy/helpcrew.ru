@@ -81,7 +81,7 @@
                 <a href="/"><img src="{% static 'img/logo.png' %}"></a>
             </div>
             <nav class="col-md-6">
-                <div class="col-md-4"><a href="#">возможности</a></div>
+                <div class="col-md-4"><a href="{% url 'crew_list_public' %}">команды</a></div>
                 <div class="col-md-4"><a href="#">документация</a></div>
                 {% if not request.user.is_anonymous %}
                     <div class="col-md-4">{% include 'user/widget_profile.html' %}</div>

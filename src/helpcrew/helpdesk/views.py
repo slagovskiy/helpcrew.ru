@@ -106,6 +106,14 @@ def crew_view(request, url=None):
         return redirect(reverse('user_profile'))
 
 
+def crew_list_public(request):
+    crews = Crew.objects.filter(deleted=False)
+    content = {
+        'crews': crews
+    }
+    return render(request, 'helpdesk/crew_list_public.html', content)
+
+
 def task_new(request, url=None):
     crew = Crew.objects.filter(url=url).first()
     if crew:

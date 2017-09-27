@@ -5,7 +5,7 @@
         <span>Команда &laquo{{ crew.name }}&raquo; - Новая заявка</span><br>
     </div>
     <div class="col-md-12">
-        <form action="{% url 'task_save' %}" id="form-task-new" method="post" enctype="multipart/form-data">
+        <form action="" id="form-task-new" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="col-md-12">
                 <div class="col-md-12 form-label">
