@@ -227,6 +227,9 @@
                         type: 'inline',
                         opts: {modal: true}
                     });
+                    $.ajax({
+                        url: '{% url 'api_task_description' %}' + task + '/'
+                    }).done(function(data){ $('#description').val(data);});
                     $('#task').val(task);
                     $('#service').val(service);
                 } else {

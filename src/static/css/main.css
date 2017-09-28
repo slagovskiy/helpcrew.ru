@@ -137,18 +137,10 @@ table .btn-group button { padding-left: .5em !important; padding-right: .5em !im
 .btn-group .btn { float: none; display: inline-block; }
 .strike { text-decoration: line-through; }
 
-.panel-heading {
-    padding: 5px 10px;
-    font-weight: bold;
-}
-
-.panel-heading .label {
-    font-weight: normal;
-}
-
-.panel-body {
-    padding: 10px;
-}
+.panel-heading { padding: 5px 10px; font-weight: bold;}
+.panel-heading .label { font-weight: normal;}
+.panel-body { padding: 10px;}
+.panel { margin-bottom: 7px; }
 
 .scroll100 { overflow-y: scroll; max-height:100px; min-height: 50px; }
 .scroll150 { overflow-y: scroll; max-height:150px; min-height: 50px; }

@@ -810,6 +810,15 @@ def api_task_save(request):
 
 
 @csrf_exempt
+def api_task_description(request, uuid=None):
+    task = CrewTask.objects.filter(uuid=uuid).first()
+    if task:
+        return HttpResponse(task.description)
+    else:
+        return HttpResponse(u'Задача не найдена')
+
+
+@csrf_exempt
 def api_task_priority_save(request):
     task = CrewTask.objects.filter(uuid=request.POST.get('task', '-1')).first()
     if task:
@@ -821,11 +830,11 @@ def api_task_priority_save(request):
                 TaskEvent.addEvent(request, task, u'Заявке назначен новый статус ' + priority.name)
                 return HttpResponse('ok')
             else:
-                HttpResponse(u'Приоритет не найден')
+                return HttpResponse(u'Приоритет не найден')
         else:
-            HttpResponse(u'Доступ запрещен')
+            return HttpResponse(u'Доступ запрещен')
     else:
-        HttpResponse(u'Задача не найдена')
+        return HttpResponse(u'Задача не найдена')
 
 
 @csrf_exempt
@@ -840,9 +849,9 @@ def api_task_datein_save(request):
             TaskEvent.addEvent(request, task, u'Изменена дата подачи заявки ' + request.POST.get('date_in', ''))
             return HttpResponse('ok')
         else:
-            HttpResponse(u'Доступ запрещен')
+            return HttpResponse(u'Доступ запрещен')
     else:
-        HttpResponse(u'Задача не найдена')
+        return HttpResponse(u'Задача не найдена')
 
 
 @csrf_exempt
@@ -853,15 +862,16 @@ def api_task_service_save(request):
             service = CrewService.objects.filter(id=int(request.POST.get('service', '-1'))).first()
             if service:
                 task.service = service
+                task.description = request.POST.get('description', '')
                 task.save()
                 TaskEvent.addEvent(request, task, u'В заявке изменена услуга ' + service.name)
                 return HttpResponse('ok')
             else:
-                HttpResponse(u'Услуга не найден')
+                return HttpResponse(u'Услуга не найден')
         else:
-            HttpResponse(u'Доступ запрещен')
+            return HttpResponse(u'Доступ запрещен')
     else:
-        HttpResponse(u'Задача не найдена')
+        return HttpResponse(u'Задача не найдена')
 
 
 @csrf_exempt

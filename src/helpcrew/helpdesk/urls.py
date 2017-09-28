@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from .views import crew_edit, api_crew_check_url, crew_view, crew_list_public
-from .views import task_new, api_task_save, api_task_view, api_task_list, api_task_new
+from .views import task_new, api_task_save, api_task_view, api_task_description, api_task_list, api_task_new
 from .views import api_task_priority_save, api_task_datein_save, api_task_service_save
 from .views import api_crew_edit
 from .views import api_user_list, api_user_edit, api_user_delete, api_user_invite, api_user_add
@@ -23,6 +23,8 @@ urlpatterns = [
     url(r'^api/task/save/$', api_task_save, name='api_task_save'),
     url(r'^api/task/view/$', api_task_view, name='api_task_view'),
     url(r'^api/task/view/(?P<uuid>[-\w]+)/$', api_task_view, name='api_task_view'),
+    url(r'^api/task/description/$', api_task_description, name='api_task_description'),
+    url(r'^api/task/description/(?P<uuid>[-\w]+)/$', api_task_description, name='api_task_description'),
     url(r'^api/task/priority/save/$', api_task_priority_save, name='api_task_priority_save'),
     url(r'^api/task/datein/save/$', api_task_datein_save, name='api_task_datein_save'),
     url(r'^api/task/service/save/$', api_task_service_save, name='api_task_service_save'),
