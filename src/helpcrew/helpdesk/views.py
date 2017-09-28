@@ -846,6 +846,25 @@ def api_task_datein_save(request):
 
 
 @csrf_exempt
+def api_task_service_save(request):
+    task = CrewTask.objects.filter(uuid=request.POST.get('task', '-1')).first()
+    if task:
+        if check_member_dispatcher(request.user, task.crew):
+            service = CrewService.objects.filter(id=int(request.POST.get('service', '-1'))).first()
+            if service:
+                task.service = service
+                task.save()
+                TaskEvent.addEvent(request, task, u'В заявке изменена услуга ' + service.name)
+                return HttpResponse('ok')
+            else:
+                HttpResponse(u'Услуга не найден')
+        else:
+            HttpResponse(u'Доступ запрещен')
+    else:
+        HttpResponse(u'Задача не найдена')
+
+
+@csrf_exempt
 def api_crew_check_url(request):
     message = ''
     r = True

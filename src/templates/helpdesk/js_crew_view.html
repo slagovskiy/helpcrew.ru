@@ -138,7 +138,6 @@
                     });
                     $('#task').val(task);
                     $('#priority').val(priority);
-                    $('#priority').selectpicker();
                 } else {
                     $.notify(data['message'], 'error');
                 }
@@ -198,6 +197,53 @@
             type: 'POST',
             url: $('#form-task-view-datein').attr('action'),
             data: $('#form-task-view-datein').serialize()
+        })
+            .done(function(data){
+                if(data=='ok') {
+                    $.fancybox.close();
+                    $.fancybox.close();
+                    $.notify('Сохранено', 'success');
+
+                    openTask($('#task').val());
+                }
+                else {
+                    $.notify(data, 'warn');
+                }
+            })
+            .fail(function(){
+                $.notify('Ошибка передачи данных', 'error');
+            });
+    }
+
+    function openTaskService(task, service) {
+        $.getJSON( "{% url 'api_service_list' crew.slug %}", function( data ) {
+            try {
+                if (data['message'] == '') {
+                    var tmpl = $.templates("#tmpl-task-view-service");
+                    var html = tmpl.render(data);
+                    $('#hidden-task-view-service').html(html);
+                    $.fancybox.open({
+                        src: '#hidden-task-view-service',
+                        type: 'inline',
+                        opts: {modal: true}
+                    });
+                    $('#task').val(task);
+                    $('#service').val(service);
+                } else {
+                    $.notify(data['message'], 'error');
+                }
+            }
+            catch (err) {
+                console.error(err);
+            }
+        });
+    }
+
+    function saveTaskService() {
+        $.ajax({
+            type: 'POST',
+            url: $('#form-task-view-service').attr('action'),
+            data: $('#form-task-view-service').serialize()
         })
             .done(function(data){
                 if(data=='ok') {

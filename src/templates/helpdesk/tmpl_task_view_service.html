@@ -1,0 +1,27 @@
+<script id="tmpl-task-view-service" type="text/x-jsrender">
+<form action="{% url 'api_task_service_save' %}" method="post" id="form-task-view-service" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="col-md-12">
+        <div class="col-md-12 form-label">
+            Услуга
+        </div>
+            <select class="form-control" id="service" name="service" size="5">
+                <%for data%>
+                    <%if !fields.deleted%>
+                        <option value="<%:pk%>"><%:fields.name%></option>
+                    <%/if%>
+                <%/for%>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <input type="hidden" name="task" id="task" value="">
+        <div class="col-md-6">
+            <input type="submit" class="form-control btn btn-primary" onclick="saveTaskService(); return false;" value="отправить"/>
+        </div>
+        <div class="col-md-6">
+            <button data-fancybox-close class="form-control btn btn-default">отмена</button>
+        </div>
+    </div>
+</form>
+</script>

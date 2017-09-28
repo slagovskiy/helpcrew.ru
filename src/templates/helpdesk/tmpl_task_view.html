@@ -2,41 +2,53 @@
 <div class="col-md-12">
 <div class="float-form" style="display: none;" id="hidden-task-view-priority"></div>
 <div class="float-form" style="display: none;" id="hidden-task-view-datein"></div>
+<div class="float-form" style="display: none;" id="hidden-task-view-service"></div>
 <%for task%>
     <div class="col-md-12">
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-body font06">
-                    Статус: <%:status%><br>
-                    Приоритет: <%:priority%><br>
+                    <div>
+                        Статус: <%:status%><br>
+                        Приоритет: <%:priority%><br>
+                    </div>
                     <hr style="margin-top: 3px; margin-bottom: 3px;">
-                    Дата подачи: <%:date_in%><br>
-                    Срок принятия в работу: <%:date__reaction%><br>
-                    Срок исполнения: <%:date__finish%><br>
+                    <div>
+                        Дата подачи: <%:date_in%><br>
+                        Срок принятия в работу: <%:date__reaction%><br>
+                        Срок исполнения: <%:date__finish%><br>
+                    </div>
                     <hr style="margin-top: 3px; margin-bottom: 3px;">
-                    <a href="#" onclick="openTaskPriority('<%:uuid%>', '<%:priority_code%>'); return false;">изменить приоритет</a> | <a href="#" onclick="openTaskDateIn('<%:uuid%>', '<%:date_in%>'); return false;">изменить дату подачи</a>
+                    <div class="text-right">
+                        <a href="#" onclick="openTaskPriority('<%:uuid%>', '<%:priority_code%>'); return false;">изменить приоритет</a> | <a href="#" onclick="openTaskDateIn('<%:uuid%>', '<%:date_in%>'); return false;">изменить дату подачи</a>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-body font06">
-                    Заявитель: Sergey Lagovskiy<br>
-                    Диспетчер: Sergey Lagovskiy<br>
-                    Исполнители: Sergey Lagovskiy, Sergey Lagovskiy<br>
-                    Ответственный: Sergey Lagovskiy
+                    <div>
+                        Заявитель: Sergey Lagovskiy<br>
+                        Диспетчер: Sergey Lagovskiy<br>
+                        Исполнители: Sergey Lagovskiy, Sergey Lagovskiy<br>
+                        Ответственный: Sergey Lagovskiy
+                    </div>
                     <hr style="margin-top: 3px; margin-bottom: 3px;">
-                    <a href="#" onclick="return false;">изменить</a>
+                    <div class="text-right">
+                        <a href="#" onclick="return false;">изменить</a>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    <%:service%>
-                </div>
                 <div class="panel-body">
+                    <%:service%>
+                    <div class="text-right font06">
+                        <a href="#" onclick="openTaskService('<%:uuid%>', '<%:service_code%>'); return false;">изменить услугу</a>
+                    </div>
                     <div class="scroll150">
                         <%:description%>
                     </div>
@@ -45,18 +57,22 @@
         </div>
 
         <div class="col-md-12">
-            <div class="col-md-4">
-                <input type="button" name="work" value="В работу" class="btn btn-primary form-control">
-            </div>
-            <div class="col-md-4">
-                <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control">
-            </div>
-            <div class="col-md-4">
-                <input type="button" name="cancel" value="Отменить" class="btn btn-default form-control">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-4">
+                        <input type="button" name="work" value="В работу" class="btn btn-primary form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="button" name="cancel" value="Отменить" class="btn btn-default form-control">
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="col-md-12 padding-top-20">
+        <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="col-md-12">
