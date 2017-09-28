@@ -64,8 +64,6 @@
                 if (data['message'] == '') {
                     var tmpl = $.templates("#tmpl-task-view");
                     var html = tmpl.render(data);
-                    console.log(data);
-                    console.log(html);
                     $('#hidden-task-view').html(html);
                     $.fancybox.open({
                         src: '#hidden-task-view',
@@ -125,4 +123,54 @@
             }
         });
     }
+
+    function openTaskPriority(task, priority) {
+        $.getJSON( "{% url 'api_priority_list' crew.slug %}", function( data ) {
+            try {
+                if (data['message'] == '') {
+                    var tmpl = $.templates("#tmpl-task-view-priority");
+                    var html = tmpl.render(data);
+                    $('#hidden-task-view-priority').html(html);
+                    $.fancybox.open({
+                        src: '#hidden-task-view-priority',
+                        type: 'inline',
+                        opts: {modal: true}
+                    });
+                    $('#task').val(task);
+                    $('#priority').val(priority);
+                    $('#priority').selectpicker();
+                } else {
+                    $.notify(data['message'], 'error');
+                }
+            }
+            catch (err) {
+                console.error(err);
+            }
+        });
+    }
+
+    function saveTaskPriority() {
+        $.ajax({
+            type: 'POST',
+            url: $('#form-task-view-priority').attr('action'),
+            data: $('#form-task-view-priority').serialize()
+        })
+            .done(function(data){
+                if(data=='ok') {
+                    $.fancybox.close();
+                    $.fancybox.close();
+                    $.notify('Сохранено', 'success');
+
+                    openTask($('#task').val());
+                }
+                else {
+                    $.notify(data, 'warn');
+                }
+            })
+            .fail(function(){
+                $.notify('Ошибка передачи данных', 'error');
+            });
+    }
+
+
 </script>

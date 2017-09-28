@@ -15,7 +15,7 @@ from ..settings import UPLOAD_DIR
 from ..taskqueue.utils import add_email
 from .models import Crew, CrewUsers, CrewService, ServicePrice, TaskPriority, CrewEvent, CrewTask, TaskEvent, TaskFiles
 from ..userext.models import User
-from .utils import get_crews_list, check_member, check_member_admin, statusLikeText
+from .utils import get_crews_list, check_member, check_member_admin, check_member_dispatcher, statusLikeText
 
 
 def crew_edit(request, url=None):
@@ -704,6 +704,7 @@ def api_task_view(request, uuid=None):
         date_finish = task.date2_calc()
         date_fail = task.date3_calc()
         list.append({
+            'id': task.id,
             'uuid': task.uuid,
             'crew_id': task.crew.id,
             'type': task.type,
@@ -805,6 +806,24 @@ def api_task_save(request):
     else:
         return HttpResponse(u'Команда не найдена')
 
+
+@csrf_exempt
+def api_task_priority_save(request):
+    task = CrewTask.objects.filter(uuid=request.POST.get('task', '-1')).first()
+    if task:
+        if check_member_dispatcher(request.user, task.crew):
+            priority = TaskPriority.objects.filter(id=int(request.POST.get('priority', '-1'))).first()
+            if priority:
+                task.priority = priority
+                task.save()
+                TaskEvent.addEvent(request, task, u'Заявке назначен новый статус ' + priority.name)
+                return HttpResponse('ok')
+            else:
+                HttpResponse(u'Приоритет не найден')
+        else:
+            HttpResponse(u'Доступ запрещен')
+    else:
+        HttpResponse(u'Задача не найдена')
 
 @csrf_exempt
 def api_crew_check_url(request):

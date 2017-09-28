@@ -1,5 +1,6 @@
 <script id="tmpl-task-view" type="text/x-jsrender">
 <div class="col-md-12">
+<div class="float-form" style="display: none;" id="hidden-task-view-priority"></div>
 <%for task%>
     <div class="col-md-12">
         <div class="col-md-6">
@@ -12,7 +13,7 @@
                     Срок принятия в работу: <%:date__reaction%><br>
                     Срок исполнения: <%:date__finish%><br>
                     <hr style="margin-top: 3px; margin-bottom: 3px;">
-                    <a href="#">изменить приоритет</a> | <a href="#">изменить дату подачи</a>
+                    <a href="#" onclick="openTaskPriority('<%:uuid%>', '<%:priority_code%>'); return false;">изменить приоритет</a> | <a href="#">изменить дату подачи</a>
                 </div>
             </div>
         </div>
