@@ -148,6 +148,14 @@ table .btn-group button { padding-left: .5em !important; padding-right: .5em !im
 .scroll300 { overflow-y: scroll; max-height:300px; min-height: 50px; }
 .scroll400 { overflow-y: scroll; max-height:400px; min-height: 50px; }
 
+pre.text {
+    border: none;
+    background-color: transparent;
+    font-size: 1em;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    padding: 0;
+}
+
 /* header */
 /**********************************************************************************************************************/
 
