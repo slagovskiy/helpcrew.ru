@@ -84,7 +84,7 @@ def check_member_dispatcher(user=None, crew=None):
     cu = CrewUsers.objects.filter(crew=crew, user=user)
     if cu:
         cu = cu[0]
-        if cu.type == CrewUsers.DISPATCHER_TYPE:
+        if cu.type == CrewUsers.DISPATCHER_TYPE or cu.type == CrewUsers.ADMINISTRATOR_TYPE:
             return True
         else:
             return False
