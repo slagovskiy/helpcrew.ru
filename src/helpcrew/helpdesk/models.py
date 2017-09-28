@@ -471,34 +471,6 @@ class CrewTask(models.Model):
         default='',
         verbose_name=u'Электронный адрес контакта'
     )
-    observer = models.ForeignKey(
-        User,
-        related_name='observer',
-        null=True,
-        blank=True,
-        verbose_name=u'Наблюдатель, подавший заявку'
-    )
-    dispatcher_in = models.ForeignKey(
-        User,
-        related_name='dispatcher_in',
-        null=True,
-        blank=True,
-        verbose_name=u'Диспетчер, обработавший новую заявку'
-    )
-    dispatcher_close = models.ForeignKey(
-        User,
-        related_name='dispatcher_close',
-        null=True,
-        blank=True,
-        verbose_name=u'Диспетчер, закрывший заявку'
-    )
-    operator = models.ForeignKey(
-        User,
-        related_name='operator',
-        null=True,
-        blank=True,
-        verbose_name=u'Оператор, выполнивший заявку'
-    )
     qty = models.DecimalField(
         max_digits=9,
         decimal_places=2,
