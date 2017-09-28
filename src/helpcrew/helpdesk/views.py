@@ -778,9 +778,26 @@ def api_task_save(request):
             contact_email=contact_email
         )
         task.save()
-
         CrewEvent.addEvent(request, crew, u'Добавлена новая заявка ' + str(task.uuid))
         TaskEvent.addEvent(request, task, u'Добавлена новая заявка ' + str(task.uuid))
+
+        for file in request.FILES.getlist('files'):
+            up_file = file
+            tfile = TaskFiles.objects.create(
+                task=task
+            )
+            tfile.save()
+            file = os.path.join(UPLOAD_DIR, TaskFiles.file_path(tfile, up_file.name))
+            filename = os.path.basename(file)
+            if not os.path.exists(os.path.dirname(file)):
+                os.makedirs(os.path.dirname(file))
+            destination = open(file, 'wb+')
+            for chunk in up_file.chunks():
+                destination.write(chunk)
+            tfile.file.save(filename, destination, save=False)
+            tfile.save()
+            destination.close()
+            TaskEvent.addEvent(request, task, u'К заявке добавлено вложение ' + up_file.name)
 
         if service and service.auto_wait_status:
             task.status = CrewTask.TASK_STATUS_WAITING

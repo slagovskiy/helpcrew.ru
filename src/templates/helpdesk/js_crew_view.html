@@ -84,7 +84,7 @@
         $.ajax({
             type: 'POST',
             url: $('#form-task-new').attr('action'),
-            data: $('#form-task-new').serialize()
+            data: new FormData($('#form-task-new')[0]), //$('#form-task-new').serialize()
         })
             .done(function(data){
                 if(data=='ok') {

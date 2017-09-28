@@ -590,9 +590,9 @@ class CrewTask(models.Model):
 
 class TaskFiles(models.Model):
     def file_path(instance, filename):
-        ext = filename.split('.')[-1]
-        filename = '{}.{}'.format(str(uuid.uuid1()), ext)
-        return os.path.join(os.path.join(instance.task.uuid, 'tasks'), filename)
+        #ext = filename.split('.')[-1]
+        #filename = '{}.{}'.format(str(uuid.uuid1()), ext)
+        return os.path.join(os.path.join('task', str(instance.task.uuid)), filename)
 
     task = models.ForeignKey(
         CrewTask,
