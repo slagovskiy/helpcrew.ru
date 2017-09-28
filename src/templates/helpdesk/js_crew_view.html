@@ -1,4 +1,7 @@
 <script>
+
+    //$(this).parents('form').isValid()
+
     function openNewTask(type) {
         $.getJSON( "{% url 'api_task_new' crew.slug %}?type=" + type, function( data ) {
             try {
@@ -81,10 +84,13 @@
     }
 
     function saveNewTask() {
+        if (!$('#form-task-new').isValid()) { $.notify('Проверьте правильность ввода', 'warn'); return false; }
         $.ajax({
             type: 'POST',
             url: $('#form-task-new').attr('action'),
             data: new FormData($('#form-task-new')[0]), //$('#form-task-new').serialize()
+            processData: false,
+            contentType: false
         })
             .done(function(data){
                 if(data=='ok') {
