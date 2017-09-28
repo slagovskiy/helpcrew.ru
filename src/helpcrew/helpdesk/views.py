@@ -1,7 +1,9 @@
+from datetime import datetime
 import re
 import json
 
 import os
+from django.utils.timezone import get_current_timezone
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.shortcuts import render, redirect
@@ -824,6 +826,24 @@ def api_task_priority_save(request):
             HttpResponse(u'Доступ запрещен')
     else:
         HttpResponse(u'Задача не найдена')
+
+
+@csrf_exempt
+def api_task_datein_save(request):
+    task = CrewTask.objects.filter(uuid=request.POST.get('task', '-1')).first()
+    if task:
+        if check_member_dispatcher(request.user, task.crew):
+            tz = get_current_timezone()
+            dt = tz.localize(datetime.strptime(request.POST.get('date_in', ''), '%Y/%m/%d %H:%M:%S'))
+            task.date_in = dt
+            task.save()
+            TaskEvent.addEvent(request, task, u'Изменена дата подачи заявки ' + request.POST.get('date_in', ''))
+            return HttpResponse('ok')
+        else:
+            HttpResponse(u'Доступ запрещен')
+    else:
+        HttpResponse(u'Задача не найдена')
+
 
 @csrf_exempt
 def api_crew_check_url(request):

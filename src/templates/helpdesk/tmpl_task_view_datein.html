@@ -1,0 +1,26 @@
+<script id="tmpl-task-view-datein" type="text/x-jsrender">
+<form action="{% url 'api_task_datein_save' %}" method="post" id="form-task-view-datein" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="col-md-12">
+        <div class="col-md-12 form-label">
+            Дата подачи
+        </div>
+        <div class="col-md-12 form-label">
+            <div class="form-group">
+                <div id="date_in_view">
+                    <input type="hidden" data-format="yyyy/MM/dd hh:mm:ss" name="date_in" id="date_in" value="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <input type="hidden" name="task" id="task" value="">
+        <div class="col-md-6">
+            <input type="submit" class="form-control btn btn-primary" onclick="saveTaskDateIn(); return false;" value="отправить"/>
+        </div>
+        <div class="col-md-6">
+            <button data-fancybox-close class="form-control btn btn-default">отмена</button>
+        </div>
+    </div>
+</form>
+</script>

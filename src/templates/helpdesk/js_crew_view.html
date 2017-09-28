@@ -173,4 +173,46 @@
     }
 
 
+    function openTaskDateIn(task, date_in) {
+        var tmpl = $.templates("#tmpl-task-view-datein");
+        var html = tmpl.render({});
+        $('#hidden-task-view-datein').html(html);
+        $.fancybox.open({
+            src: '#hidden-task-view-datein',
+            type: 'inline',
+            opts: {modal: true}
+        });
+        $('#date_in_view').datetimepicker({
+            inline: true,
+            sideBySide: true,
+            keepOpen: true,
+            format: 'YYYY/MM/DD HH:mm:ss',
+            date: date_in
+        });
+        $('#task').val(task);
+        $('#date_in').val(date_in);
+    }
+
+    function saveTaskDateIn() {
+        $.ajax({
+            type: 'POST',
+            url: $('#form-task-view-datein').attr('action'),
+            data: $('#form-task-view-datein').serialize()
+        })
+            .done(function(data){
+                if(data=='ok') {
+                    $.fancybox.close();
+                    $.fancybox.close();
+                    $.notify('Сохранено', 'success');
+
+                    openTask($('#task').val());
+                }
+                else {
+                    $.notify(data, 'warn');
+                }
+            })
+            .fail(function(){
+                $.notify('Ошибка передачи данных', 'error');
+            });
+    }
 </script>
