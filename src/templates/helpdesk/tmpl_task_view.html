@@ -29,10 +29,10 @@
             <div class="panel panel-default">
                 <div class="panel-body font06">
                     <div>
-                        Заявитель: Sergey Lagovskiy<br>
-                        Диспетчер: Sergey Lagovskiy<br>
-                        Исполнители: Sergey Lagovskiy, Sergey Lagovskiy<br>
-                        Ответственный: Sergey Lagovskiy
+                        Заявитель: <%for user_observer%><%:name%><%else%>...<%/for%><br>
+                        Диспетчер: <%for user_dispatcher%><%:name%><%else%>...<%/for%><br>
+                        Исполнители: <%for user_operator%><%:name%> <%else%>...<%/for%><br>
+                        Ответственный: <%for user_close%><%:name%><%else%>...<%/for%>
                     </div>
                     <hr style="margin-top: 3px; margin-bottom: 3px;">
                     <div class="text-right">
