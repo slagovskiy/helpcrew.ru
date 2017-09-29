@@ -446,6 +446,11 @@ class CrewTask(models.Model):
         blank=True,
         verbose_name=u'Дата подачи заявки'
     )
+    date_work = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name=u'Дата начала выполнения заявки'
+    )
     date_end = models.DateTimeField(
         null=True,
         blank=True,
@@ -603,6 +608,36 @@ class CrewTask(models.Model):
         else:
             delta = businesstimedelta.BusinessTimeDelta(btd, hours=self.crew.incident_time_two)
         rez = self.date_in + delta
+        return rez
+
+    def fail_work(self):
+        rez = False
+        date_reaction = self.date1_calc()
+        if self.date_work:
+            if self.date_work > date_reaction:
+                rez = True
+            else:
+                rez = False
+        else:
+            if timezone.now() > date_reaction:
+                rez = True
+            else:
+                rez = False
+        return rez
+
+    def fail_finish(self):
+        rez = False
+        date_finish = self.date2_calc()
+        if self.date_work:
+            if self.date_finish > date_finish:
+                rez = True
+            else:
+                rez = False
+        else:
+            if timezone.now() > date_finish:
+                rez = True
+            else:
+                rez = False
         return rez
 
     def save(self, *args, **kwargs):
