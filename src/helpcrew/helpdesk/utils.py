@@ -90,3 +90,31 @@ def check_member_dispatcher(user=None, crew=None):
             return False
     else:
         return False
+
+
+def check_member_operator(user=None, crew=None):
+    if not __first_check(user):
+        return False
+    cu = CrewUsers.objects.filter(crew=crew, user=user)
+    if cu:
+        cu = cu[0]
+        if cu.type == CrewUsers.OPERATOR_TYPE:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+
+def check_member_observer(user=None, crew=None):
+    if not __first_check(user):
+        return False
+    cu = CrewUsers.objects.filter(crew=crew, user=user)
+    if cu:
+        cu = cu[0]
+        if cu.type == CrewUsers.OBSERVER_TYPE:
+            return True
+        else:
+            return False
+    else:
+        return False

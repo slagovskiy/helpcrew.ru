@@ -9,8 +9,8 @@
             <div class="panel panel-default">
                 <div class="panel-body font06">
                     <div>
-                        Статус: <%:status%><br>
-                        Приоритет: <%:priority%><br>
+                        Статус: <span class="bold"><%:status%></span><br>
+                        Приоритет: <span class="bold"><%:priority%></span><br>
                     </div>
                     <hr style="margin-top: 3px; margin-bottom: 3px;">
                     <div>
@@ -55,19 +55,125 @@
         </div>
 
         <div class="col-md-12">
+        {% if not is_observer %}
+            <%!-- новая --%>
+            <%if status_code==0%>
+            {% if is_dispatcher %}
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="col-md-4">
-                        <input type="button" name="work" value="В работу" class="btn btn-primary form-control">
+                        <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
                     </div>
                     <div class="col-md-4">
-                        <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control">
+                        <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control"  onclick="setStatus('<%:uuid%>', '2'); return false;">
                     </div>
                     <div class="col-md-4">
-                        <input type="button" name="cancel" value="Отменить" class="btn btn-default form-control">
+                        <input type="button" name="cancel" value="Отменить" class="btn btn-info form-control" onclick="setStatus('<%:uuid%>', '4'); return false;">
                     </div>
                 </div>
             </div>
+            {% endif %}
+            <%/if%>
+
+            <%!-- в ожидании --%>
+            <%if status_code==1%>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-4">
+                        <input type="button" name="inwork" value="Начать работу" class="btn btn-success form-control" onclick="setStatus('<%:uuid%>', '3'); return false;">
+                    </div>
+                    {% if is_dispatcher %}
+                    <div class="col-md-4">
+                        <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control"  onclick="setStatus('<%:uuid%>', '2'); return false;">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="button" name="cancel" value="Отменить" class="btn btn-info form-control" onclick="setStatus('<%:uuid%>', '4'); return false;">
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <%/if%>
+
+            <%!-- приостановлена --%>
+            <%if status_code==2%>
+            {% if is_dispatcher %}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-4">
+                        <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="button" name="cancel" value="Отменить" class="btn btn-info form-control" onclick="setStatus('<%:uuid%>', '4'); return false;">
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <%/if%>
+
+            <%!-- выполняется --%>
+            <%if status_code==3%>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-4">
+                        <input type="button" name="finished" value="Работа выполнена" class="btn btn-success form-control" onclick="setStatus('<%:uuid%>', '5'); return false;">
+                    </div>
+                </div>
+            </div>
+            <%/if%>
+
+            <%!-- отменена --%>
+            <%if status_code==4%>
+            {% if is_admin %}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-4">
+                        <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control"  onclick="setStatus('<%:uuid%>', '2'); return false;">
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <%/if%>
+
+            <%!-- выполнена --%>
+            <%if status_code==5%>
+            {% if is_dispatcher %}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-4">
+                        <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="button" name="close" value="Закрыть заявку" class="btn btn-success form-control" onclick="setStatus('<%:uuid%>', '6'); return false;">
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <%/if%>
+
+            <%!-- закрыта --%>
+            <%if status_code==6%>
+            {% if is_admin %}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-4">
+                        <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control"  onclick="setStatus('<%:uuid%>', '2'); return false;">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="button" name="cancel" value="Отменить" class="btn btn-info form-control" onclick="setStatus('<%:uuid%>', '4'); return false;">
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <%/if%>
+                </div>
+            </div>
+        {% endif %}
         </div>
 
         <div class="col-md-12">

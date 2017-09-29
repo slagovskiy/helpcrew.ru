@@ -1,7 +1,7 @@
 import uuid
 from django import template
 
-from ...helpdesk.utils import check_member_admin, check_member_dispatcher, check_member
+from ...helpdesk.utils import check_member_admin, check_member_dispatcher, check_member_operator, check_member_observer, check_member
 from ...helpdesk.models import CrewTask
 from ...settings import SITE_URL, UPLOAD_URL
 
@@ -57,6 +57,18 @@ def chk_member_admin(context, crew):
 def chk_member_dispatcher(context, crew):
     request = context['request']
     return check_member_dispatcher(request.user, crew)
+
+
+@register.simple_tag(takes_context=True)
+def chk_member_operator(context, crew):
+    request = context['request']
+    return check_member_operator(request.user, crew)
+
+
+@register.simple_tag(takes_context=True)
+def chk_member_observer(context, crew):
+    request = context['request']
+    return check_member_observer(request.user, crew)
 
 
 @register.simple_tag(takes_context=True)

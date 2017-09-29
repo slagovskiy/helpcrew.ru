@@ -534,8 +534,8 @@ a.btn-link {
 /**********************************************************************************************************************/
 .btn-success {
     color: #FFFFFF;
-    background-color: #B3B31C;
-    border-color: #616102;
+    background-color: #ADAD09;
+    border-color: #99990C;
 }
 
 .btn-success:hover,
@@ -544,8 +544,8 @@ a.btn-link {
 .btn-success.active,
 .open .dropdown-toggle.btn-success {
     color: #FFFFFF;
-    background-color: #8A8A26;
-    border-color: #616102;
+    background-color: #858503;
+    border-color: #99990C;
 }
 
 .btn-success:active,
@@ -569,12 +569,12 @@ fieldset[disabled] .btn-success:active,
 .btn-success.disabled.active,
 .btn-success[disabled].active,
 fieldset[disabled] .btn-success.active {
-    background-color: #B3B31C;
-    border-color: #616102;
+    background-color: #ADAD09;
+    border-color: #99990C;
 }
 
 .btn-success .badge {
-    color: #B3B31C;
+    color: #ADAD09;
     background-color: #FFFFFF;
 }
 
