@@ -17,7 +17,8 @@ from ..settings import UPLOAD_DIR
 from ..taskqueue.utils import add_email
 from .models import Crew, CrewUsers, CrewService, ServicePrice, TaskPriority, CrewEvent, CrewTask, TaskEvent, TaskFiles, TaskUsers
 from ..userext.models import User
-from .utils import get_crews_list, check_member, check_member_admin, check_member_dispatcher, statusLikeText
+from .utils import get_crews_list, check_member, check_member_admin, check_member_dispatcher, statusLikeText, \
+    check_member_observer
 
 
 def crew_edit(request, url=None):
@@ -885,11 +886,100 @@ def api_task_description(request, uuid=None):
         return HttpResponse(u'Задача не найдена')
 
 
+def task_status_changing(request, task, status):
+    if status == 1:
+        u = TaskUsers.objects.filter(task=task, type=TaskUsers.DISPATCHER_TYPE).first()
+        if u:
+            u.user = request.user
+            u.save()
+            TaskEvent.addEvent(request, task, u'Изменен диспетчер на ' + request.user.name())
+        else:
+            TaskUsers.objects.create(
+                task=task,
+                user=request.user,
+                type=TaskUsers.DISPATCHER_TYPE
+            )
+            TaskEvent.addEvent(request, task, u'Назначен диспетчер ' + request.user.name())
+
+    if status == 2:
+        u = TaskUsers.objects.filter(task=task, type=TaskUsers.DISPATCHER_TYPE).first()
+        if u:
+            u.user = request.user
+            u.save()
+            TaskEvent.addEvent(request, task, u'Изменен диспетчер на ' + request.user.name())
+        else:
+            TaskUsers.objects.create(
+                task=task,
+                user=request.user,
+                type=TaskUsers.DISPATCHER_TYPE
+            )
+            TaskEvent.addEvent(request, task, u'Назначен диспетчер ' + request.user.name())
+
+    if status == 3:
+        TaskUsers.objects.create(
+            task=task,
+            user=request.user,
+            type=TaskUsers.OPERATOR_TYPE
+        )
+        TaskEvent.addEvent(request, task, u'Назначен оператор ' + request.user.name())
+
+    if status == 4:
+        u = TaskUsers.objects.filter(task=task, type=TaskUsers.CLOSE_TYPE).first()
+        if u:
+            u.user = request.user
+            u.save()
+            TaskEvent.addEvent(request, task, u'Изменен ответственный на ' + request.user.name())
+        else:
+            TaskUsers.objects.create(
+                task=task,
+                user=request.user,
+                type=TaskUsers.CLOSE_TYPE
+            )
+            TaskEvent.addEvent(request, task, u'Назначен ответственный ' + request.user.name())
+
+    if status == 6:
+        u = TaskUsers.objects.filter(task=task, type=TaskUsers.CLOSE_TYPE).first()
+        if u:
+            u.user = request.user
+            u.save()
+            TaskEvent.addEvent(request, task, u'Изменен ответственный на ' + request.user.name())
+        else:
+            TaskUsers.objects.create(
+                task=task,
+                user=request.user,
+                type=TaskUsers.CLOSE_TYPE
+            )
+            TaskEvent.addEvent(request, task, u'Назначен ответственный ' + request.user.name())
+
+
 @csrf_exempt
-def api_task_status_save(request, tas, status):
+def api_task_status_save(request):
     task = CrewTask.objects.filter(uuid=request.POST.get('task', '-1')).first()
+    status = int(request.POST.get('status', '-1'))
     if task:
-        pass
+        if task.status == 0 and status in [1, 2, 4] and check_member_dispatcher(request.user, task.crew):
+            task.status = status
+        elif task.status == 1 and status in [2, 3, 4] and check_member_dispatcher(request.user, task.crew):
+            task.status = status
+        elif task.status == 1 and status == 3 and check_member(request.user, task.crew) and not check_member_observer(request.user, task.crew):
+            task.status = status
+        elif task.status == 2 and status in [1, 4] and check_member_dispatcher(request.user, task.crew):
+            task.status = status
+        elif task.status == 3 and status == 5 and not check_member_observer(request.user, task.crew):
+            task.status = status
+        elif task.status == 4 and status in [1, 2] and check_member_admin(request.user, task.crew):
+            task.status = status
+        elif task.status == 5 and status in [1, 6] and check_member_dispatcher(request.user, task.crew):
+            task.status = status
+        elif task.status == 6 and status in [1, 2, 4] and check_member_admin(request.user, task.crew):
+            task.status = status
+        else:
+            return HttpResponse(u'Отказано в доступе')
+
+        TaskEvent.addEvent(request, task, u'Заявка переведена в статус ' + statusLikeText(status))
+        task_status_changing(request, task, status)
+        task.save()
+        return HttpResponse('ok')
     else:
         return HttpResponse(u'Задача не найдена')
 

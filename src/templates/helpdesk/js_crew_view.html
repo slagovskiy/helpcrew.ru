@@ -130,6 +130,31 @@
         });
     }
 
+    function setStatus(task, status) {
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'api_task_status_save' %}',
+            data: {
+                'task': task,
+                'status': status
+            }
+        })
+            .done(function(data){
+                if(data=='ok') {
+                    $.fancybox.close();
+                    $.notify('Сохранено', 'success');
+
+                    openTask(task);
+                }
+                else {
+                    $.notify(data, 'warn');
+                }
+            })
+            .fail(function(){
+                $.notify('Ошибка передачи данных', 'error');
+            });
+    }
+
     function openTaskPriority(task, priority) {
         $.getJSON( "{% url 'api_priority_list' crew.slug %}", function( data ) {
             try {
