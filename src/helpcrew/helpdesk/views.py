@@ -746,6 +746,9 @@ def api_task_view(request, uuid=None):
         date_reaction = task.date1_calc()
         date_finish = task.date2_calc()
         date_fail = task.date3_calc()
+        fail_work = task.fail_work()
+        fail_finish = task.fail_finish()
+
         list.append({
             'id': task.id,
             'uuid': task.uuid,
@@ -759,12 +762,15 @@ def api_task_view(request, uuid=None):
             'service_code': task.service.id if task.service else '',
             'description': task.description,
             'date_in': timezone.localtime(task.date_in, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_in else '',
+            'date_work': timezone.localtime(task.date_work, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_work else '',
             'date_end': timezone.localtime(task.date_end, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_end else '',
             'date_finish': timezone.localtime(task.date_finish, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_finish else '',
             'date_close': timezone.localtime(task.date_close, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_close else '',
             'date__reaction': timezone.localtime(date_reaction, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_in else '',
             'date__finish': timezone.localtime(date_finish, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_in else '',
             'date__fail': timezone.localtime(date_fail, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_in else '',
+            'fail_work': fail_work,
+            'fail_finish': fail_finish,
             'user_observer': user_observer,
             'user_dispatcher': user_dispatcher,
             'user_operator': user_operator,
