@@ -886,6 +886,15 @@ def api_task_description(request, uuid=None):
 
 
 @csrf_exempt
+def api_task_status_save(request, tas, status):
+    task = CrewTask.objects.filter(uuid=request.POST.get('task', '-1')).first()
+    if task:
+        pass
+    else:
+        return HttpResponse(u'Задача не найдена')
+
+
+@csrf_exempt
 def api_task_priority_save(request):
     task = CrewTask.objects.filter(uuid=request.POST.get('task', '-1')).first()
     if task:
