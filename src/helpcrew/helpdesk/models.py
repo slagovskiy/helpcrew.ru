@@ -487,6 +487,34 @@ class CrewTask(models.Model):
     def __str__(self):
         return self.uuid
 
+    def user_observer(self):
+        _user = self.taskusers_set.filter(type=TaskUsers.OBSERVER_TYPE).first()
+        if _user:
+            return _user.user
+        else:
+            return None
+
+    def user_dispatcher(self):
+        _user = self.taskusers_set.filter(type=TaskUsers.DISPATCHER_TYPE).first()
+        if _user:
+            return _user.user
+        else:
+            return None
+
+    def user_operator(self):
+        _user = self.taskusers_set.filter(type=TaskUsers.OPERATOR_TYPE)
+        _rez = []
+        for __user in _user:
+            _rez.append(__user.user)
+        return _rez
+
+    def user_close(self):
+        _user = self.taskusers_set.filter(type=TaskUsers.CLOSE_TYPE).first()
+        if _user:
+            return _user.user
+        else:
+            return None
+
     def date_prepare(self):
         working_days = []
         if self.crew.work_day_0:
@@ -588,6 +616,41 @@ class CrewTask(models.Model):
         verbose_name_plural = u'Заявки'
 
 
+class TaskUsers(models.Model):
+    OBSERVER_TYPE = 0
+    DISPATCHER_TYPE = 1
+    OPERATOR_TYPE = 2
+    CLOSE_TYPE = 3
+
+    USER_TYPE_CHOICES = (
+        (OBSERVER_TYPE, 'Наблюдатель'),
+        (DISPATCHER_TYPE, 'Дисптечер'),
+        (OPERATOR_TYPE, 'Оператор'),
+        (CLOSE_TYPE, 'Ответственный')
+    )
+
+    task = models.ForeignKey(
+        CrewTask,
+        verbose_name=u'Заявка'
+    )
+    user = models.ForeignKey(
+        User,
+        null=True,
+        blank=True,
+        verbose_name=u'Пользователь'
+    )
+    type = models.IntegerField(
+        choices=USER_TYPE_CHOICES,
+        default=OBSERVER_TYPE,
+        verbose_name=u'Тип пользователя в рамках заявки'
+    )
+
+    class Meta:
+        ordering = ['task', 'user', 'type']
+        verbose_name = u'Участник заявки'
+        verbose_name_plural = u'Участники заявок'
+
+
 class TaskFiles(models.Model):
     def file_path(instance, filename):
         #ext = filename.split('.')[-1]
@@ -605,6 +668,9 @@ class TaskFiles(models.Model):
         verbose_name=u'Вложение'
     )
 
+    class Meta:
+        verbose_name = u'Вложение к заявке'
+        verbose_name_plural = u'Вложения к заявкам'
 
 class TaskEvent(models.Model):
     task = models.ForeignKey(
