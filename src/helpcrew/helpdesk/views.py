@@ -15,7 +15,7 @@ from django.core import serializers
 
 from ..settings import UPLOAD_DIR
 from ..taskqueue.utils import add_email
-from .models import Crew, CrewUsers, CrewService, ServicePrice, TaskPriority, CrewEvent, CrewTask, TaskEvent, TaskFiles
+from .models import Crew, CrewUsers, CrewService, ServicePrice, TaskPriority, CrewEvent, CrewTask, TaskEvent, TaskFiles, TaskUsers
 from ..userext.models import User
 from .utils import get_crews_list, check_member, check_member_admin, check_member_dispatcher, statusLikeText
 
@@ -702,6 +702,46 @@ def api_task_view(request, uuid=None):
                 'message': event.message
             })
 
+        user_observer = []
+        _user = task.user_observer()
+        if _user:
+            user_observer.append({
+                'name': _user.name(),
+                'first_name': _user.firstname,
+                'last_name': _user.lastname,
+                'email': _user.email
+            })
+
+        user_dispatcher = []
+        _user = task.user_dispatcher()
+        if _user:
+            user_dispatcher.append({
+                'name': _user.name(),
+                'first_name': _user.firstname,
+                'last_name': _user.lastname,
+                'email': _user.email
+            })
+
+        user_close = []
+        _user = task.user_close()
+        if _user:
+            user_close.append({
+                'name': _user.name(),
+                'first_name': _user.firstname,
+                'last_name': _user.lastname,
+                'email': _user.email
+            })
+
+        user_operator = []
+        _user = task.user_operator()
+        for __user in _user:
+            user_operator.append({
+                'name': __user.name(),
+                'first_name': __user.firstname,
+                'last_name': __user.lastname,
+                'email': __user.email
+            })
+
         date_reaction = task.date1_calc()
         date_finish = task.date2_calc()
         date_fail = task.date3_calc()
@@ -724,6 +764,10 @@ def api_task_view(request, uuid=None):
             'date__reaction': timezone.localtime(date_reaction, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_in else '',
             'date__finish': timezone.localtime(date_finish, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_in else '',
             'date__fail': timezone.localtime(date_fail, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_in else '',
+            'user_observer': user_observer,
+            'user_dispatcher': user_dispatcher,
+            'user_operator': user_operator,
+            'user_close': user_close,
             'contact_name': task.contact_name,
             'contact_email': task.contact_email,
             'qty': str(task.qty),
@@ -809,18 +853,24 @@ def api_task_save(request):
             task.save()
             TaskEvent.addEvent(request, task, u'Подписка автоматически переведена в статус "В работе"')
 
-        #if observer and not check_member(request.user, crew):
-        #    cu = CrewUsers.objects.create(
-        #        crew=crew,
-        #        user=observer,
-        #        type=CrewUsers.OBSERVER_TYPE
-        #    )
-        #    cu.save()
-        #    CrewEvent.addEvent(request, crew, u'В команду добавлен наблюдатель ' + observer.email)
-        #    return redirect(reverse('crew_view', kwargs={'url': crew.url}))
-        #else:
-        #messages.error(request, u'Заявка успешно сохранена')
-        #return redirect(reverse('task_info', kwargs={'uuid': str(task.uuid)}))
+        if not request.user.is_anonymous:
+            u = TaskUsers.objects.create(
+                task=task,
+                user=request.user,
+                type=TaskUsers.OBSERVER_TYPE
+            )
+            u.save()
+            TaskEvent.addEvent(request, task, u'Подписке назначен наблюдатель ' + request.user.name())
+
+            if not CrewUsers.objects.filter(user=request.user).first():
+                cu = CrewUsers.objects.create(
+                    crew=crew,
+                    user=request.user,
+                    type=CrewUsers.OBSERVER_TYPE
+                )
+                cu.save()
+                CrewEvent.addEvent(request, crew, u'В команду добавлен наблюдатель ' + request.user.name())
+
         return HttpResponse('ok')
     else:
         return HttpResponse(u'Команда не найдена')
