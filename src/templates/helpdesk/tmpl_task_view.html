@@ -18,11 +18,19 @@
                         Срок принятия в работу: <%:date__reaction%>
                         <%if fail_work%>
                             <i class="fa fa-exclamation-circle color-o" aria-hidden="true" title="Заявка не принята в работу вовремя <%:date_work%>"></i>
+                        <%else%>
+                            <%if date_work%>
+                                <i class="fa fa-check-circle color-g" aria-hidden="true" title="Заявка принята в работу вовремя <%:date_work%>"></i>
+                            <%/if%>
                         <%/if%><br>
                         Срок исполнения: <%:date__finish%>
                         <%if fail_finish%>
                             <i class="fa fa-exclamation-circle color-o" aria-hidden="true" title="Заявка не выполнена вовремя <%:date_finish%>"></i>
-                        <%/if%><br>
+                         <%else%>
+                            <%if date_finish%>
+                                <i class="fa fa-check-circle color-g" aria-hidden="true" title="Заявка выполнена вовремя <%:date_finish%>"></i>
+                            <%/if%>
+                       <%/if%><br>
                     </div>
                     <hr style="margin-top: 3px; margin-bottom: 3px;">
                     <div class="text-right">
