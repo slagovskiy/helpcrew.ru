@@ -15,8 +15,14 @@
                     <hr style="margin-top: 3px; margin-bottom: 3px;">
                     <div>
                         Дата подачи: <%:date_in%><br>
-                        Срок принятия в работу: <%:date__reaction%><br>
-                        Срок исполнения: <%:date__finish%><br>
+                        Срок принятия в работу: <%:date__reaction%>
+                        <%if fail_work%>
+                            <i class="fa fa-exclamation-circle color-o" aria-hidden="true" title="Заявка не принята в работу вовремя <%:date_work%>"></i>
+                        <%/if%><br>
+                        Срок исполнения: <%:date__finish%>
+                        <%if fail_finish%>
+                            <i class="fa fa-exclamation-circle color-o" aria-hidden="true" title="Заявка не выполнена вовремя <%:date_finish%>"></i>
+                        <%/if%><br>
                     </div>
                     <hr style="margin-top: 3px; margin-bottom: 3px;">
                     <div class="text-right">
