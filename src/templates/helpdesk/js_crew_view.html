@@ -136,7 +136,8 @@
             url: '{% url 'api_task_status_save' %}',
             data: {
                 'task': task,
-                'status': status
+                'status': status,
+                'qty': $('#task_qty').val()
             }
         })
             .done(function(data){

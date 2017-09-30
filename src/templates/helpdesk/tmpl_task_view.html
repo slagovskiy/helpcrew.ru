@@ -33,10 +33,12 @@
                             <%/if%>
                        <%/if%><br>
                     </div>
+                    {% if is_dispatcher %}
                     <hr style="margin-top: 3px; margin-bottom: 3px;">
                     <div class="text-right">
                         <a href="#" onclick="openTaskPriority('<%:uuid%>', '<%:priority_code%>'); return false;">изменить приоритет</a> | <a href="#" onclick="openTaskDateIn('<%:uuid%>', '<%:date_in%>'); return false;">изменить дату подачи</a>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -44,15 +46,19 @@
             <div class="panel panel-default">
                 <div class="panel-body font06">
                     <div>
-                        Заявитель: <%for user_observer%><%:name%><%else%>...<%/for%><br>
-                        Диспетчер: <%for user_dispatcher%><%:name%><%else%>...<%/for%><br>
-                        Исполнители: <%for user_operator%><%:name%> <%else%>...<%/for%><br>
-                        Ответственный: <%for user_close%><%:name%><%else%>...<%/for%>
+                        Заявитель: <%for user_observer%><%:name%>; <%else%><%:contact_name%><%/for%><br>
+                        Диспетчер: <%for user_dispatcher%><%:name%>; <%else%>...<%/for%><br>
+                        Исполнители: <%for user_operator%><%:name%>; <%else%>...<%/for%><br>
+                        Ответственный: <%for user_close%><%:name%>; <%else%>...<%/for%>
                     </div>
+                    {% comment %}
+                    {% if is_dispatcher %}
                     <hr style="margin-top: 3px; margin-bottom: 3px;">
                     <div class="text-right">
                         <a href="#" onclick="return false;">изменить</a>
                     </div>
+                    {% endif %}
+                    {% endcomment %}
                 </div>
             </div>
         </div>
@@ -62,12 +68,29 @@
                 <div class="panel-body">
                     <%:service%>
                     <div class="scroll150" style="white-space: pre-wrap;"><%:description%></div>
+                    {% if is_dispatcher %}
                     <div class="text-right font06">
                         <a href="#" onclick="openTaskService('<%:uuid%>', '<%:service_code%>'); return false;">изменить услугу</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <%if files!=''%>
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="text-right font06">вложения</div>
+                    <div class="font06">
+                        <%for files%>
+                            <a href="<%:url%>" target="_blank"><i class="fa fa-file-o" aria-hidden="true"></i> <%:name%></a>;
+                        <%/for%>
                     </div>
                 </div>
             </div>
         </div>
+        <%/if%>
 
         <div class="col-md-12">
         {% if not is_observer %}
@@ -76,6 +99,7 @@
             {% if is_dispatcher %}
             <div class="panel panel-default">
                 <div class="panel-body">
+                    <div class="text-right font06">изменение статуса заявки</div>
                     <div class="col-md-4">
                         <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
                     </div>
@@ -88,12 +112,14 @@
                 </div>
             </div>
             {% endif %}
+            <input type="hidden" name="task_qty" id="task_qty" value="<%:qty%>">
             <%/if%>
 
             <%!-- в ожидании --%>
             <%if status_code==1%>
             <div class="panel panel-default">
                 <div class="panel-body">
+                    <div class="text-right font06">изменение статуса заявки</div>
                     <div class="col-md-4">
                         <input type="button" name="inwork" value="Начать работу" class="btn btn-success form-control" onclick="setStatus('<%:uuid%>', '3'); return false;">
                     </div>
@@ -107,6 +133,7 @@
                 </div>
             </div>
             {% endif %}
+            <input type="hidden" name="task_qty" id="task_qty" value="<%:qty%>">
             <%/if%>
 
             <%!-- приостановлена --%>
@@ -114,6 +141,7 @@
             {% if is_dispatcher %}
             <div class="panel panel-default">
                 <div class="panel-body">
+                    <div class="text-right font06">изменение статуса заявки</div>
                     <div class="col-md-4">
                         <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
                     </div>
@@ -123,37 +151,47 @@
                 </div>
             </div>
             {% endif %}
+            <input type="hidden" name="task_qty" id="task_qty" value="<%:qty%>">
             <%/if%>
 
             <%!-- выполняется --%>
             <%if status_code==3%>
             <div class="panel panel-default">
                 <div class="panel-body">
+                    <div class="text-right font06">изменение статуса заявки</div>
+                    <div class="col-md-8">
+                        Количество услуги <input type="text" name="task_qty" id="task_qty" value="<%:qty%>" style="width: 60px"> <%:service_unit%>.
+                    </div>
                     <div class="col-md-4">
-                        <input type="button" name="finished" value="Работа выполнена" class="btn btn-success form-control" onclick="setStatus('<%:uuid%>', '5'); return false;">
+                        <input type="button" name="finished" value="Работа выполнена" class="btn btn-success form-control" onclick="if(parseFloat($('#task_qty').val())>0) { setStatus('<%:uuid%>', '5'); } else { $.notify('Не проставлено количство', 'error'); } return false;">
                     </div>
                 </div>
             </div>
             <%/if%>
 
             <%!-- отменена --%>
+            {% comment %}
             <%if status_code==4%>
             {% if is_admin %}
             <div class="panel panel-default">
                 <div class="panel-body">
+                    <div class="text-right font06">изменение статуса заявки</div>
                     <div class="col-md-4">
                         <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
                     </div>
                 </div>
             </div>
             {% endif %}
+            <input type="hidden" name="task_qty" id="task_qty" value="<%:qty%>">
             <%/if%>
+            {% endcomment %}
 
             <%!-- выполнена --%>
             <%if status_code==5%>
             {% if is_dispatcher %}
             <div class="panel panel-default">
                 <div class="panel-body">
+                    <div class="text-right font06">изменение статуса заявки</div>
                     <div class="col-md-4">
                         <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
                     </div>
@@ -163,13 +201,16 @@
                 </div>
             </div>
             {% endif %}
+            <input type="hidden" name="task_qty" id="task_qty" value="<%:qty%>">
             <%/if%>
 
+            {% comment %}
             <%!-- закрыта --%>
             <%if status_code==6%>
             {% if is_admin %}
             <div class="panel panel-default">
                 <div class="panel-body">
+                    <div class="text-right font06">изменение статуса заявки</div>
                     <div class="col-md-4">
                         <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
                     </div>
@@ -183,6 +224,7 @@
             </div>
             {% endif %}
             <%/if%>
+            {% endcomment %}
                 </div>
             </div>
         {% endif %}
@@ -191,6 +233,20 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
+                    <form>
+                        <div class="col-md-12 form-label">
+                            Добавить cообщение в журнал заявки
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-8">
+                                <textarea class="form-control" rows="1"></textarea>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="button" value="Сохранить" class="btn btn-default form-control">
+                            </div>
+                        </div>
+                    </form>
+
                     <div class="col-md-12">
                         <div class="scroll150">
                             <table class="table font06">
@@ -213,19 +269,6 @@
                             </table>
                         </div>
                     </div>
-                    <form>
-                        <div class="col-md-12 form-label">
-                            Добавить cообщение в журнал заявки
-                        </div>
-                        <div class="col-md-12">
-                            <div class="col-md-8">
-                                <textarea class="form-control" rows="1"></textarea>
-                            </div>
-                            <div class="col-md-4">
-                                <input type="button" value="Сохранить" class="btn btn-default form-control">
-                            </div>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
