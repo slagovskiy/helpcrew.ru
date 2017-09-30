@@ -893,7 +893,10 @@ def api_task_description(request, uuid=None):
 
 
 def task_status_changing(request, task, status):
-    if status == 1:
+    if status == 1:    # wait
+        if task.status in [2, 4, 5, 6]:
+            task.date_in = timezone.now()
+
         u = TaskUsers.objects.filter(task=task, type=TaskUsers.DISPATCHER_TYPE).first()
         if u:
             u.user = request.user
@@ -907,7 +910,7 @@ def task_status_changing(request, task, status):
             )
             TaskEvent.addEvent(request, task, u'Назначен диспетчер ' + request.user.name())
 
-    if status == 2:
+    elif status == 2:   # pause
         u = TaskUsers.objects.filter(task=task, type=TaskUsers.DISPATCHER_TYPE).first()
         if u:
             u.user = request.user
@@ -921,7 +924,10 @@ def task_status_changing(request, task, status):
             )
             TaskEvent.addEvent(request, task, u'Назначен диспетчер ' + request.user.name())
 
-    if status == 3:
+    elif status == 3:   # in work
+        if task.status == 1:
+            task.date_work = timezone.now()
+
         TaskUsers.objects.create(
             task=task,
             user=request.user,
@@ -929,7 +935,15 @@ def task_status_changing(request, task, status):
         )
         TaskEvent.addEvent(request, task, u'Назначен оператор ' + request.user.name())
 
-    if status == 4:
+    elif status == 4:   # cancel
+        if not task.date_in:
+            task.date_in = timezone.now()
+        if not task.date_work:
+            task.date_work = timezone.now()
+        if not task.date_finish:
+            task.date_finish = timezone.now()
+        task.date_close = timezone.now()
+
         u = TaskUsers.objects.filter(task=task, type=TaskUsers.CLOSE_TYPE).first()
         if u:
             u.user = request.user
@@ -943,7 +957,22 @@ def task_status_changing(request, task, status):
             )
             TaskEvent.addEvent(request, task, u'Назначен ответственный ' + request.user.name())
 
-    if status == 6:
+    elif status == 5:   # finish
+        if not task.date_in:
+            task.date_in = timezone.now()
+        if not task.date_work:
+            task.date_work = timezone.now()
+        task.date_finish = timezone.now()
+
+    elif status == 6:   # close
+        if not task.date_in:
+            task.date_in = timezone.now()
+        if not task.date_work:
+            task.date_work = timezone.now()
+        if not task.date_finish:
+            task.date_finish = timezone.now()
+        task.date_close = timezone.now()
+
         u = TaskUsers.objects.filter(task=task, type=TaskUsers.CLOSE_TYPE).first()
         if u:
             u.user = request.user
@@ -964,26 +993,27 @@ def api_task_status_save(request):
     status = int(request.POST.get('status', '-1'))
     if task:
         if task.status == 0 and status in [1, 2, 4] and check_member_dispatcher(request.user, task.crew):
-            task.status = status
+            pass
         elif task.status == 1 and status in [2, 3, 4] and check_member_dispatcher(request.user, task.crew):
-            task.status = status
+            pass
         elif task.status == 1 and status == 3 and check_member(request.user, task.crew) and not check_member_observer(request.user, task.crew):
-            task.status = status
+            pass
         elif task.status == 2 and status in [1, 4] and check_member_dispatcher(request.user, task.crew):
-            task.status = status
+            pass
         elif task.status == 3 and status == 5 and not check_member_observer(request.user, task.crew):
-            task.status = status
+            pass
         elif task.status == 4 and status in [1, 2] and check_member_admin(request.user, task.crew):
-            task.status = status
+            pass
         elif task.status == 5 and status in [1, 6] and check_member_dispatcher(request.user, task.crew):
-            task.status = status
+            pass
         elif task.status == 6 and status in [1, 2, 4] and check_member_admin(request.user, task.crew):
-            task.status = status
+            pass
         else:
             return HttpResponse(u'Отказано в доступе')
 
-        TaskEvent.addEvent(request, task, u'Заявка переведена в статус ' + statusLikeText(status))
         task_status_changing(request, task, status)
+        TaskEvent.addEvent(request, task, u'Заявка переведена в статус ' + statusLikeText(status))
+        task.status = status
         task.save()
         return HttpResponse('ok')
     else:
