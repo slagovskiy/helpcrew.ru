@@ -135,6 +135,10 @@ button {
 table .btn-group button { padding-left: .5em !important; padding-right: .5em !important;}
 .btn-group { white-space: nowrap; font-size: 0;}
 .btn-group .btn { float: none; display: inline-block; }
+.btn-close { position: absolute; top: -14px; right: -5px; }
+a:focus.btn-close { outline: none; }
+a.btn-close { color: #999999; }
+a:hover.btn-close { color: #333333; }
 .strike { text-decoration: line-through; }
 
 .panel-heading { padding: 5px 10px; font-weight: bold;}

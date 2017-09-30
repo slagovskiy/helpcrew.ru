@@ -1,4 +1,5 @@
 <script id="tmpl-task-priority-edit" type="text/x-jsrender">
+<div class="col-md-12 text-right"><a href="#" data-fancybox-close class="btn-close"><i class="fa fa-window-close" aria-hidden="true"></i></a></div>
     <%for data%>
     <form action="{% url 'api_priority_edit' %}" method="post" id="form-task-priority-edit" enctype="multipart/form-data">
         {% csrf_token %}

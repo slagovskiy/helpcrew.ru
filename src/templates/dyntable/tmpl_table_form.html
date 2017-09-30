@@ -1,4 +1,5 @@
 <script id="tmpl-view-table-form" type="text/x-jsrender">
+<div class="col-md-12 text-right"><a href="#" data-fancybox-close class="btn-close"><i class="fa fa-window-close" aria-hidden="true"></i></a></div>
     <form action="{% url 'api_record_save' %}" method="post" id="form-view-record<%:table onerror='0'%>" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="table" value="<%:table onerror='0'%>" />

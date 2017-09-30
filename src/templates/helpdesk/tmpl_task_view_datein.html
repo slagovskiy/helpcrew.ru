@@ -1,4 +1,5 @@
 <script id="tmpl-task-view-datein" type="text/x-jsrender">
+<div class="col-md-12 text-right"><a href="#" data-fancybox-close class="btn-close"><i class="fa fa-window-close" aria-hidden="true"></i></a></div>
 <form action="{% url 'api_task_datein_save' %}" method="post" id="form-task-view-datein" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="col-md-12">
