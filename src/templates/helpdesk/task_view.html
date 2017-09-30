@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% load static %}
+
+{% block content %}
+    {% if task %}
+        {% chk_member_admin crew as is_admin %}
+        {% chk_member_dispatcher crew as is_dispatcher %}
+        {% chk_member_dispatcher crew as is_operator %}
+        {% chk_member_observer crew as is_observer %}
+
+        <div class="float-form float-form-w" style="display: none;" id="hidden-task-view"></div>
+        {% include 'helpdesk/tmpl_task_view.html' %}
+        {% include 'helpdesk/tmpl_task_view_priority.html' %}
+        {% include 'helpdesk/tmpl_task_view_datein.html' %}
+        {% include 'helpdesk/tmpl_task_view_service.html' %}
+        {% include 'helpdesk/js_crew_view.html' %}
+
+        <div class="col-md-12 crew-title">
+            <span>Команда &laquo{{ crew.name }}&raquo; - Информация о заявке</span><br>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-3">
+                {% if crew.logo %}
+                    <img src="{{ crew.logo.url }}?w=200">
+                {% else %}
+                    <img src="{% static 'img/logo256.png' %}">
+                {% endif %}</div>
+            <div class="col-md-9">
+                {{ crew.description|escapebr|safe }}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <button class="btn btn-primary" onclick="openTask('{{ task.uuid }}'); return false;">Открыть заявку</button>
+                <button class="btn btn-default" onclick="location.href='{% url 'crew_view' crew.url %}'; return false;">Перейти на старницу команды</button>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+
+        <script>
+            function init() {
+                openTask('{{ task.uuid }}');
+            }
+        </script>
+    {% else %}
+        <script>
+            function init() {
+                location.href='/';
+            }
+        </script>
+    {% endif %}
+{% endblock %}
