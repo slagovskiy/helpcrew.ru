@@ -964,6 +964,15 @@ def task_status_changing(request, task, status):
             task.date_work = timezone.now()
         task.date_finish = timezone.now()
 
+        u = TaskUsers.objects.filter(task=task, user=request.user, type=TaskUsers.OPERATOR_TYPE).first()
+        if not u:
+            TaskUsers.objects.create(
+                task=task,
+                user=request.user,
+                type=TaskUsers.OPERATOR_TYPE
+            )
+            TaskEvent.addEvent(request, task, u'Назначен оператор ' + request.user.name())
+
     elif status == 6:   # close
         if not task.date_in:
             task.date_in = timezone.now()

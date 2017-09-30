@@ -628,7 +628,7 @@ class CrewTask(models.Model):
     def fail_finish(self):
         rez = False
         date_finish = self.date2_calc()
-        if self.date_work:
+        if self.date_finish:
             if self.date_finish > date_finish:
                 rez = True
             else:
