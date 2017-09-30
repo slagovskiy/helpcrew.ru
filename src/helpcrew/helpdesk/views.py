@@ -13,7 +13,7 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
 from django.core import serializers
 
-from ..settings import UPLOAD_DIR
+from ..settings import UPLOAD_DIR, UPLOAD_URL
 from ..taskqueue.utils import add_email
 from .models import Crew, CrewUsers, CrewService, ServicePrice, TaskPriority, CrewEvent, CrewTask, TaskEvent, TaskFiles, TaskUsers
 from ..userext.models import User
@@ -142,6 +142,19 @@ def task_new(request, url=None):
             else:
                 request.session[crew.slug] = ''
         return redirect(reverse('crew_view_redirect', kwargs={'url': crew.url}))
+
+
+def task_view(request, uuid=None):
+    task = CrewTask.objects.filter(uuid=uuid).first()
+    if task:
+        content = {
+            'task': task,
+            'crew': task.crew
+        }
+        return render(request, 'helpdesk/task_view.html', content)
+    else:
+        messages.error(request, u'Задача не найдена')
+        return redirect(reverse('home'))
 
 
 @csrf_exempt
@@ -703,6 +716,13 @@ def api_task_view(request, uuid=None):
                 'message': event.message
             })
 
+        files = []
+        for file in task.taskfiles_set.all():
+            files.append({
+                'url': file.file.url,
+                'name': os.path.basename(file.file.path)
+            })
+
         user_observer = []
         _user = task.user_observer()
         if _user:
@@ -760,6 +780,7 @@ def api_task_view(request, uuid=None):
             'priority_code': task.priority.id,
             'service': task.service.name if task.service else u'Проблема',
             'service_code': task.service.id if task.service else '',
+            'service_unit': task.service.unit if task.service else '',
             'description': task.description,
             'date_in': timezone.localtime(task.date_in, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_in else '',
             'date_work': timezone.localtime(task.date_work, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_work else '',
@@ -779,7 +800,8 @@ def api_task_view(request, uuid=None):
             'contact_email': task.contact_email,
             'qty': str(task.qty),
             'fine': str(task.fine),
-            'events': events
+            'events': events,
+            'files': files,
         })
         return JsonResponse({
             'message': u'',
@@ -1023,6 +1045,9 @@ def api_task_status_save(request):
         task_status_changing(request, task, status)
         TaskEvent.addEvent(request, task, u'Заявка переведена в статус ' + statusLikeText(status))
         task.status = status
+        if str(task.qty) != request.POST.get('qty', '0.00'):
+            TaskEvent.addEvent(request, task, u'Изменено количество с ' + str(task.qty) + ' на ' + request.POST.get('qty', '0.00'))
+        task.qty = request.POST.get('qty', '0.00')
         task.save()
         return HttpResponse('ok')
     else:
