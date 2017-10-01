@@ -110,7 +110,7 @@ def crew_view(request, url=None):
 
 
 def crew_list_public(request):
-    crews = Crew.objects.filter(deleted=False, is_public=True)
+    crews = Crew.objects.filter(deleted=False, is_public=True).order_by('order', 'name')
     content = {
         'crews': crews
     }
