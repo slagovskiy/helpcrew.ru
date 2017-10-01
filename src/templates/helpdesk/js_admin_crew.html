@@ -38,7 +38,6 @@ function loadCrew() {
 }
 
 function saveCrew(crew) {
-    if (!$('#form-crew-edit').isValid()) { $.notify('Проверьте правильность ввода', 'warn'); return false; }
     if (crew == '') crew = '0';
     $.ajax({
         type: 'POST',
@@ -47,18 +46,17 @@ function saveCrew(crew) {
         processData: false,
         contentType: false//$('#form-crew-edit').serialize()
     })
-        .done(function(data){
-            if(data=='ok') {
-                $.fancybox.close();
+        .done(function (data) {
+            if (data == 'ok') {
                 $.notify('Сохранено', 'success');
-                loadCrew();
+                //loadCrew();
                 loadEventsList(100);
             }
             else {
                 $.notify(data, 'warn');
             }
         })
-        .fail(function(){
+        .fail(function () {
             $.notify('Ошибка передачи данных', 'error');
         });
 }

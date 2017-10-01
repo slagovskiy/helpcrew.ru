@@ -1,7 +1,7 @@
 {% load tags %}
 <script id="tmpl-crew-edit" type="text/x-jsrender">
     <%for data%>
-    <form action="{% url 'api_crew_edit' %}" method="post" id="form-crew-edit" enctype="multipart/form-data">
+    <form action="{% url 'api_crew_save' %}" method="post" id="form-crew-edit" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="slug" value="<%:fields.slug%>">
         <div class="col-md-12">
@@ -220,7 +220,7 @@
             </div>
         </div>
         <div class="col-md-12">
-            <div class="col-md-6"><input type="submit" class="form-control btn btn-primary" value="сохранить" onclick="saveCrew('<%:pk onerror='0'%>');return false;"/></div>
+            <div class="col-md-6"><button class="form-control btn btn-primary" onclick="saveCrew('<%:pk onerror='0'%>');return false;">сохранить</button></div>
             <div class="col-md-6"><input type="button" class="form-control btn btn-danger" value="удалить" /></div>
         </div>
     </form>
