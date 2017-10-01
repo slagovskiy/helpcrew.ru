@@ -159,65 +159,67 @@ def task_view(request, uuid=None):
 
 @csrf_exempt
 def api_crew_edit(request, crew=None):
-    if request.method == 'GET':
-        crew = Crew.objects.filter(slug=crew).first()
-        if not check_member_admin(request.user, crew):
-            return JsonResponse({
-                'message': u'access denied!',
-                'data': ''
-            })
+    crew = Crew.objects.filter(slug=crew).first()
+    if not check_member_admin(request.user, crew):
+        return JsonResponse({
+            'message': u'access denied!',
+            'data': ''
+        })
+    if crew:
+        data = serializers.serialize('json', [crew,])
+        return JsonResponse({
+            'message': '',
+            'data': json.loads(data)
+        })
+    else:
+        return JsonResponse({
+            'message': u'Команда не найдена',
+            'data': ''
+        })
+
+
+@csrf_exempt
+def api_crew_save(request, crew=None):
+    crew = Crew.objects.filter(slug=request.POST.get('slug', '')).first()
+    if check_member_admin(request.user, crew):
         if crew:
-            data = serializers.serialize('json', [crew,])
-            return JsonResponse({
-                'message': '',
-                'data': json.loads(data)
-            })
-        else:
-            return JsonResponse({
-                'message': u'Команда не найдена',
-                'data': ''
-            })
-    if request.method == 'POST':
-        crew = Crew.objects.filter(slug=request.POST.get('slug', '')).first()
-        if check_member_admin(request.user, crew):
-            if crew:
-                crew.name = request.POST.get('name', '_')
-                crew.url = request.POST.get('url', crew.slug)
-                crew.description = request.POST.get('description', '')
-                crew.user_page = request.POST.get('user_page', '')
-                crew.password = request.POST.get('password', '')
-                crew.work_start_time = request.POST.get('work_start_time', '9:00')
-                crew.work_end_time = request.POST.get('work_end_time', '18:00')
-                crew.lunch_start_time = request.POST.get('lunch_start_time', '12:00')
-                crew.lunch_end_time = request.POST.get('lunch_end_time', '13:00')
-                crew.holidays = request.POST.get('holidays', '')
-                crew.is_public = request.POST.get('is_public', False)
-                crew.work_day_0 = request.POST.get('work_day_0', False)
-                crew.work_day_1 = request.POST.get('work_day_1', False)
-                crew.work_day_2 = request.POST.get('work_day_2', False)
-                crew.work_day_3 = request.POST.get('work_day_3', False)
-                crew.work_day_4 = request.POST.get('work_day_4', False)
-                crew.work_day_5 = request.POST.get('work_day_5', False)
-                crew.work_day_6 = request.POST.get('work_day_6', False)
+            crew.name = request.POST.get('name', '_')
+            crew.url = request.POST.get('url', crew.slug)
+            crew.description = request.POST.get('description', '')
+            crew.user_page = request.POST.get('user_page', '')
+            crew.password = request.POST.get('password', '')
+            crew.work_start_time = request.POST.get('work_start_time', '9:00')
+            crew.work_end_time = request.POST.get('work_end_time', '18:00')
+            crew.lunch_start_time = request.POST.get('lunch_start_time', '12:00')
+            crew.lunch_end_time = request.POST.get('lunch_end_time', '13:00')
+            crew.holidays = request.POST.get('holidays', '')
+            crew.is_public = request.POST.get('is_public', False)
+            crew.work_day_0 = request.POST.get('work_day_0', False)
+            crew.work_day_1 = request.POST.get('work_day_1', False)
+            crew.work_day_2 = request.POST.get('work_day_2', False)
+            crew.work_day_3 = request.POST.get('work_day_3', False)
+            crew.work_day_4 = request.POST.get('work_day_4', False)
+            crew.work_day_5 = request.POST.get('work_day_5', False)
+            crew.work_day_6 = request.POST.get('work_day_6', False)
+            crew.save()
+            if 'logo' in request.FILES:
+                up_file = request.FILES['logo']
+                file = os.path.join(UPLOAD_DIR, Crew.logo_path(crew, up_file.name))
+                filename = os.path.basename(file)
+                if not os.path.exists(os.path.dirname(file)):
+                    os.makedirs(os.path.dirname(file))
+                destination = open(file, 'wb+')
+                for chunk in up_file.chunks():
+                    destination.write(chunk)
+                crew.logo.save(filename, destination, save=False)
                 crew.save()
-                if 'logo' in request.FILES:
-                    up_file = request.FILES['logo']
-                    file = os.path.join(UPLOAD_DIR, Crew.logo_path(crew, up_file.name))
-                    filename = os.path.basename(file)
-                    if not os.path.exists(os.path.dirname(file)):
-                        os.makedirs(os.path.dirname(file))
-                    destination = open(file, 'wb+')
-                    for chunk in up_file.chunks():
-                        destination.write(chunk)
-                    crew.logo.save(filename, destination, save=False)
-                    crew.save()
-                    destination.close()
-                    CrewEvent.addEvent(request, crew, u'Изменены параметры команды')
-                return HttpResponse('ok')
-            else:
-                return HttpResponse('crew not found!')
+                destination.close()
+                CrewEvent.addEvent(request, crew, u'Изменены параметры команды')
+            return HttpResponse('ok')
         else:
-            return HttpResponse('access denied!')
+            return HttpResponse('crew not found!')
+    else:
+        return HttpResponse('access denied!')
 
 
 @csrf_exempt
