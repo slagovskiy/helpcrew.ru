@@ -38,6 +38,7 @@ function loadCrew() {
 }
 
 function saveCrew(crew) {
+    if (!$('#form-crew-edit').isValid()) { $.notify('Проверьте правильность ввода', 'warn'); return false; }
     if (crew == '') crew = '0';
     $.ajax({
         type: 'POST',

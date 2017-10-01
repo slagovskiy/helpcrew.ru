@@ -68,6 +68,7 @@ function editPrice(price) {
 }
 
 function savePrice(price) {
+    if (!$('#form-service-price-edit').isValid()) { $.notify('Проверьте правильность ввода', 'warn'); return false; }
     if (price == '') price = '0';
     $.ajax({
         type: 'POST',

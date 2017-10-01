@@ -73,6 +73,7 @@ function deletePriority(priority) {
 }
 
 function savePriority(priority) {
+    if (!$('#form-task-priority-edit').isValid()) { $.notify('Проверьте правильность ввода', 'warn'); return false; }
     if (priority == '') priority = '0';
     $.ajax({
         type: 'POST',

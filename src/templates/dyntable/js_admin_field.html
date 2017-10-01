@@ -82,6 +82,7 @@ function deleteField(field) {
 }
 
 function saveField(field) {
+    if (!$('#form-table-field-edit').isValid()) { $.notify('Проверьте правильность ввода', 'warn'); return false; }
     if (field == '') field = '0';
     $.ajax({
         type: 'POST',

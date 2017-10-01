@@ -55,6 +55,7 @@
     }
 
     function saveRecord(table) {
+        if (!$('#form-view-record').isValid()) { $.notify('Проверьте правильность ввода', 'warn'); return false; }
         if (table == '') table = '0';
         $.ajax({
             type: 'POST',

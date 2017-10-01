@@ -71,6 +71,7 @@ function openInvite() {
 }
 
 function saveInvite() {
+    if (!$('#form-crew-user-invite').isValid()) { $.notify('Проверьте правильность ввода', 'warn'); return false; }
     $.ajax({
         type: 'POST',
         url: $('#form-crew-user-invite').attr('action'),

@@ -74,6 +74,7 @@ function deleteTable(table) {
 }
 
 function saveTable(table) {
+    if (!$('#form-crew-table-edit').isValid()) { $.notify('Проверьте правильность ввода', 'warn'); return false; }
     if (table == '') table = '0';
     $.ajax({
         type: 'POST',

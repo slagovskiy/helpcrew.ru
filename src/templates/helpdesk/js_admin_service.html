@@ -73,6 +73,7 @@ function deleteService(service) {
 }
 
 function saveService(service) {
+    if (!$('#form-crew-service-edit').isValid()) { $.notify('Проверьте правильность ввода', 'warn'); return false; }
     if (service == '') service = '0';
     $.ajax({
         type: 'POST',
