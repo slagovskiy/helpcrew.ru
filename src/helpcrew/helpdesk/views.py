@@ -891,7 +891,7 @@ def api_task_save(request):
                 type=TaskUsers.OBSERVER_TYPE
             )
             u.save()
-            TaskEvent.addEvent(request, task, u'Подписке назначен наблюдатель ' + request.user.name())
+            TaskEvent.addEvent(request, task, u'Заявке назначен наблюдатель ' + request.user.name())
 
             if not CrewUsers.objects.filter(user=request.user).first():
                 cu = CrewUsers.objects.create(
