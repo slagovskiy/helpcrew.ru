@@ -39,6 +39,10 @@ class Crew(models.Model):
     added = models.DateTimeField(
         auto_now_add=True
     )
+    order = models.IntegerField(
+        default=10000,
+        verbose_name=u'Определяет сортировку в списке команд'
+    )
     logo = models.ImageField(
         'Logo',
         blank=True,
@@ -151,7 +155,7 @@ class Crew(models.Model):
             return False
 
     class Meta:
-        ordering = ['name']
+        ordering = ['order', 'name']
         verbose_name = u'Команда'
         verbose_name_plural = u'Команды'
 
