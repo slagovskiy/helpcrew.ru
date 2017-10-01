@@ -49,7 +49,7 @@ function saveCrew(crew) {
         .done(function (data) {
             if (data == 'ok') {
                 $.notify('Сохранено', 'success');
-                //loadCrew();
+                loadCrew();
                 loadEventsList(100);
             }
             else {
