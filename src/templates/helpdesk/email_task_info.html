@@ -1,0 +1,38 @@
+{% extends "email.html" %}
+{% load tags %}
+{% block content %}
+    <tr>
+        <td style="padding: 30px 30px 0 30px;">
+            <h1 style="color: #222222; font-weight: bold; font-size: 24px; margin: 0; padding: 0 0 20px 0; text-align: left; line-height: 1.15;">{{ title }}</h1>
+            <p style="color: #474747; font-weight: normal; font-size: 14px; margin: 0; padding: 0 0 0 0; text-align: left; line-height: 1.5;">
+                {% ifequal task.type 0 %}
+                    <b>{{ task.service.name }}</b>.<br /><br />
+                    {{ task.description | escapebr | safe }}.<br /><br />
+                    Срок принятия в работу: {{ task.date1_calc | date:"j F Y H:i" }}.<br />
+                    Срок исполнения заявки: {{ task.date2_calc | date:"j F Y H:i" }}.<br /><br />
+                {% endifequal %}
+                {% ifequal task.type 1 %}
+                    Добавлена новая проблема.<br /><br />
+                    {{ task.description | escapebr | safe }}.<br /><br />
+                    Срок принятия в работу: {{ task.date1_calc | date:"j F Y H:i" }}.<br />
+                    Срок исполнения заявки: {{ task.date2_calc | date:"j F Y H:i" }}.<br /><br />
+                {% endifequal %}
+                {% ifequal task.type 2 %}
+                Добавлена новая подписка: <b>{{ task.service.name }}</b>.<br /><br />
+                Начало действия: {{ task.date_in | date:"j F Y H:i" }}<br />
+                Окончание действия: {{ task.date_end | date:"j F Y H:i" }}<br /><br />
+                {% endifequal %}
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding: 30px 30px 30px 30px;">
+            <table>
+                <tr>
+                    <td><a style="font-size: 16px; background: #45737E; padding: 12px 20px; margin: 0 auto 0 0; text-align: left; display: table; color: white; font-weight: bold; text-decoration: none; border-radius: 3px;" href="{% site_url %}{% url "task_view" task.uuid %}">Открыть заявку</a></td>
+                    <td><a style="font-size: 16px; background: #45737E; padding: 12px 20px; margin: 0 auto 0 0; text-align: left; display: table; color: white; font-weight: bold; text-decoration: none; border-radius: 3px;" href="{% site_url %}{% url "crew_view" task.crew.url %}">Перейти к журналу заявок</a></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+{% endblock %}

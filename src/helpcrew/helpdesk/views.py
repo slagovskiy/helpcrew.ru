@@ -900,6 +900,42 @@ def api_task_save(request):
                 cu.save()
                 CrewEvent.addEvent(request, crew, u'В команду добавлен наблюдатель ' + request.user.name())
 
+        email_to = []
+        # task observer
+        if task.user_observer():
+            email_to.append(task.user_observer().email)
+        else:
+            if task.contact_email != '':
+                email_to.append(task.contact_email)
+
+        if task.type != CrewTask.TASK_TYPE_SUBSCRIBE and task.status == CrewTask.TASK_STATUS_WAITING:
+            # crew operator
+            for user in crew.crewusers_set.filter(deleted=False, type=CrewUsers.OPERATOR_TYPE):
+                if not user.user.email in email_to:
+                    email_to.append(user.user.email)
+
+        # crew dispatcher or admins
+        for user in crew.crewusers_set.filter(deleted=False, type=CrewUsers.DISPATCHER_TYPE):
+            if not user.user.email in email_to:
+                email_to.append(user.user.email)
+
+        if not crew.crewusers_set.filter(deleted=False, type=CrewUsers.DISPATCHER_TYPE):
+            for user in crew.crewusers_set.filter(deleted=False, type=CrewUsers.ADMINISTRATOR_TYPE):
+                if not user.user.email in email_to:
+                    email_to.append(user.user.email)
+
+        for email in email_to:
+            add_email(
+                msg_to=email,
+                subject=u'Добавлена новая заявка',
+                body=render_to_string('helpdesk/email_task_info.html',
+                                      {
+                                          'task': task,
+                                          'title': u'Добавлена новая заявка'
+                                      })
+            )
+
+
         return HttpResponse('ok')
     else:
         return HttpResponse(u'Команда не найдена')
@@ -931,6 +967,34 @@ def task_status_changing(request, task, status):
                 type=TaskUsers.DISPATCHER_TYPE
             )
             TaskEvent.addEvent(request, task, u'Назначен диспетчер ' + request.user.name())
+
+        crew = task.crew
+        email_to = []
+        for user in crew.crewusers_set.filter(deleted=False, type=CrewUsers.OPERATOR_TYPE):
+            if not user.user.email in email_to:
+                email_to.append(user.user.email)
+
+        # crew dispatcher or admins
+        if not crew.crewusers_set.filter(deleted=False, type=CrewUsers.OPERATOR_TYPE):
+            for user in crew.crewusers_set.filter(deleted=False, type=CrewUsers.DISPATCHER_TYPE):
+                if not user.user.email in email_to:
+                    email_to.append(user.user.email)
+
+        if not crew.crewusers_set.filter(deleted=False, type=CrewUsers.DISPATCHER_TYPE):
+            for user in crew.crewusers_set.filter(deleted=False, type=CrewUsers.ADMINISTRATOR_TYPE):
+                if not user.user.email in email_to:
+                    email_to.append(user.user.email)
+
+        for email in email_to:
+            add_email(
+                msg_to=email,
+                subject=u'Заявка отправлена в работу',
+                body=render_to_string('helpdesk/email_task_info.html',
+                                      {
+                                          'task': task,
+                                          'title': u'Заявка отправлена в работу'
+                                      })
+            )
 
     elif status == 2:   # pause
         u = TaskUsers.objects.filter(task=task, type=TaskUsers.DISPATCHER_TYPE).first()
@@ -994,6 +1058,29 @@ def task_status_changing(request, task, status):
                 type=TaskUsers.OPERATOR_TYPE
             )
             TaskEvent.addEvent(request, task, u'Назначен оператор ' + request.user.name())
+
+        crew = task.crew
+        email_to = []
+        # crew dispatcher or admins
+        for user in crew.crewusers_set.filter(deleted=False, type=CrewUsers.DISPATCHER_TYPE):
+            if not user.user.email in email_to:
+                email_to.append(user.user.email)
+
+        if not crew.crewusers_set.filter(deleted=False, type=CrewUsers.DISPATCHER_TYPE):
+            for user in crew.crewusers_set.filter(deleted=False, type=CrewUsers.ADMINISTRATOR_TYPE):
+                if not user.user.email in email_to:
+                    email_to.append(user.user.email)
+
+        for email in email_to:
+            add_email(
+                msg_to=email,
+                subject=u'Работы по заявке были завершены',
+                body=render_to_string('helpdesk/email_task_info.html',
+                                      {
+                                          'task': task,
+                                          'title': u'Работы по заявке были завершены'
+                                      })
+            )
 
     elif status == 6:   # close
         if not task.date_in:

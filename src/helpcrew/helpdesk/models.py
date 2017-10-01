@@ -571,6 +571,7 @@ class CrewTask(models.Model):
         btd = None
 
         # not work!
+        '''
         if self.crew.holidays:
             for day in self.crew.holidays.split('\n'):
                 if day != '':
@@ -582,6 +583,8 @@ class CrewTask(models.Model):
             btd = businesstimedelta.Rules([workday, lunchbreak, holidays])
         else:
             btd = businesstimedelta.Rules([workday, lunchbreak])
+        '''
+        btd = businesstimedelta.Rules([workday, lunchbreak])
         return btd
 
     def date1_calc(self):

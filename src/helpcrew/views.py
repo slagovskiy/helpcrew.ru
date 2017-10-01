@@ -4,7 +4,7 @@ from django.contrib import messages
 import logging
 
 from django.urls import reverse
-from .helpdesk.models import Crew
+from .helpdesk.models import Crew, CrewTask
 from .helpdesk.utils import check_member
 
 log = logging.getLogger(__name__)
@@ -31,9 +31,12 @@ def go_crew(request, url=None):
 
 
 def test(request):
-    c = Crew.objects.filter(slug='82428b08-9609-11e7-92c2-00158315a310').first()
-    content = {'crew': c}
-    return render(request, 'helpdesk/email_invite.html', content)
+    task = CrewTask.objects.filter(uuid='3d82581e-a602-11e7-8361-00158315a310').first()
+    content = {
+        'task': task,
+        'title': u'Заявка отправлена в работу'
+    }
+    return render(request, 'helpdesk/email_task_info.html', content)
 
 #def captcha(request):
 #    request.session['CAPTCHA_CODE'] = captcha_code(4)
