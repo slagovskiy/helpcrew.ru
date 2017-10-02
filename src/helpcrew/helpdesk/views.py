@@ -1191,6 +1191,23 @@ def api_task_datein_save(request):
 
 
 @csrf_exempt
+def api_task_commentary_save(request):
+    '''
+    task = CrewTask.objects.filter(uuid=request.POST.get('task', '-1')).first()
+    if task:
+        if check_member(request.user, task.crew):
+            task.commentary = request.POST.get('commentary', '')
+            task.save()
+            TaskEvent.addEvent(request, task, u'В заявке изменен комментарий')
+            return HttpResponse('ok')
+        else:
+            return HttpResponse(u'Доступ запрещен')
+    else:
+    '''
+    return HttpResponse(u'1Задача не найдена1')
+
+
+@csrf_exempt
 def api_task_service_save(request):
     task = CrewTask.objects.filter(uuid=request.POST.get('task', '-1')).first()
     if task:
@@ -1208,6 +1225,7 @@ def api_task_service_save(request):
             return HttpResponse(u'Доступ запрещен')
     else:
         return HttpResponse(u'Задача не найдена')
+
 
 
 @csrf_exempt

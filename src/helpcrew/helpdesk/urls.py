@@ -3,7 +3,7 @@ from django.conf.urls import url
 from .views import crew_edit, api_crew_check_url, crew_view, crew_list_public
 from .views import task_new, task_view
 from .views import api_task_save, api_task_view, api_task_description, api_task_list, api_task_new
-from .views import api_task_commentary
+from .views import api_task_commentary, api_task_commentary_save
 from .views import api_task_priority_save, api_task_datein_save, api_task_service_save, api_task_status_save
 from .views import api_crew_edit, api_crew_save
 from .views import api_user_list, api_user_edit, api_user_delete, api_user_invite, api_user_add
@@ -30,9 +30,11 @@ urlpatterns = [
     url(r'^api/task/description/(?P<uuid>[-\w]+)/$', api_task_description, name='api_task_description'),
     url(r'^api/task/commentary/$', api_task_commentary, name='api_task_commentary'),
     url(r'^api/task/commentary/(?P<uuid>[-\w]+)/$', api_task_commentary, name='api_task_commentary'),
+
     url(r'^api/task/priority/save/$', api_task_priority_save, name='api_task_priority_save'),
     url(r'^api/task/datein/save/$', api_task_datein_save, name='api_task_datein_save'),
     url(r'^api/task/service/save/$', api_task_service_save, name='api_task_service_save'),
+    url(r'^api/task/commentary/save/$', api_task_commentary_save, name='api_task_commentary_save'),
     url(r'^api/task/status/save/$', api_task_status_save, name='api_task_status_save'),
 
     url(r'^api/crew/edit/$', api_crew_edit, name='api_crew_edit'),

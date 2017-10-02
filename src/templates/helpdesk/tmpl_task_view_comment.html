@@ -1,0 +1,22 @@
+<script id="tmpl-task-view-commentary" type="text/x-jsrender">
+<div class="col-md-12 text-right"><a href="#" data-fancybox-close class="btn-close"><i class="fa fa-window-close" aria-hidden="true"></i></a></div>
+<form action="{% url 'api_task_commentary_save' %}" method="post" id="form-task-view-commentary" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="col-md-12">
+        <div class="col-md-12 form-label">
+            Комментарий
+        </div>
+            <textarea class="form-control" rows="10" name="commentary" id="commentary"></textarea>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <input type="hidden" name="task" id="task" value="">
+        <div class="col-md-6">
+            <input type="submit" class="form-control btn btn-primary" onclick="saveTaskComment(); return false;" value="отправить"/>
+        </div>
+        <div class="col-md-6">
+            <button data-fancybox-close class="form-control btn btn-default">отмена</button>
+        </div>
+    </div>
+</form>
+</script>

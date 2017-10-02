@@ -4,6 +4,7 @@
 <div class="float-form" style="display: none;" id="hidden-task-view-priority"></div>
 <div class="float-form" style="display: none;" id="hidden-task-view-datein"></div>
 <div class="float-form" style="display: none;" id="hidden-task-view-service"></div>
+<div class="float-form" style="display: none;" id="hidden-task-view-commentary"></div>
 <%for task%>
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
@@ -245,7 +246,7 @@
                     <div class="panel-body">
                         <div class="scroll150" style="white-space: pre-wrap;"><%:commentary%></div>
                         <div class="text-right font06">
-                            <a href="#" onclick="openTaskCommentary('<%:uuid%>'); return false;">изменить комментарий</a>
+                            <a href="#" onclick="openTaskComment('<%:uuid%>'); return false;">изменить комментарий</a>
                         </div>
                     </div>
                 </div>
