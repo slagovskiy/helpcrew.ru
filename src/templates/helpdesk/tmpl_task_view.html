@@ -5,275 +5,321 @@
 <div class="float-form" style="display: none;" id="hidden-task-view-datein"></div>
 <div class="float-form" style="display: none;" id="hidden-task-view-service"></div>
 <%for task%>
-    <div class="col-md-12">
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-body font06">
-                    <div>
-                        Статус: <span class="bold"><%:status%></span><br>
-                        Приоритет: <span class="bold"><%:priority%></span><br>
-                    </div>
-                    <hr style="margin-top: 3px; margin-bottom: 3px;">
-                    <div>
-                        Дата подачи: <%:date_in%><br>
-                        Срок принятия в работу: <%:date__reaction%>
-                        <%if fail_work%>
-                            <i class="fa fa-exclamation-circle color-o" aria-hidden="true" title="Заявка не принята в работу вовремя <%:date_work%>"></i>
-                        <%else%>
-                            <%if date_work%>
-                                <i class="fa fa-check-circle color-g" aria-hidden="true" title="Заявка принята в работу вовремя <%:date_work%>"></i>
-                            <%/if%>
-                        <%/if%><br>
-                        Срок исполнения: <%:date__finish%>
-                        <%if fail_finish%>
-                            <i class="fa fa-exclamation-circle color-o" aria-hidden="true" title="Заявка не выполнена вовремя <%:date_finish%>"></i>
-                         <%else%>
-                            <%if date_finish%>
-                                <i class="fa fa-check-circle color-g" aria-hidden="true" title="Заявка выполнена вовремя <%:date_finish%>"></i>
-                            <%/if%>
-                       <%/if%><br>
-                    </div>
-                    {% if is_dispatcher %}
-                    <hr style="margin-top: 3px; margin-bottom: 3px;">
-                    <div class="text-right">
-                        <a href="#" onclick="openTaskPriority('<%:uuid%>', '<%:priority_code%>'); return false;">изменить приоритет</a> | <a href="#" onclick="openTaskDateIn('<%:uuid%>', '<%:date_in%>'); return false;">изменить дату подачи</a>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-body font06">
-                    <div>
-                        Заявитель: <%for user_observer%><%:name%>; <%else%><%:contact_name%><%/for%><br>
-                        Диспетчер: <%for user_dispatcher%><%:name%>; <%else%>...<%/for%><br>
-                        Исполнители: <%for user_operator%><%:name%>; <%else%>...<%/for%><br>
-                        Ответственный: <%for user_close%><%:name%>; <%else%>...<%/for%>
-                    </div>
-                    {% comment %}
-                    {% if is_dispatcher %}
-                    <hr style="margin-top: 3px; margin-bottom: 3px;">
-                    <div class="text-right">
-                        <a href="#" onclick="return false;">изменить</a>
-                    </div>
-                    {% endif %}
-                    {% endcomment %}
-                </div>
-            </div>
-        </div>
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a href="#task-main" aria-controls="task-main" role="tab" data-toggle="tab">Информация</a>
+        </li>
+        <li role="presentation">
+            <a href="#task-attach" aria-controls="task-attach" role="tab" data-toggle="tab">Вложения</a>
+        </li>
+        <li role="presentation">
+            <a href="#task-log" aria-controls="task-log" role="tab" data-toggle="tab">События</a>
+        </li>
+    </ul>
 
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <%:service%>
-                    <div class="scroll150" style="white-space: pre-wrap;"><%:description%></div>
-                    {% if is_dispatcher %}
-                    <div class="text-right font06">
-                        <a href="#" onclick="openTaskService('<%:uuid%>', '<%:service_code%>'); return false;">изменить услугу</a>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="task-main">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body font06">
+                            <div>
+                                Статус: <span class="bold"><%:status%></span><br>
+                                Приоритет: <span class="bold"><%:priority%></span><br>
+                            </div>
+                            <hr style="margin-top: 3px; margin-bottom: 3px;">
+                            <div>
+                                Дата подачи: <%:date_in%><br>
+                                Срок принятия в работу: <%:date__reaction%>
+                                <%if fail_work%>
+                                    <i class="fa fa-exclamation-circle color-o" aria-hidden="true" title="Заявка не принята в работу вовремя <%:date_work%>"></i>
+                                <%else%>
+                                    <%if date_work%>
+                                        <i class="fa fa-check-circle color-g" aria-hidden="true" title="Заявка принята в работу вовремя <%:date_work%>"></i>
+                                    <%/if%>
+                                <%/if%><br>
+                                Срок исполнения: <%:date__finish%>
+                                <%if fail_finish%>
+                                    <i class="fa fa-exclamation-circle color-o" aria-hidden="true" title="Заявка не выполнена вовремя <%:date_finish%>"></i>
+                                 <%else%>
+                                    <%if date_finish%>
+                                        <i class="fa fa-check-circle color-g" aria-hidden="true" title="Заявка выполнена вовремя <%:date_finish%>"></i>
+                                    <%/if%>
+                               <%/if%><br>
+                            </div>
+                            {% if is_dispatcher %}
+                            <hr style="margin-top: 3px; margin-bottom: 3px;">
+                            <div class="text-right">
+                                <a href="#" onclick="openTaskPriority('<%:uuid%>', '<%:priority_code%>'); return false;">изменить приоритет</a> | <a href="#" onclick="openTaskDateIn('<%:uuid%>', '<%:date_in%>'); return false;">изменить дату подачи</a>
+                            </div>
+                            {% endif %}
+                        </div>
                     </div>
-                    {% endif %}
                 </div>
-            </div>
-        </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body font06">
+                            <div>
+                                Заявитель: <%for user_observer%><%:name%>; <%else%><%:contact_name%><%/for%><br>
+                                Диспетчер: <%for user_dispatcher%><%:name%>; <%else%>...<%/for%><br>
+                                Исполнители: <%for user_operator%><%:name%>; <%else%>...<%/for%><br>
+                                Ответственный: <%for user_close%><%:name%>; <%else%>...<%/for%>
+                            </div>
+                            {% comment %}
+                            {% if is_dispatcher %}
+                            <hr style="margin-top: 3px; margin-bottom: 3px;">
+                            <div class="text-right">
+                                <a href="#" onclick="return false;">изменить</a>
+                            </div>
+                            {% endif %}
+                            {% endcomment %}
+                        </div>
+                    </div>
+                </div>
 
-        <%if files!=''%>
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="text-right font06">вложения</div>
-                    <div class="font06">
-                        <%for files%>
-                            <a href="<%:url%>" target="_blank"><i class="fa fa-file-o" aria-hidden="true"></i> <%:name%></a>;
-                        <%/for%>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <%/if%>
 
-        <div class="col-md-12">
-        {% if not is_observer %}
-            <%!-- новая --%>
-            <%if status_code==0%>
-            {% if is_dispatcher %}
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="text-right font06">изменение статуса заявки</div>
-                    <div class="col-md-4">
-                        <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
-                    </div>
-                    <div class="col-md-4">
-                        <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control"  onclick="setStatus('<%:uuid%>', '2'); return false;">
-                    </div>
-                    <div class="col-md-4">
-                        <input type="button" name="cancel" value="Отменить" class="btn btn-info form-control" onclick="setStatus('<%:uuid%>', '4'); return false;">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <%:service%>
+                            <div class="scroll150" style="white-space: pre-wrap;"><%:description%></div>
+                            {% if is_dispatcher %}
+                            <div class="text-right font06">
+                                <a href="#" onclick="openTaskService('<%:uuid%>', '<%:service_code%>'); return false;">изменить услугу</a>
+                            </div>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endif %}
-            <input type="hidden" name="task_qty" id="task_qty" value="<%:qty%>">
-            <%/if%>
 
-            <%!-- в ожидании --%>
-            <%if status_code==1%>
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="text-right font06">изменение статуса заявки</div>
-                    <div class="col-md-4">
-                        <input type="button" name="inwork" value="Начать работу" class="btn btn-success form-control" onclick="setStatus('<%:uuid%>', '3'); return false;">
-                    </div>
-                    {% if is_dispatcher %}
-                    <div class="col-md-4">
-                        <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control"  onclick="setStatus('<%:uuid%>', '2'); return false;">
-                    </div>
-                    <div class="col-md-4">
-                        <input type="button" name="cancel" value="Отменить" class="btn btn-info form-control" onclick="setStatus('<%:uuid%>', '4'); return false;">
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            <input type="hidden" name="task_qty" id="task_qty" value="<%:qty%>">
-            <%/if%>
 
-            <%!-- приостановлена --%>
-            <%if status_code==2%>
-            {% if is_dispatcher %}
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="text-right font06">изменение статуса заявки</div>
-                    <div class="col-md-4">
-                        <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
-                    </div>
-                    <div class="col-md-4">
-                        <input type="button" name="cancel" value="Отменить" class="btn btn-info form-control" onclick="setStatus('<%:uuid%>', '4'); return false;">
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            <input type="hidden" name="task_qty" id="task_qty" value="<%:qty%>">
-            <%/if%>
 
-            <%!-- выполняется --%>
-            <%if status_code==3%>
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="text-right font06">изменение статуса заявки</div>
-                    <div class="col-md-8">
-                        Количество услуги <input type="text" name="task_qty" id="task_qty" value="<%:qty%>" style="width: 60px"> <%:service_unit%>.
-                    </div>
-                    <div class="col-md-4">
-                        <input type="button" name="finished" value="Работа выполнена" class="btn btn-success form-control" onclick="if(parseFloat($('#task_qty').val())>0) { setStatus('<%:uuid%>', '5'); } else { $.notify('Не проставлено количство', 'error'); } return false;">
-                    </div>
-                </div>
-            </div>
-            <%/if%>
+                <div class="col-md-12">
+                {% if not is_observer %}
 
-            <%!-- отменена --%>
-            {% comment %}
-            <%if status_code==4%>
-            {% if is_admin %}
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="text-right font06">изменение статуса заявки</div>
-                    <div class="col-md-4">
-                        <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
+                <%!-- новая --%>
+                <%if status_code==0%>
+                {% if is_dispatcher %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="text-right font06">изменение статуса заявки</div>
+                        <div class="col-md-4">
+                            <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control"  onclick="setStatus('<%:uuid%>', '2'); return false;">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="button" name="cancel" value="Отменить" class="btn btn-info form-control" onclick="setStatus('<%:uuid%>', '4'); return false;">
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endif %}
-            <input type="hidden" name="task_qty" id="task_qty" value="<%:qty%>">
-            <%/if%>
-            {% endcomment %}
+                {% endif %}
+                <input type="hidden" name="task_qty" id="task_qty" value="<%:qty%>">
+                <%/if%>
 
-            <%!-- выполнена --%>
-            <%if status_code==5%>
-            {% if is_dispatcher %}
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="text-right font06">изменение статуса заявки</div>
-                    <div class="col-md-4">
-                        <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
-                    </div>
-                    <div class="col-md-4">
-                        <input type="button" name="close" value="Закрыть заявку" class="btn btn-success form-control" onclick="setStatus('<%:uuid%>', '6'); return false;">
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            <input type="hidden" name="task_qty" id="task_qty" value="<%:qty%>">
-            <%/if%>
 
-            {% comment %}
-            <%!-- закрыта --%>
-            <%if status_code==6%>
-            {% if is_admin %}
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="text-right font06">изменение статуса заявки</div>
-                    <div class="col-md-4">
-                        <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
-                    </div>
-                    <div class="col-md-4">
-                        <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control"  onclick="setStatus('<%:uuid%>', '2'); return false;">
-                    </div>
-                    <div class="col-md-4">
-                        <input type="button" name="cancel" value="Отменить" class="btn btn-info form-control" onclick="setStatus('<%:uuid%>', '4'); return false;">
+                <%!-- в ожидании --%>
+                <%if status_code==1%>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="text-right font06">изменение статуса заявки</div>
+                        <div class="col-md-4">
+                            <input type="button" name="inwork" value="Начать работу" class="btn btn-success form-control" onclick="setStatus('<%:uuid%>', '3'); return false;">
+                        </div>
+                        {% if is_dispatcher %}
+                        <div class="col-md-4">
+                            <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control"  onclick="setStatus('<%:uuid%>', '2'); return false;">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="button" name="cancel" value="Отменить" class="btn btn-info form-control" onclick="setStatus('<%:uuid%>', '4'); return false;">
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endif %}
-            <%/if%>
-            {% endcomment %}
-                </div>
-            </div>
-        {% endif %}
-        </div>
+                {% endif %}
+                <input type="hidden" name="task_qty" id="task_qty" value="<%:qty%>">
+                <%/if%>
 
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-body">
+                <%!-- приостановлена --%>
+                <%if status_code==2%>
+                {% if is_dispatcher %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="text-right font06">изменение статуса заявки</div>
+                        <div class="col-md-4">
+                            <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="button" name="cancel" value="Отменить" class="btn btn-info form-control" onclick="setStatus('<%:uuid%>', '4'); return false;">
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                <input type="hidden" name="task_qty" id="task_qty" value="<%:qty%>">
+                <%/if%>
+
+
+
+                <%!-- выполняется --%>
+                <%if status_code==3%>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="text-right font06">изменение статуса заявки</div>
+                        <div class="col-md-8">
+                            Количество услуги <input type="text" name="task_qty" id="task_qty" value="<%:qty%>" style="width: 60px"> <%:service_unit%>.
+                        </div>
+                        <div class="col-md-4">
+                            <input type="button" name="finished" value="Работа выполнена" class="btn btn-success form-control" onclick="if(parseFloat($('#task_qty').val())>0) { setStatus('<%:uuid%>', '5'); } else { $.notify('Не проставлено количство', 'error'); } return false;">
+                        </div>
+                    </div>
+                </div>
+                <%/if%>
+
+
+                <%!-- отменена --%>
                 {% comment %}
-                    <form>
-                        <div class="col-md-12 form-label">
-                            Добавить cообщение в журнал заявки
+                <%if status_code==4%>
+                {% if is_admin %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="text-right font06">изменение статуса заявки</div>
+                        <div class="col-md-4">
+                            <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
                         </div>
-                        <div class="col-md-12">
-                            <div class="col-md-8">
-                                <textarea class="form-control" rows="1"></textarea>
-                            </div>
-                            <div class="col-md-4">
-                                <input type="button" value="Сохранить" class="btn btn-default form-control">
-                            </div>
-                        </div>
-                    </form>
+                    </div>
+                </div>
+                {% endif %}
+                <input type="hidden" name="task_qty" id="task_qty" value="<%:qty%>">
+                <%/if%>
                 {% endcomment %}
-                    <div class="col-md-12">
-                        <div class="scroll150">
-                            <table class="table font06">
-                                <thead>
-                                    <tr>
-                                        <td>Дата</td>
-                                        <td>Пользователь</td>
-                                        <td>Событие</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                <%for events%>
-                                    <tr>
-                                        <td><%:date%></td>
-                                        <td><%:user%></td>
-                                        <td><%:message%></td>
-                                    </tr>
+
+
+                <%!-- выполнена --%>
+                <%if status_code==5%>
+                {% if is_dispatcher %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="text-right font06">изменение статуса заявки</div>
+                        <div class="col-md-4">
+                            <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="button" name="close" value="Закрыть заявку" class="btn btn-success form-control" onclick="setStatus('<%:uuid%>', '6'); return false;">
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                <input type="hidden" name="task_qty" id="task_qty" value="<%:qty%>">
+                <%/if%>
+
+
+                {% comment %}
+                <%!-- закрыта --%>
+                <%if status_code==6%>
+                {% if is_admin %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="text-right font06">изменение статуса заявки</div>
+                        <div class="col-md-4">
+                            <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control"  onclick="setStatus('<%:uuid%>', '2'); return false;">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="button" name="cancel" value="Отменить" class="btn btn-info form-control" onclick="setStatus('<%:uuid%>', '4'); return false;">
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                <%/if%>
+                {% endcomment %}
+
+
+                {% endif %}
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="scroll150" style="white-space: pre-wrap;"><%:commentary%></div>
+                        <div class="text-right font06">
+                            <a href="#" onclick="openTaskCommentary('<%:uuid%>'); return false;">изменить комментарий</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="task-attach">
+            <div class="col-md-12">
+                <%if files!=''%>
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="text-right font06">вложения</div>
+                            <div>
+                                <%for files%>
+                                    <a href="<%:url%>" target="_blank"><i class="fa fa-file-o" aria-hidden="true"></i> <%:name%></a>;
                                 <%/for%>
-                                </tbody>
-                            </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <%else%>
+                    Нет вложений
+                <%/if%>
+            </div>
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="task-log">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                    {% comment %}
+                        <form>
+                            <div class="col-md-12 form-label">
+                                Добавить cообщение в журнал заявки
+                            </div>
+                            <div class="col-md-12">
+                                <div class="col-md-8">
+                                    <textarea class="form-control" rows="1"></textarea>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="button" value="Сохранить" class="btn btn-default form-control">
+                                </div>
+                            </div>
+                        </form>
+                    {% endcomment %}
+                        <div class="col-md-12">
+                            <div class="scroll500">
+                                <table class="table font06">
+                                    <thead>
+                                        <tr>
+                                            <td>Дата</td>
+                                            <td>Пользователь</td>
+                                            <td>Событие</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <%for events%>
+                                        <tr>
+                                            <td><%:date%></td>
+                                            <td><%:user%></td>
+                                            <td><%:message%></td>
+                                        </tr>
+                                    <%/for%>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 <%/for%>
-</div>
 </script>
