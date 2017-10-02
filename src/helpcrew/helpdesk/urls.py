@@ -26,16 +26,18 @@ urlpatterns = [
     url(r'^api/task/save/$', api_task_save, name='api_task_save'),
     url(r'^api/task/view/$', api_task_view, name='api_task_view'),
     url(r'^api/task/view/(?P<uuid>[-\w]+)/$', api_task_view, name='api_task_view'),
-    url(r'^api/task/description/$', api_task_description, name='api_task_description'),
-    url(r'^api/task/description/(?P<uuid>[-\w]+)/$', api_task_description, name='api_task_description'),
-    url(r'^api/task/commentary/$', api_task_commentary, name='api_task_commentary'),
-    url(r'^api/task/commentary/(?P<uuid>[-\w]+)/$', api_task_commentary, name='api_task_commentary'),
 
     url(r'^api/task/priority/save/$', api_task_priority_save, name='api_task_priority_save'),
     url(r'^api/task/datein/save/$', api_task_datein_save, name='api_task_datein_save'),
     url(r'^api/task/service/save/$', api_task_service_save, name='api_task_service_save'),
     url(r'^api/task/commentary/save/$', api_task_commentary_save, name='api_task_commentary_save'),
     url(r'^api/task/status/save/$', api_task_status_save, name='api_task_status_save'),
+
+    url(r'^api/task/description/$', api_task_description, name='api_task_description'),
+    url(r'^api/task/description/(?P<uuid>[-\w]+)/$', api_task_description, name='api_task_description'),
+    url(r'^api/task/commentary/$', api_task_commentary, name='api_task_commentary'),
+    url(r'^api/task/commentary/(?P<uuid>[-\w]+)/$', api_task_commentary, name='api_task_commentary'),
+
 
     url(r'^api/crew/edit/$', api_crew_edit, name='api_crew_edit'),
     url(r'^api/crew/edit/(?P<crew>[-\w]+)/$', api_crew_edit, name='api_crew_edit'),

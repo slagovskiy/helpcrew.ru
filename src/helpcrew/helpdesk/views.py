@@ -1192,7 +1192,6 @@ def api_task_datein_save(request):
 
 @csrf_exempt
 def api_task_commentary_save(request):
-    '''
     task = CrewTask.objects.filter(uuid=request.POST.get('task', '-1')).first()
     if task:
         if check_member(request.user, task.crew):
@@ -1203,8 +1202,7 @@ def api_task_commentary_save(request):
         else:
             return HttpResponse(u'Доступ запрещен')
     else:
-    '''
-    return HttpResponse(u'1Задача не найдена1')
+        return HttpResponse(u'Задача не найдена')
 
 
 @csrf_exempt
