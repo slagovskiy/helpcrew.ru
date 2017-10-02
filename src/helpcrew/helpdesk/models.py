@@ -441,6 +441,10 @@ class CrewTask(models.Model):
         default='',
         verbose_name=u'Текстовое описание'
     )
+    commentary = models.TextField(
+        default='',
+        verbose_name=u'Комментарий к заявке'
+    )
     priority = models.ForeignKey(
         TaskPriority,
         verbose_name=u'Приоритет заявки'

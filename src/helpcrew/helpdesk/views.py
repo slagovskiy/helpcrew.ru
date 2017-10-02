@@ -659,6 +659,7 @@ def api_task_list(request, crew=None):
                         'status': statusLikeText(item.status),
                         'status_code': item.status,
                         'description': item.description[0:150],
+                        'commentary': item.commentary[0:150],
                         'priority': item.priority.name,
                         'date_in': timezone.localtime(item.date_in, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S'),
                         'service': item.service.name if item.service else u'Проблема',
@@ -784,6 +785,7 @@ def api_task_view(request, uuid=None):
             'service_code': task.service.id if task.service else '',
             'service_unit': task.service.unit if task.service else '',
             'description': task.description,
+            'commentary': task.commentary,
             'date_in': timezone.localtime(task.date_in, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_in else '',
             'date_work': timezone.localtime(task.date_work, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_work else '',
             'date_end': timezone.localtime(task.date_end, timezone.get_current_timezone()).strftime('%Y/%m/%d %H:%M:%S') if task.date_end else '',
@@ -948,6 +950,15 @@ def api_task_description(request, uuid=None):
     task = CrewTask.objects.filter(uuid=uuid).first()
     if task:
         return HttpResponse(task.description)
+    else:
+        return HttpResponse(u'Задача не найдена')
+
+
+@csrf_exempt
+def api_task_commentary(request, uuid=None):
+    task = CrewTask.objects.filter(uuid=uuid).first()
+    if task:
+        return HttpResponse(task.commentary)
     else:
         return HttpResponse(u'Задача не найдена')
 
