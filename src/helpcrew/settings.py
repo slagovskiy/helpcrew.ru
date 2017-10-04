@@ -106,6 +106,7 @@ if not SECRET_KEY:
 # settings_local.py
 
 from .settings import BASE_DIR
+from datetime import datetime
 import os
 
 DEBUG = True
@@ -113,6 +114,7 @@ SECRET_KEY = '-vop18rtmr(sy-1f)74-5@=mv(_9zl@xa$7=7mw4&nsq^jo)sy'
 ALLOWED_HOSTS = []
 
 # email
+SERVER_EMAIL = 'noreply@helpcrew.ru'
 DEFAULT_FROM_EMAIL = 'noreply@helpcrew.ru'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'
@@ -122,6 +124,9 @@ EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'noreply@helpcrew.ru'
 EMAIL_HOST_PASSWORD = ''
 EMAIL_SUBJECT_PREFIX = '[helpcrew]'
+
+ADMINS = [('Sergey Lagovskiy', 'slagovskiy@gmail.com'),]
+MANAGERS = ADMINS
 
 STATIC_URL = '/static/'
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
@@ -144,6 +149,44 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, os.path.join('logs', 'error_%s.log' % (datetime.now().strftime('%Y%m%d%H%M%S')))),
+            'formatter': 'verbose'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True,
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
 }
 
 DEBUG_TOOLBAR_PANELS = [
