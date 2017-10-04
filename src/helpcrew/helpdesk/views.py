@@ -865,13 +865,13 @@ def api_task_save(request):
             )
             tfile.save()
             file = os.path.join(UPLOAD_DIR, TaskFiles.file_path(tfile, up_file.name))
-            filename = os.path.basename(file)
+            filename = os.path.basename(file).encode('utf-8')
             if not os.path.exists(os.path.dirname(file)):
                 os.makedirs(os.path.dirname(file))
             destination = open(file, 'wb+')
             for chunk in up_file.chunks():
                 destination.write(chunk)
-            tfile.file.save(filename, destination, save=False)
+            tfile.file.save(filename.decode('utf-8'), destination, save=False)
             tfile.save()
             destination.close()
             TaskEvent.addEvent(request, task, u'К заявке добавлено вложение ' + up_file.name)
