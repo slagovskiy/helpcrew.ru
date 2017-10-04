@@ -1,2 +1,6 @@
 User-agent: *
 Disallow: /admin/
+Disallow: /c/
+Disallow: /p/
+Disallow: /u/
+Disallow: /t/
