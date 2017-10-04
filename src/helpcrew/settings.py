@@ -165,9 +165,11 @@ LOGGING = {
     'handlers': {
         'file': {
             'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, os.path.join('logs', 'error_%s.log' % (datetime.now().strftime('%Y%m%d%H%M%S')))),
-            'formatter': 'verbose'
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, os.path.join('logs', 'error.log')),
+            'formatter': 'verbose',
+            'maxBytes': 1024*1024*5,
+            'backupCount': 20,
         },
         'mail_admins': {
             'level': 'ERROR',
