@@ -721,10 +721,11 @@ def api_task_view(request, uuid=None):
 
         files = []
         for file in task.taskfiles_set.all():
-            files.append({
-                'url': file.file.url,
-                'name': os.path.basename(file.file.path)
-            })
+            if file.file:
+                files.append({
+                    'url': file.file.url,
+                    'name': os.path.basename(file.file.path)
+                })
 
         user_observer = []
         _user = task.user_observer()
