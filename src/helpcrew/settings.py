@@ -178,11 +178,18 @@ LOGGING = {
             'formatter': 'verbose',
             'maxBytes': 1024*1024*5,
             'backupCount': 20,
-        },
+         },
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
             'include_html': True,
+        },
+        'emailfile': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, os.path.join('logs', 'email.log')),
+            'maxBytes': 1024*1024*5,
+            'backupCount': 20,
         },
     },
     'loggers': {
@@ -194,6 +201,11 @@ LOGGING = {
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
+            'propagate': True,
+        },
+        'helpcrew.worker_email': {
+            'handlers': ['emailfile'],
+            'level': 'DEBUG',
             'propagate': True,
         },
     },
