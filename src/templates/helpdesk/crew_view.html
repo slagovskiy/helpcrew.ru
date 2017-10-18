@@ -187,6 +187,19 @@
 
         var taskUpdateTimer = setTimeout(function() { reloadTaskList(); }, 1000);
 
+        var taskOnlineTimer = setTimeout(function() { checkOnline(); }, 60000);
+
+
+        function checkOnline()
+        {
+            $.ajax({
+                url: '{% url 'api_check_online' %}'
+            }).done(function(data){
+                if (data == 'offline')
+                    location.reload();
+            });
+            taskOnlineTimer = setTimeout(function() { checkOnline(); }, 60000);
+        }
 
         function reloadTaskList()
         {

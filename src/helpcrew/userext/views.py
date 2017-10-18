@@ -1,8 +1,10 @@
+from django.http import HttpResponse
 from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout, authenticate, login
 from django.template.loader import render_to_string
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 import os
 
 from .models import User
@@ -167,3 +169,11 @@ def user_save(request):
             except:
                 messages.error(request, u'Ошибка сохранения')
                 return render(request, 'user/profile.html', {})
+
+
+@csrf_exempt
+def api_check_online(request):
+    if request.user.is_anonymous:
+        return HttpResponse('offline')
+    else:
+        return HttpResponse('online')
