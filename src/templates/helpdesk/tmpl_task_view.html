@@ -104,14 +104,19 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="text-right font06">изменение статуса заявки</div>
+                        <div class="col-md-8"></div>
                         <div class="col-md-4">
-                            <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
-                        </div>
-                        <div class="col-md-4">
-                            <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control"  onclick="setStatus('<%:uuid%>', '2'); return false;">
-                        </div>
-                        <div class="col-md-4">
-                            <input type="button" name="cancel" value="Отменить" class="btn btn-info form-control" onclick="setStatus('<%:uuid%>', '4'); return false;">
+                            <div class="btn-group btn-flex">
+                                <button type="button" name="work" class="btn btn-primary" onclick="setStatus('<%:uuid%>', '1'); return false;">В работу</button>
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu w100">
+                                    <li><a href="#" onclick="setStatus('<%:uuid%>', '2'); return false;">Приостановить</a></li>
+                                    <li><a href="#" onclick="setStatus('<%:uuid%>', '4'); return false;">Отменить</a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -125,19 +130,25 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="text-right font06">изменение статуса заявки</div>
+                        <div class="col-md-8"></div>
                         <div class="col-md-4">
-                            <input type="button" name="inwork" value="Начать работу" class="btn btn-success form-control" onclick="setStatus('<%:uuid%>', '3'); return false;">
-                        </div>
-                        {% if is_dispatcher %}
-                        <div class="col-md-4">
-                            <input type="button" name="pause" value="Приостановить" class="btn btn-danger form-control"  onclick="setStatus('<%:uuid%>', '2'); return false;">
-                        </div>
-                        <div class="col-md-4">
-                            <input type="button" name="cancel" value="Отменить" class="btn btn-info form-control" onclick="setStatus('<%:uuid%>', '4'); return false;">
+                            <div class="btn-group btn-flex">
+                                <button type="button" name="work" class="btn btn-primary" onclick="setStatus('<%:uuid%>', '3'); return false;">Начать работу</button>
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu w100">
+                                    <li><a href="#" name="pause" onclick="setStatus('<%:uuid%>', '3'); return false;">Начать работу</a></li>
+                                    {% if is_dispatcher %}
+                                    <li><a href="#" name="pause" onclick="setStatus('<%:uuid%>', '2'); return false;">Приостановить</a></li>
+                                    <li><a href="#" name="cancel" onclick="setStatus('<%:uuid%>', '4'); return false;">Отменить</a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-                {% endif %}
                 <input type="hidden" name="task_qty" id="task_qty" value="<%:qty%>">
                 <%/if%>
 
@@ -147,11 +158,19 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="text-right font06">изменение статуса заявки</div>
+                        <div class="col-md-8"></div>
                         <div class="col-md-4">
-                            <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
-                        </div>
-                        <div class="col-md-4">
-                            <input type="button" name="cancel" value="Отменить" class="btn btn-info form-control" onclick="setStatus('<%:uuid%>', '4'); return false;">
+                            <div class="btn-group btn-flex">
+                                <button type="button" name="work" class="btn btn-primary" onclick="setStatus('<%:uuid%>', '1'); return false;">В работу</button>
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu w100">
+                                    <li><a href="#" name="pause" onclick="setStatus('<%:uuid%>', '1'); return false;">В работу</a></li>
+                                    <li><a href="#" name="cancel" onclick="setStatus('<%:uuid%>', '4'); return false;">Отменить</a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -170,7 +189,16 @@
                             Количество услуги <input type="text" name="task_qty" id="task_qty" value="<%:qty%>" style="width: 60px"> <%:service_unit%>.
                         </div>
                         <div class="col-md-4">
-                            <input type="button" name="finished" value="Работа выполнена" class="btn btn-success form-control" onclick="if(parseFloat($('#task_qty').val())>0) { setStatus('<%:uuid%>', '5'); } else { $.notify('Не проставлено количство', 'error'); } return false;">
+                            <div class="btn-group btn-flex">
+                                <button type="button" name="work" class="btn btn-primary" onclick="if(parseFloat($('#task_qty').val())>0) { setStatus('<%:uuid%>', '5'); } else { $.notify('Не проставлено количство', 'error'); } return false;">Работа выполнена</button>
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu w100">
+                                    <li><a href="#" name="pause" onclick="if(parseFloat($('#task_qty').val())>0) { setStatus('<%:uuid%>', '5'); } else { $.notify('Не проставлено количство', 'error'); } return false;">Работа выполнена</a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -201,12 +229,19 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="text-right font06">изменение статуса заявки</div>
+                        <div class="col-md-8"></div>
                         <div class="col-md-4">
-                            <input type="button" name="work" value="В работу" class="btn btn-primary form-control" onclick="setStatus('<%:uuid%>', '1'); return false;">
-                        </div>
-                        <div class="col-md-4">
-                            <input type="button" name="close" value="Закрыть заявку" class="btn btn-success form-control" onclick="setStatus('<%:uuid%>', '6'); return false;">
-                        </div>
+                            <div class="btn-group btn-flex">
+                                <button type="button" name="work" class="btn btn-primary" onclick="setStatus('<%:uuid%>', '6'); return false;">Закрыть заявку</button>
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu w100">
+                                    <li><a href="#" name="cancel" onclick="setStatus('<%:uuid%>', '6'); return false;">Закрыть заявку</a></li>
+                                    <li><a href="#" name="pause" onclick="setStatus('<%:uuid%>', '1'); return false;">В работу</a></li>
+                                </ul>
+                            </div>
                     </div>
                 </div>
                 {% endif %}

@@ -140,6 +140,8 @@ a:focus.btn-close { outline: none; }
 a.btn-close { color: #999999; }
 a:hover.btn-close { color: #333333; }
 .strike { text-decoration: line-through; }
+.btn-flex { display: flex; align-items: stretch; align-content: stretch; }
+.btn-flex .btn:first-child { flex-grow: 1; text-align: center; }
 
 .panel-heading { padding: 5px 10px; font-weight: bold;}
 .panel-heading .label { font-weight: normal;}
@@ -152,6 +154,10 @@ a:hover.btn-close { color: #333333; }
 .scroll300 { overflow-y: scroll; max-height:300px; min-height: 50px; }
 .scroll400 { overflow-y: scroll; max-height:400px; min-height: 50px; }
 .scroll500 { overflow-y: scroll; max-height:500px; min-height: 50px; }
+
+.w100 { width: 100%; }
+.w95 { width: 95%; }
+.w93 { width: 93%; }
 
 pre.text {
     border: none;
