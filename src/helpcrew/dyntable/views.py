@@ -1,4 +1,6 @@
 import json
+
+import os
 from django.db import transaction
 from django.db.models import Max
 from django.core import serializers
@@ -7,6 +9,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Table, Field, Index, Record
+from ..settings import UPLOAD_DIR
 from ..helpdesk.utils import check_member, check_member_admin
 from ..helpdesk.models import Crew, CrewEvent
 
@@ -278,6 +281,31 @@ def api_record_list(request, table=None):
             return HttpResponse('access denied!')
     else:
         return HttpResponse('table not found!')
+
+
+@csrf_exempt
+@transaction.atomic
+def api_record_import(request, table=None):
+    table = Table.objects.filter(id=table).first()
+    if table:
+        if not check_member(request.user, table.crew):
+            return HttpResponse('Доступ запрещен')
+
+        if 'import' in request.FILES:
+            up_file = request.FILES['import']
+            file = os.path.join(UPLOAD_DIR, Table.import_path(table, up_file.name))
+            filename = os.path.basename(file)
+            if not os.path.exists(os.path.dirname(file)):
+                os.makedirs(os.path.dirname(file))
+            destination = open(file, 'wb+')
+            for chunk in up_file.chunks():
+                destination.write(chunk)
+            destination.close()
+            CrewEvent.addEvent(request, table.crew, 'Получен файл для импорта данных ' + filename + ' в справочник ' + table.name)
+
+        return HttpResponse('err')
+    else:
+        return HttpResponse('Таблица не найдена')
 
 
 @csrf_exempt

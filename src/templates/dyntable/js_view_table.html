@@ -78,6 +78,32 @@
             });
     }
 
+    function importRecord(table) {
+        if (!$('#form-import-csv-' + table).isValid()) { $.notify('Проверьте правильность ввода', 'warn'); return false; }
+        if (table == '') table = '0';
+        $.ajax({
+            type: 'POST',
+            url: $('#form-import-csv-' + table).attr('action') + table + '/',
+            data: new FormData($('#form-import-csv-' + table)[0]), //$('#form-import-csv-' + table).serialize()
+            processData: false,
+            contentType: false
+        })
+            .done(function(data){
+                if(data=='ok') {
+                    $.fancybox.close();
+                    $.notify('Сохранено', 'success');
+                    loadTableRowsView(table);
+                    loadEventsList(table);
+                }
+                else {
+                    $.notify(data, 'warn');
+                }
+            })
+            .fail(function(){
+                $.notify('Ошибка передачи данных', 'error');
+            });
+    }
+
     function deleteRecord(table, index) {
         $.ajax({
             type: 'GET',
@@ -98,6 +124,18 @@
     }
 
     function importFromCSV(table) {
-        nyi();
+        $.fancybox.open({
+            src: '#hidden-view-table-import' + table,
+            type: 'inline',
+            opts: {modal: true}
+        });
+        $.validate({
+            form : '#form-import-csv-' + table
+        });
+        $('#import-csv-' + table).filestyle({
+            input: true,
+            btnClass: "btn-primary",
+            text: "выбрать csv"
+        });
     }
 </script>

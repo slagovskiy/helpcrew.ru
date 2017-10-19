@@ -1,9 +1,15 @@
 import uuid
+import os
 from django.db import models
 from ..helpdesk.models import Crew
 
 
 class Table(models.Model):
+    def import_path(instance, filename):
+        #ext = filename.split('.')[-1]
+        #filename = '{}.{}'.format(str(uuid.uuid1()), ext)
+        return os.path.join(os.path.join('import', instance.uuid), filename)
+
     crew = models.ForeignKey(
         Crew,
         verbose_name=u'Команда'
