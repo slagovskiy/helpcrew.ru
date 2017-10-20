@@ -80,6 +80,7 @@
 
     function importRecord(table) {
         if (!$('#form-import-csv-' + table).isValid()) { $.notify('Проверьте правильность ввода', 'warn'); return false; }
+        $('#import-btn-' + table).attr("disabled", "disabled");
         if (table == '') table = '0';
         $.ajax({
             type: 'POST',
@@ -98,8 +99,10 @@
                 else {
                     $.notify(data, 'warn');
                 }
+                $('#import-btn-' + table).removeAttr("disabled");
             })
             .fail(function(){
+                $('#import-btn-' + table).removeAttr("disabled");
                 $.notify('Ошибка передачи данных', 'error');
             });
     }

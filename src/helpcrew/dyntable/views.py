@@ -286,7 +286,9 @@ def api_record_list(request, table=None):
 @csrf_exempt
 @transaction.atomic
 def api_record_import(request, table=None):
+    import csv
     table = Table.objects.filter(id=table).first()
+    fields = Field.objects.filter(table=table, deleted=False).order_by('order')
     if table:
         if not check_member(request.user, table.crew):
             return HttpResponse('Доступ запрещен')
@@ -301,9 +303,41 @@ def api_record_import(request, table=None):
             for chunk in up_file.chunks():
                 destination.write(chunk)
             destination.close()
-            CrewEvent.addEvent(request, table.crew, 'Получен файл для импорта данных ' + filename + ' в справочник ' + table.name)
+            CrewEvent.addEvent(request, table.crew, u'Получен файл для импорта данных ' + filename + ' в справочник ' + table.name)
 
-        return HttpResponse('err')
+            delimiter = ','
+            reader = csv.reader(open(file, encoding='utf-8'), delimiter=delimiter)
+            try:
+                for row in reader:
+                    if len(row) != len(fields):
+                        CrewEvent.addEvent(request, table.crew, u'Не верное количество полей во входном файле ' + filename)
+                        return HttpResponse(u'Не верное количество полей во входном файле')
+
+                    index_num = Index.objects.filter(table=table).aggregate(Max('num'))
+                    if index_num['num__max']:
+                        index_num = index_num['num__max'] + 1
+                    else:
+                        index_num = 1
+                    index = Index.objects.create(
+                        table=table,
+                        num=index_num
+                    )
+                    index.save()
+
+                    i = 0
+                    for field in fields:
+                        record = Record.objects.create(
+                            index=index,
+                            field=field,
+                            value=row[i]
+                        )
+                        record.save()
+                        i = i + 1
+                    CrewEvent.addEvent(request, table.crew, 'Импортирована новая запись #' + str(index.num) + ' в справочник ' + table.name)
+                return HttpResponse('ok')
+            except Exception as inst:
+                CrewEvent.addEvent(request, table.crew, 'Ошибка во время импорта: ' + str(inst))
+                return HttpResponse(str(inst))
     else:
         return HttpResponse('Таблица не найдена')
 
