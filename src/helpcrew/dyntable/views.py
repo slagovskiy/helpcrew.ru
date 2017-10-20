@@ -246,12 +246,16 @@ def api_record_list(request, table=None):
             _data = []
             _header = []
             for field in flds:
+                tmp = str(field.name).replace('+', '')
                 _header.append({
                     'field': field.id,
-                    'value': field.name
+                    'value': tmp
                 })
             for index in indxs:
                 _records = []
+                _sort1 = ''
+                _sort2 = ''
+                _sort3 = ''
                 for field in flds:
                     val = ''
                     found = False
@@ -264,13 +268,21 @@ def api_record_list(request, table=None):
                         'field': field.name,
                         'value': val
                     })
+                    if field.name[0:0] == '+':
+                        _sort1 = val
+                    if field.name[0:1] == '++':
+                        _sort2 = val
+                    if field.name[0:3] == '+++':
+                        _sort3 = val
                 _data.append({
                     'table': table.id,
                     'row': index.num,
                     'index': index.id,
                     'deleted': index.deleted,
-                    'records': _records
+                    'records': _records,
+                    'sort': _sort1 + _sort2 + _sort3
                 })
+                _data = sorted(_data, key=lambda k: k['sort'])
             return JsonResponse({
                 'message': '',
                 'table': table.id,
