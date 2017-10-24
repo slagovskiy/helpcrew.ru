@@ -155,8 +155,6 @@ a:hover.btn-close { color: #333333; }
 .scroll400 { overflow-y: scroll; max-height:400px; min-height: 50px; }
 .scroll500 { overflow-y: scroll; max-height:500px; min-height: 50px; }
 
-.footable {margin-top: -50px;}
-
 .w100 { width: 100%; }
 .w95 { width: 95%; }
 .w93 { width: 93%; }
