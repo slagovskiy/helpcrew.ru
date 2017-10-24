@@ -15,6 +15,7 @@
     }
 
     function loadTableRowsView(table) {
+        $('#loader-' + table).show();
         $.getJSON( "{% url 'api_record_list' %}" + table + "/", function( data ) {
             try {
                 if (data['message'] == '') {
@@ -22,6 +23,7 @@
                     var html = tmpl.render(data);
                     $('#table-record-list' + table).html(html);
                     $('.table').footable();
+                    $('#loader-' + table).hide();
                 }
             }
             catch (err) {
