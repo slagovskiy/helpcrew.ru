@@ -3,6 +3,7 @@
 {% block content %}
     <tr>
         <td style="padding: 30px 30px 0 30px;">
+            <p style="color: #707070;font-weight: normal;font-size: 10px;margin: 0;padding: 0 0 12px 0;text-align: right;line-height: 1.5;">Команда "{{ task.crew.name }}"</p>
             <h1 style="color: #222222; font-weight: bold; font-size: 24px; margin: 0; padding: 0 0 20px 0; text-align: left; line-height: 1.15;">{{ title }}</h1>
             <p style="color: #474747; font-weight: normal; font-size: 14px; margin: 0; padding: 0 0 0 0; text-align: left; line-height: 1.5;">
                 {% ifequal task.type 0 %}
