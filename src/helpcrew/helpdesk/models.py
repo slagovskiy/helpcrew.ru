@@ -135,6 +135,9 @@ class Crew(models.Model):
     def __str__(self):
         return '%s' % self.name
 
+    def user_setting(self, user):
+        return self.crewusers_set.filter(user=user).first()
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = uuid.uuid1()
@@ -244,6 +247,10 @@ class CrewUsers(models.Model):
         default=False,
         verbose_name=u'Член команды удален'
     )
+
+    dtable_filter = models.BooleanField(default=True)
+    dtable_paging = models.BooleanField(default=True)
+    dtable_page_size = models.IntegerField(default=100)
 
     def __str__(self):
         return '%s %s' % (self.crew, self.user)
