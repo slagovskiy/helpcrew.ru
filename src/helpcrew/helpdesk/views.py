@@ -185,8 +185,8 @@ def api_personal_save(request, crew=None):
         if crew:
             cu = CrewUsers.objects.filter(crew=crew, user=request.user).first()
             if cu:
-                cu.dtable_filter = request.POST.get('dtable_filter', True)
-                cu.dtable_paging = request.POST.get('dtable_paging', True)
+                cu.dtable_filter = request.POST.get('dtable_filter', False)
+                cu.dtable_paging = request.POST.get('dtable_paging', False)
                 cu.dtable_page_size = request.POST.get('dtable_page_size', 100)
                 cu.save()
                 return HttpResponse('ok')
