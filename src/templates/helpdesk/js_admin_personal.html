@@ -21,16 +21,15 @@ function savePersonal(crew) {
     if (crew == '') crew = '0';
     $.ajax({
         type: 'POST',
-        url: $('#form-crew-edit').attr('action') + crew + '/',
-        data: new FormData($('#form-crew-edit')[0]),
-        processData: false,
-        contentType: false//$('#form-crew-edit').serialize()
+        url: $('#form-personal-edit').attr('action') + crew + '/',
+        data: $('#form-personal-edit').serialize()//new FormData($('#form-personal-edit')[0]),
+        //processData: false,
+        //contentType: false//$('#form-crew-edit').serialize()
     })
         .done(function (data) {
             if (data == 'ok') {
                 $.notify('Сохранено', 'success');
-                loadCrew();
-                loadEventsList(100);
+                loadPersonal();
             }
             else {
                 $.notify(data, 'warn');

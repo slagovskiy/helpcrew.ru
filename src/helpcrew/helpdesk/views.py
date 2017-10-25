@@ -160,7 +160,7 @@ def task_view(request, uuid=None):
 @csrf_exempt
 def api_personal_edit(request, crew=None):
     crew = Crew.objects.filter(slug=crew).first()
-    if not check_member_admin(request.user, crew):
+    if not check_member(request.user, crew):
         return JsonResponse({
             'message': u'Доступ запрещен!',
             'data': ''
@@ -176,6 +176,26 @@ def api_personal_edit(request, crew=None):
             'message': u'Команда не найдена',
             'data': ''
         })
+
+
+@csrf_exempt
+def api_personal_save(request, crew=None):
+    crew = Crew.objects.filter(slug=request.POST.get('slug', '')).first()
+    if check_member(request.user, crew):
+        if crew:
+            cu = CrewUsers.objects.filter(crew=crew, user=request.user).first()
+            if cu:
+                cu.dtable_filter = request.POST.get('dtable_filter', True)
+                cu.dtable_paging = request.POST.get('dtable_paging', True)
+                cu.dtable_page_size = request.POST.get('dtable_page_size', 100)
+                cu.save()
+                return HttpResponse('ok')
+            else:
+                return HttpResponse('Не найден член команды!')
+        else:
+            return HttpResponse('Команда не найдена!')
+    else:
+        return HttpResponse('Доступ запрещен!')
 
 
 @csrf_exempt
