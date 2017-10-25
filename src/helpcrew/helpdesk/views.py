@@ -92,12 +92,12 @@ def crew_view(request, url=None):
         return redirect(reverse('user_login'))
     if not request.user.is_checked:
         return redirect(reverse('user_profile'))
-    crew = Crew.objects.filter(url=url)
+    crew = Crew.objects.filter(url=url).first()
     if crew:
-        crew = crew[0]
         if check_member(request.user, crew):
             content = {
                 'crew': crew,
+                'user_settings': crew.user_setting(request.user),
                 'crews': get_crews_list(request.user, flat=True)
             }
             return render(request, 'helpdesk/crew_view.html', content)
