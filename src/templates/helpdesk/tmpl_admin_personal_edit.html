@@ -1,0 +1,55 @@
+{% load tags %}
+<script id="tmpl-personal-edit" type="text/x-jsrender">
+    <%for data%>
+    <form action="{% url 'api_crew_save' %}" method="post" id="form-personal-edit" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="slug" value="<%:fields.slug%>">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <div class="col-md-12">
+                    <b>Справочники</b>
+                </div>
+                <div class="col-md-12">
+                    <input type="checkbox" id="dtable_filter" name="dtable_filter" value="True" class="css-checkbox lrg"
+                     <%if fields%><%if fields.dtable_filter%>checked="checked"<%/if%><%/if%>
+                     />
+                    <label for="dtable_filter" name="dtable_filter" class="css-label lrg web-two-style">Включить фильтрацию / поиск</label>
+                </div>
+                <div class="col-md-12">
+                    <input type="checkbox" id="dtable_paging" name="dtable_paging" value="True" class="css-checkbox lrg"
+                     <%if fields%><%if fields.dtable_paging%>checked="checked"<%/if%><%/if%>
+                     />
+                    <label for="dtable_paging" name="dtable_paging" class="css-label lrg web-two-style">Включить разделение на страницы</label>
+                </div>
+                <div class="col-md-12 form-label">
+                    Размер страницы
+                </div>
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="dtable_page_size" name="dtable_page_size" placeholder="100" value="<%:fields.dtable_page_size onerror=''%>"
+                           data-validation="number"
+                           data-validation-error-msg="Введите размер страницы в виде целого числа"
+                    />
+                </div>
+            </div>
+            <div class="col-md-6">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-6">
+            </div>
+            <div class="col-md-6">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-6">
+            </div>
+            <div class="col-md-6">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-6"><button class="form-control btn btn-primary" onclick="saveCrew('<%:pk onerror='0'%>');return false;">сохранить</button></div>
+            <div class="col-md-6"><input type="button" class="form-control btn btn-danger" value="удалить" /></div>
+        </div>
+    </form>
+    <%/for%>
+</script>

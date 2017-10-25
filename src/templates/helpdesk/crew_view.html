@@ -134,9 +134,7 @@
                         </div>
                     {% endif %}
                     <div role="tabpanel" class="tab-pane active" id="tab_personal">
-                        <form action="{% url 'crew_edit' %}" method="post" id="form-crewedit" enctype="multipart/form-data">
-                            
-                        </form>
+                        <div id="personal-edit"></div>
                     </div>
                 </div>
 
@@ -176,8 +174,10 @@
             {% include 'helpdesk/tmpl_task_view_datein.html' %}
             {% include 'helpdesk/tmpl_task_view_service.html' %}
             {% include 'helpdesk/tmpl_task_view_comment.html' %}
+            {% include 'helpdesk/tmpl_admin_personal_edit.html' %}
             {% include 'dyntable/js_view_table.html' %}
             {% include 'helpdesk/js_crew_view.html' %}
+            {% include 'helpdesk/js_admin_personal.html' %}
 
 
             </div>
@@ -228,6 +228,7 @@
                 loadTableList();
                 loadEventsList(100);
             {% endif %}
+            loadPersonal();
             loadTableView();
             loadTaskList();
         }
