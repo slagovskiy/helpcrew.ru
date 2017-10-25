@@ -158,6 +158,27 @@ def task_view(request, uuid=None):
 
 
 @csrf_exempt
+def api_personal_edit(request, crew=None):
+    crew = Crew.objects.filter(slug=crew).first()
+    if not check_member_admin(request.user, crew):
+        return JsonResponse({
+            'message': u'Доступ запрещен!',
+            'data': ''
+        })
+    if crew:
+        data = serializers.serialize('json', [crew.user_setting(request.user),])
+        return JsonResponse({
+            'message': '',
+            'data': json.loads(data)
+        })
+    else:
+        return JsonResponse({
+            'message': u'Команда не найдена',
+            'data': ''
+        })
+
+
+@csrf_exempt
 def api_crew_edit(request, crew=None):
     crew = Crew.objects.filter(slug=crew).first()
     if not check_member_admin(request.user, crew):
