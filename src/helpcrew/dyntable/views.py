@@ -268,12 +268,12 @@ def api_record_list(request, table=None):
                         'field': field.name,
                         'value': val
                     })
-                    if field.name[0:0] == '+':
-                        _sort1 = val
-                    if field.name[0:1] == '++':
-                        _sort2 = val
                     if field.name[0:3] == '+++':
                         _sort3 = val
+                    elif field.name[0:2] == '++':
+                        _sort2 = val
+                    elif field.name[0:1] == '+':
+                        _sort1 = val
                 _data.append({
                     'table': table.id,
                     'row': index.num,
