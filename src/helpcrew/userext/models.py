@@ -81,6 +81,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=False
     )
 
+    interface_wide_screen = models.BooleanField(
+        'wide screen support',
+        default=False
+    )
+
     def avatar_preview(self):
         if self.avatar:
             return '<img src="%s?h=100" border="0"/>' % self.avatar.url
