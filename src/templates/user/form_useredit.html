@@ -31,6 +31,10 @@
         />
     </div>
     <div class="col-md-12">
+        <input type="checkbox" id="interface_wide_screen" name="interface_wide_screen" value="True" class="css-checkbox lrg" {% if request.user.interface_wide_screen %}checked="checked"{% endif %}/>
+        <label for="interface_wide_screen" name="interface_wide_screen" class="css-label lrg web-two-style">Включить поддержку широких мониторов</label>
+    </div>
+    <div class="col-md-12">
         <div class="col-md-6">
             <input type="submit" class="form-control btn btn-primary" value="сохранить" />
         </div>

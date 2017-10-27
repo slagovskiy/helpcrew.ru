@@ -144,6 +144,7 @@ def user_save(request):
                     lastname = request.POST['lname']
                     user.firstname = firstname
                     user.lastname = lastname
+                    user.interface_wide_screen = request.POST.get('interface_wide_screen', False)
                     user.save()
                     return redirect(reverse('user_profile'))
                 elif request.POST['type'] == 'password':
