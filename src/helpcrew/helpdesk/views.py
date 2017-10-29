@@ -1264,6 +1264,9 @@ def api_task_service_save(request):
         if check_member_dispatcher(request.user, task.crew):
             service = CrewService.objects.filter(id=int(request.POST.get('service', '-1'))).first()
             if service:
+                if task.type == CrewTask.TASK_TYPE_INCIDENT:
+                    task.type = CrewTask.TASK_TYPE_NORMAL
+                    TaskEvent.addEvent(request, task, u'Тип заявки изменен с инцидента на обычную заявку')
                 task.service = service
                 task.description = request.POST.get('description', '')
                 task.save()
