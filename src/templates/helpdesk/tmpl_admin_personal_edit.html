@@ -9,6 +9,18 @@
                 <div class="col-md-12">
                     <b>Журнал заявок</b>
                 </div>
+                <div class="col-md-12">
+                    <input type="checkbox" id="task_show_closed" name="task_show_closed" value="True" class="css-checkbox lrg"
+                     <%if fields%><%if fields.task_show_closed%>checked="checked"<%/if%><%/if%>
+                     />
+                    <label for="task_show_closed" name="task_show_closed" class="css-label lrg web-two-style">Показывать закрытые заявки</label>
+                </div>
+                <div class="col-md-12">
+                    <input type="checkbox" id="task_show_canceled" name="task_show_canceled" value="True" class="css-checkbox lrg"
+                     <%if fields%><%if fields.task_show_canceled%>checked="checked"<%/if%><%/if%>
+                     />
+                    <label for="task_show_canceled" name="task_show_canceled" class="css-label lrg web-two-style">Показывать отмененные заявки</label>
+                </div>
             </div>
             <div class="col-md-6">
                 <div class="col-md-12">

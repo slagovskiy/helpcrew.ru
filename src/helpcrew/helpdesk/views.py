@@ -188,6 +188,8 @@ def api_personal_save(request, crew=None):
                 cu.dtable_filter = request.POST.get('dtable_filter', False)
                 cu.dtable_paging = request.POST.get('dtable_paging', False)
                 cu.dtable_page_size = request.POST.get('dtable_page_size', 100)
+                cu.task_show_closed = request.POST.get('task_show_closed', False)
+                cu.task_show_canceled = request.POST.get('task_show_canceled', False)
                 cu.save()
                 return HttpResponse('ok')
             else:
@@ -692,7 +694,12 @@ def api_task_list(request, crew=None):
     if crew:
         if check_member(request.user, crew):
             list = []
-            for item in CrewTask.objects.filter(crew=crew).order_by('status', '-date_in'): #select_related('user', 'crew')
+            tasks = CrewTask.objects.filter(crew=crew).order_by('status', '-date_in') #select_related('user', 'crew')
+            if not crew.user_setting(request.user).task_show_canceled:
+                tasks = tasks.exclude(status=CrewTask.TASK_STATUS_CANCELED)
+            if not crew.user_setting(request.user).task_show_closed:
+                tasks = tasks.exclude(status=CrewTask.TASK_STATUS_CLOSED)
+            for item in tasks:
                 list.append(
                     {
                         'uuid': item.uuid,
