@@ -252,6 +252,9 @@ class CrewUsers(models.Model):
     dtable_paging = models.BooleanField(default=True)
     dtable_page_size = models.IntegerField(default=100)
 
+    task_show_closed = models.BooleanField(default=True)
+    task_show_canceled = models.BooleanField(default=True)
+
     def __str__(self):
         return '%s %s' % (self.crew, self.user)
 
