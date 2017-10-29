@@ -21,6 +21,27 @@
                      />
                     <label for="task_show_canceled" name="task_show_canceled" class="css-label lrg web-two-style">Показывать отмененные заявки</label>
                 </div>
+                <div class="col-md-12">
+                    <input type="checkbox" id="task_filter" name="task_filter" value="True" class="css-checkbox lrg"
+                     <%if fields%><%if fields.task_filter%>checked="checked"<%/if%><%/if%>
+                     />
+                    <label for="task_filter" name="task_filter" class="css-label lrg web-two-style">Включить поиск</label>
+                </div>
+                <div class="col-md-12">
+                    <input type="checkbox" id="task_paging" name="task_paging" value="True" class="css-checkbox lrg"
+                     <%if fields%><%if fields.task_paging%>checked="checked"<%/if%><%/if%>
+                     />
+                    <label for="task_paging" name="task_paging" class="css-label lrg web-two-style">Включить разделение на страницы</label>
+                </div>
+                <div class="col-md-12 form-label">
+                    Размер страницы
+                </div>
+                <div class="col-md-12">
+                    <input type="text" class="form-control" id="task_page_size" name="task_page_size" placeholder="100" value="<%:fields.task_page_size onerror=''%>"
+                           data-validation="number"
+                           data-validation-error-msg="Введите размер страницы в виде целого числа"
+                    />
+                </div>
             </div>
             <div class="col-md-6">
                 <div class="col-md-12">

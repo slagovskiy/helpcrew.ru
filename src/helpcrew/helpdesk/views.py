@@ -190,6 +190,9 @@ def api_personal_save(request, crew=None):
                 cu.dtable_page_size = request.POST.get('dtable_page_size', 100)
                 cu.task_show_closed = request.POST.get('task_show_closed', False)
                 cu.task_show_canceled = request.POST.get('task_show_canceled', False)
+                cu.task_filter = request.POST.get('task_filter', False)
+                cu.task_paging = request.POST.get('task_paging', False)
+                cu.task_page_size = request.POST.get('task_page_size', 100)
                 cu.save()
                 return HttpResponse('ok')
             else:
