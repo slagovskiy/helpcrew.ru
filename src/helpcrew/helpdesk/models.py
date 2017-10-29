@@ -254,6 +254,9 @@ class CrewUsers(models.Model):
 
     task_show_closed = models.BooleanField(default=True)
     task_show_canceled = models.BooleanField(default=True)
+    task_filter = models.BooleanField(default=True)
+    task_paging = models.BooleanField(default=True)
+    task_page_size = models.IntegerField(default=100)
 
     def __str__(self):
         return '%s %s' % (self.crew, self.user)
