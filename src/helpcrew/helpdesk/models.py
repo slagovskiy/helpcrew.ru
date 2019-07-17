@@ -20,28 +20,29 @@ class Crew(models.Model):
 
     slug = models.SlugField(
         unique=True,
-        verbose_name=u'Ключ'
+        verbose_name=u'Key'
     )
     name = models.CharField(
         default='',
         max_length=255,
-        verbose_name=u'Название команды'
+        verbose_name=u'Crew name'
     )
     url = models.CharField(
         default='',
         max_length=255,
-        verbose_name=u'Ссылка'
+        verbose_name=u'Crew link'
     )
     user = models.ForeignKey(
         User,
-        verbose_name=u'Создатель команды'
+        verbose_name=u'Crew creator',
+        on_delete=models.DO_NOTHING
     )
     added = models.DateTimeField(
         auto_now_add=True
     )
     order = models.IntegerField(
         default=10000,
-        verbose_name=u'Определяет сортировку в списке команд'
+        verbose_name=u'Sort'
     )
     logo = models.ImageField(
         'Logo',
@@ -51,80 +52,80 @@ class Crew(models.Model):
     )
     description = models.TextField(
         default='',
-        verbose_name=u'Описание'
+        verbose_name=u'Description'
     )
     user_page = models.TextField(
         default='',
-        verbose_name=u'Текст для пользователя'
+        verbose_name=u'Description for user'
     )
     password = models.CharField(
         default='',
         max_length=255,
-        verbose_name=u'Пароль для подачи заявок'
+        verbose_name=u'Password for add tasks'
     )
     is_public = models.BooleanField(
         default=True,
-        verbose_name=u'Команда видна в списке команд на главной странице'
+        verbose_name=u'Show crew in crew list'
     )
     deleted = models.BooleanField(
         default=False,
-        verbose_name=u'Команда удалена'
+        verbose_name=u'Crew is deleted'
     )
     crew_user_limit = models.IntegerField(
         default=0,
-        verbose_name=u'Ограничение на количество членов команды'
+        verbose_name=u'Limit on the number of crew members'
     )
     work_start_time = models.CharField(
         default='9:00',
         max_length=5,
-        verbose_name=u'Начало рабочего дня'
+        verbose_name=u'The begining of the work day'
     )
     work_end_time = models.CharField(
         default='18:00',
         max_length=5,
-        verbose_name=u'Конец рабочего дня'
+        verbose_name=u'The end of the working day'
     )
     work_day_0 = models.BooleanField(
         default=True,
-        verbose_name=u'Рабочий день 0'
+        verbose_name=u'Working day 0'
     )
     work_day_1 = models.BooleanField(
         default=True,
-        verbose_name=u'Рабочий день 1'
+        verbose_name=u'Working day 1'
     )
     work_day_2 = models.BooleanField(
         default=True,
-        verbose_name=u'Рабочий день 2'
+        verbose_name=u'Working day 2'
     )
     work_day_3 = models.BooleanField(
         default=True,
-        verbose_name=u'Рабочий день 3'
+        verbose_name=u'Working day 3'
     )
     work_day_4 = models.BooleanField(
         default=True,
-        verbose_name=u'Рабочий день 4'
+        verbose_name=u'Working day 4'
     )
     work_day_5 = models.BooleanField(
         default=False,
-        verbose_name=u'Рабочий день 5'
+        verbose_name=u'Working day 5'
     )
     work_day_6 = models.BooleanField(
         default=False,
-        verbose_name=u'Рабочий день 6'
+        verbose_name=u'Working day 6'
     )
     lunch_start_time = models.CharField(
         default='13:00',
         max_length=5,
-        verbose_name=u'Начало обеденного перерыва'
+        verbose_name=u'Start of lunch break'
     )
     lunch_end_time = models.CharField(
         default='14:00',
         max_length=5,
-        verbose_name=u'Конец обеденного перерыва'
+        verbose_name=u'The end of the lunch break'
     )
     holidays = models.TextField(
         default='',
-        verbose_name=u'Праздники'
+        verbose_name=u'Holidays'
     )
     start_task = models.IntegerField(default=0)
     incident_time_one = models.IntegerField(default=0)
@@ -159,38 +160,40 @@ class Crew(models.Model):
 
     class Meta:
         ordering = ['order', 'name']
-        verbose_name = u'Команда'
-        verbose_name_plural = u'Команды'
+        verbose_name = u'Crew'
+        verbose_name_plural = u'Crews'
 
 
 class CrewEvent(models.Model):
     crew = models.ForeignKey(
         Crew,
-        verbose_name=u'Команда'
+        verbose_name=u'Crew',
+        on_delete=models.DO_NOTHING
     )
     date = models.DateTimeField(
         auto_now_add=True,
-        verbose_name=u'Время события'
+        verbose_name=u'Event time'
     )
     user = models.ForeignKey(
         User,
         null=True,
         blank=True,
-        verbose_name=u'Пользователь'
+        verbose_name=u'User',
+        on_delete=models.SET_NULL
     )
     ip = models.GenericIPAddressField(
         default='',
         max_length=60,
-        verbose_name=u'IP адрес пользователя'
+        verbose_name=u'User ip address'
     )
     user_agent = models.CharField(
         default='',
         max_length=200,
-        verbose_name=u'Идентификатор браузера'
+        verbose_name=u'User agent name'
     )
     message = models.TextField(
         default='',
-        verbose_name=u'Событие'
+        verbose_name=u'Event'
     )
 
     def __str__(self):
@@ -213,8 +216,8 @@ class CrewEvent(models.Model):
 
     class Meta:
         ordering = ['-date']
-        verbose_name = u'Событие в команде'
-        verbose_name_plural = u'События в команде'
+        verbose_name = u'Crew event'
+        verbose_name_plural = u'Crew events'
 
 
 class CrewUsers(models.Model):
@@ -232,20 +235,22 @@ class CrewUsers(models.Model):
 
     crew = models.ForeignKey(
         Crew,
-        verbose_name=u'Команда'
+        verbose_name=u'Crew',
+        on_delete=models.DO_NOTHING
     )
     user = models.ForeignKey(
         User,
-        verbose_name=u'Пользователь'
+        verbose_name=u'User',
+        on_delete=models.DO_NOTHING
     )
     type = models.IntegerField(
         choices=USER_TYPE_CHOICES,
         default=OPERATOR_TYPE,
-        verbose_name=u'Уровеь доступа'
+        verbose_name=u'Type of user'
     )
     deleted = models.BooleanField(
         default=False,
-        verbose_name=u'Член команды удален'
+        verbose_name=u'User is deleted'
     )
 
     dtable_filter = models.BooleanField(default=True)
@@ -263,45 +268,49 @@ class CrewUsers(models.Model):
 
     class Meta:
         ordering = ['type', 'user']
-        verbose_name = 'Член команды'
-        verbose_name_plural = 'Члены команд'
+        verbose_name = 'Crew user'
+        verbose_name_plural = 'Crew users'
 
 
 class CrewService(models.Model):
-    crew = models.ForeignKey(Crew, verbose_name=u'Команда')
+    crew = models.ForeignKey(
+        Crew,
+        verbose_name=u'Crew',
+        on_delete=models.DO_NOTHING
+    )
     name = models.CharField(
         max_length=200,
         default='',
-        verbose_name=u'Наименование'
+        verbose_name=u'Service name'
     )
     time1 = models.IntegerField(
         default=10,
-        verbose_name=u'Время первой реакции'
+        verbose_name=u'First reaction time'
     )
     time2 = models.IntegerField(
         default=48,
-        verbose_name=u'Время на завершение заявки'
+        verbose_name=u'Time to complete the task'
     )
     time3 = models.IntegerField(
         default=480,
-        verbose_name=u'Время провала заявки'
+        verbose_name=u'Time of failure'
     )
     unit = models.CharField(
         max_length=50,
         default='',
-        verbose_name=u'Единица измерения'
+        verbose_name=u'Unit'
     )
     auto_wait_status = models.BooleanField(
         default=False,
-        verbose_name=u'Заявка автоматически переводится в статус "В ожидании"'
+        verbose_name=u'The task is automatically transferred to the status of "Pending"'
     )
     template = models.TextField(
         default='',
-        verbose_name=u'Шаблон заявки'
+        verbose_name=u'Task template'
     )
     deleted = models.BooleanField(
         default=False,
-        verbose_name=u'Услуга удалена'
+        verbose_name=u'Service is deleted'
     )
 
     def __str__(self):
@@ -309,43 +318,44 @@ class CrewService(models.Model):
 
     class Meta:
         ordering = ['crew', 'name']
-        verbose_name = u'Услуга'
-        verbose_name_plural = u'Услуги'
+        verbose_name = u'Service'
+        verbose_name_plural = u'Services'
 
 
 class ServicePrice(models.Model):
     service = models.ForeignKey(
         CrewService,
-        verbose_name=u'Услуга'
+        verbose_name=u'Service',
+        on_delete=models.DO_NOTHING
     )
     start_date = models.DateField(
         null=True,
         blank=True,
-        verbose_name=u'Дата начала тействия цены'
+        verbose_name=u'Starting date of the price'
     )
     cost = models.DecimalField(
         default=0,
         max_digits=9,
         decimal_places=2,
-        verbose_name=u'Стоимость услуги'
+        verbose_name=u'Service cost'
     )
     prepay = models.DecimalField(
         default=0,
         max_digits=9,
         decimal_places=2,
-        verbose_name=u'Предоплата'
+        verbose_name=u'Prepayment'
     )
     fine1 = models.DecimalField(
         default=0,
         max_digits=9,
         decimal_places=2,
-        verbose_name=u'Штраф за невыполнение заявки в срок'
+        verbose_name=u'Fine for not completing the application on time'
     )
     fine2 = models.DecimalField(
         default=0,
         max_digits=9,
         decimal_places=2,
-        verbose_name=u'Штраф за просроченную заявку'
+        verbose_name=u'Fine for overdue application'
     )
 
     def __str__(self):
@@ -353,39 +363,40 @@ class ServicePrice(models.Model):
 
     class Meta:
         ordering = ['service', 'start_date']
-        verbose_name = u'Строимость услуги'
-        verbose_name_plural = u'Стоимость услуг'
+        verbose_name = u'Service price'
+        verbose_name_plural = u'Services price'
 
 
 class TaskPriority(models.Model):
     crew = models.ForeignKey(
         Crew,
-        verbose_name=u'Команда'
+        verbose_name=u'Crew',
+        on_delete=models.DO_NOTHING
     )
     name = models.CharField(
         max_length=200,
         default='',
-        verbose_name=u'Наименование'
+        verbose_name=u'Priority name'
     )
     time_factor = models.DecimalField(
         default=0,
         max_digits=9,
         decimal_places=2,
-        verbose_name=u'Коэффициент времени выполнения'
+        verbose_name=u'Time factor'
     )
     cost_factor = models.DecimalField(
         default=0,
         max_digits=9,
         decimal_places=2,
-        verbose_name=u'Коэффициент стоимости'
+        verbose_name=u'Cost factor'
     )
     default = models.BooleanField(
         default=False,
-        verbose_name=u'Выбрано по умолчанию'
+        verbose_name=u'Selected by default'
     )
     deleted = models.BooleanField(
         default=False,
-        verbose_name=u'Приоритет удален'
+        verbose_name=u'Priority is deleted'
     )
 
     def __str__(self):
@@ -393,8 +404,8 @@ class TaskPriority(models.Model):
 
     class Meta:
         ordering = ['crew', 'time_factor']
-        verbose_name = u'Приоритет выполнения'
-        verbose_name_plural = u'Приоритеты выполнения'
+        verbose_name = u'Execution priority'
+        verbose_name_plural = u'Execution priorities'
 
 
 class CrewTask(models.Model):
@@ -428,86 +439,89 @@ class CrewTask(models.Model):
     uuid = models.CharField(
         max_length=200,
         default='',
-        verbose_name=u'Уникальный ключ'
+        verbose_name=u'Key'
     )
     crew = models.ForeignKey(
         Crew,
-        verbose_name=u'Команда'
+        verbose_name=u'Crew',
+        on_delete=models.DO_NOTHING
     )
     type = models.IntegerField(
         choices=TASK_TYPE_CHOICES,
         default=TASK_TYPE_NORMAL,
-        verbose_name=u'Тип заявки'
+        verbose_name=u'Task type'
     )
     status = models.IntegerField(
         choices=TASK_STATUS_CHOICES,
         default=TASK_STATUS_NEW,
-        verbose_name=u'Статус заявки'
+        verbose_name=u'Task status'
     )
     service = models.ForeignKey(
         CrewService,
         null=True,
         blank=True,
-        verbose_name=u'Услуга'
+        verbose_name=u'Service',
+        on_delete=models.SET_NULL
     )
     description = models.TextField(
         default='',
-        verbose_name=u'Текстовое описание'
+        verbose_name=u'Description'
     )
     commentary = models.TextField(
         default='',
-        verbose_name=u'Комментарий к заявке'
+        verbose_name=u'Commentary'
     )
     priority = models.ForeignKey(
         TaskPriority,
-        verbose_name=u'Приоритет заявки'
+        verbose_name=u'Execution priority',
+        on_delete=models.DO_NOTHING
     )
     date_in = models.DateTimeField(
         null=True,
         blank=True,
-        verbose_name=u'Дата подачи заявки'
+        verbose_name=u'In date'
     )
     date_work = models.DateTimeField(
         null=True,
         blank=True,
-        verbose_name=u'Дата начала выполнения заявки'
+        verbose_name=u'Start work date'
     )
     date_end = models.DateTimeField(
         null=True,
         blank=True,
-        verbose_name=u'Дата окончания подписки'
+        verbose_name=u'End of subscribe'
     )
     date_finish = models.DateTimeField(
         null=True,
         blank=True,
-        verbose_name=u'Дата выполнения заявки'
+        verbose_name=u'End of work date'
     )
     date_close = models.DateTimeField(
         null=True,
         blank=True,
-        verbose_name=u'Дата закрытия заявки'
+        verbose_name=u'Close date'
     )
     contact_name = models.CharField(
         max_length=200,
         default='',
-        verbose_name=u'Имя контакта'
+        verbose_name=u'Contact name'
     )
     contact_email = models.CharField(
         max_length=200,
         default='',
-        verbose_name=u'Электронный адрес контакта'
+        verbose_name=u'Contact email'
     )
     qty = models.DecimalField(
         max_digits=9,
         decimal_places=2,
         default=0,
-        verbose_name=u'Количество оказанной услуги'
+        verbose_name=u'Quantity'
     )
     fine = models.DecimalField(
         max_digits=9,
         decimal_places=2,
         default=0,
-        verbose_name=u'Штраф к стоимости, накладываемый администратором'
+        verbose_name=u'The fine to the cost imposed by the administrator'
     )
 
     def __str__(self):
@@ -671,43 +685,45 @@ class CrewTask(models.Model):
 
     class Meta:
         ordering = ['-date_in']
-        verbose_name = u'Заявка'
-        verbose_name_plural = u'Заявки'
+        verbose_name = u'Task'
+        verbose_name_plural = u'Tasks'
 
 
 class TaskUsers(models.Model):
     OBSERVER_TYPE = 0
     DISPATCHER_TYPE = 1
     OPERATOR_TYPE = 2
-    CLOSE_TYPE = 3
+    RESPONSIBLE_TYPE = 3
 
     USER_TYPE_CHOICES = (
-        (OBSERVER_TYPE, 'Наблюдатель'),
-        (DISPATCHER_TYPE, 'Дисптечер'),
-        (OPERATOR_TYPE, 'Оператор'),
-        (CLOSE_TYPE, 'Ответственный')
+        (OBSERVER_TYPE, 'OBSERVER'),
+        (DISPATCHER_TYPE, 'DISPATCHER'),
+        (OPERATOR_TYPE, 'OPERATOR'),
+        (RESPONSIBLE_TYPE, 'RESPONSIBLE')
     )
 
     task = models.ForeignKey(
         CrewTask,
-        verbose_name=u'Заявка'
+        verbose_name=u'Task',
+        on_delete=models.DO_NOTHING
     )
     user = models.ForeignKey(
         User,
         null=True,
         blank=True,
-        verbose_name=u'Пользователь'
+        verbose_name=u'User',
+        on_delete=models.SET_NULL
     )
     type = models.IntegerField(
         choices=USER_TYPE_CHOICES,
         default=OBSERVER_TYPE,
-        verbose_name=u'Тип пользователя в рамках заявки'
+        verbose_name=u'User type'
     )
 
     class Meta:
         ordering = ['task', 'user', 'type']
-        verbose_name = u'Участник заявки'
-        verbose_name_plural = u'Участники заявок'
+        verbose_name = u'Task user'
+        verbose_name_plural = u'Task users'
 
 
 class TaskFiles(models.Model):
@@ -718,47 +734,50 @@ class TaskFiles(models.Model):
 
     task = models.ForeignKey(
         CrewTask,
-        verbose_name=u'Заявка'
+        verbose_name=u'Task',
+        on_delete=models.DO_NOTHING
     )
     file = models.FileField(
         blank=True,
         null=True,
         upload_to=file_path,
-        verbose_name=u'Вложение'
+        verbose_name=u'file'
     )
 
     class Meta:
-        verbose_name = u'Вложение к заявке'
-        verbose_name_plural = u'Вложения к заявкам'
+        verbose_name = u'Attachment'
+        verbose_name_plural = u'Attachments'
 
 class TaskEvent(models.Model):
     task = models.ForeignKey(
         CrewTask,
-        verbose_name=u'Заявка'
+        verbose_name=u'Task',
+        on_delete=models.DO_NOTHING
     )
     date = models.DateTimeField(
         auto_now_add=True,
-        verbose_name=u'Время события'
+        verbose_name=u'Event time'
     )
     user = models.ForeignKey(
         User,
         null=True,
         blank=True,
-        verbose_name=u'Пользователь'
+        verbose_name=u'User',
+        on_delete=models.SET_NULL
     )
     ip = models.GenericIPAddressField(
         default='',
         max_length=60,
-        verbose_name=u'IP адрес пользователя'
+        verbose_name=u'User IP address'
     )
     user_agent = models.CharField(
         default='',
         max_length=200,
-        verbose_name=u'Идентификатор браузера'
+        verbose_name=u'User Agent'
     )
     message = models.TextField(
         default='',
-        verbose_name=u'Событие'
+        verbose_name=u'Event text'
     )
 
     def __str__(self):
@@ -781,5 +800,5 @@ class TaskEvent(models.Model):
 
     class Meta:
         ordering = ['-date']
-        verbose_name = u'Событие в заявке'
-        verbose_name_plural = u'События в заявке'
+        verbose_name = u'Task event'
+        verbose_name_plural = u'Task events'

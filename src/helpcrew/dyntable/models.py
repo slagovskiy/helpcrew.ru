@@ -12,20 +12,21 @@ class Table(models.Model):
 
     crew = models.ForeignKey(
         Crew,
-        verbose_name=u'Команда'
+        verbose_name=u'Crew',
+        on_delete=models.DO_NOTHING
     )
     uuid = models.SlugField(
         unique=True,
-        verbose_name=u'Ключ'
+        verbose_name=u'Key'
     )
     name = models.CharField(
         max_length=200,
         default='',
-        verbose_name=u'Имя таблицы'
+        verbose_name=u'Table name'
     )
     deleted = models.BooleanField(
         default=False,
-        verbose_name=u'Запись удалена'
+        verbose_name=u'Record is deleted'
     )
 
     def __str__(self):
@@ -38,8 +39,8 @@ class Table(models.Model):
 
     class Meta:
         ordering = ['name']
-        verbose_name = u'Динамическая таблица'
-        verbose_name_plural = u'Динамические таблицы'
+        verbose_name = u'Dynamic table'
+        verbose_name_plural = u'Dynamic tables'
 
 
 class Field(models.Model):
@@ -49,37 +50,38 @@ class Field(models.Model):
     TYPE_IP = 4
     TYPE_PASSWORD = 5
     TYPES = (
-        (TYPE_NUMERIC, 'Число'),
-        (TYPE_STRING, 'Строка'),
-        (TYPE_DATE, 'Дата'),
+        (TYPE_NUMERIC, 'Number'),
+        (TYPE_STRING, 'String'),
+        (TYPE_DATE, 'Date'),
         (TYPE_IP, 'IP'),
-        (TYPE_PASSWORD, 'Пароль')
+        (TYPE_PASSWORD, 'Password')
     )
     table = models.ForeignKey(
         Table,
-        verbose_name=u'Таблица'
+        verbose_name=u'Table',
+        on_delete=models.DO_NOTHING
     )
     uuid = models.SlugField(
         unique=True,
-        verbose_name=u'Ключ'
+        verbose_name=u'Key'
     )
     name = models.CharField(
         max_length=50,
         default='',
-        verbose_name=u'Наименование поля'
+        verbose_name=u'Field name'
     )
     type = models.IntegerField(
         choices=TYPES,
         default=TYPE_STRING,
-        verbose_name=u'Тип поля'
+        verbose_name=u'Field type'
     )
     order = models.IntegerField(
         default=10,
-        verbose_name=u'Сортировка'
+        verbose_name=u'Sort'
     )
     deleted = models.BooleanField(
         default=False,
-        verbose_name=u'Запись удалена'
+        verbose_name=u'Field is deleted'
     )
 
     def __str__(self):
@@ -92,22 +94,23 @@ class Field(models.Model):
 
     class Meta:
         ordering = ['name']
-        verbose_name = u'Поле таблицы'
-        verbose_name_plural = u'Поля таблицы'
+        verbose_name = u'Table field'
+        verbose_name_plural = u'Table fields'
 
 
 class Index(models.Model):
     table = models.ForeignKey(
         Table,
-        verbose_name=u'Таблица'
+        verbose_name=u'Table',
+        on_delete=models.DO_NOTHING
     )
     num = models.IntegerField(
         default=0,
-        verbose_name=u'Номер строки'
+        verbose_name=u'Row number'
     )
     deleted = models.BooleanField(
         default=False,
-        verbose_name=u'Строка удалена'
+        verbose_name=u'Row is deleted'
     )
 
     def __str__(self):
@@ -115,23 +118,25 @@ class Index(models.Model):
 
     class Meta:
         ordering = ['table', 'num']
-        verbose_name = u'Номер строки'
-        verbose_name_plural = u'Номера строк'
+        verbose_name = u'Row number'
+        verbose_name_plural = u'Row numbers'
 
 
 class Record(models.Model):
     index = models.ForeignKey(
         Index,
-        verbose_name=u'Номер строки'
+        verbose_name=u'Row number',
+        on_delete=models.DO_NOTHING
     )
     field = models.ForeignKey(
         Field,
-        verbose_name=u'Поле'
+        verbose_name=u'Field',
+        on_delete=models.DO_NOTHING
     )
     value = models.CharField(
         max_length=255,
         default='',
-        verbose_name=u'Значение'
+        verbose_name=u'Value'
     )
 
     def __str__(self):
@@ -139,5 +144,5 @@ class Record(models.Model):
 
     class Meta:
         ordering = ['index', 'field']
-        verbose_name = u'Значение поля'
-        verbose_name_plural = u'Значения полей'
+        verbose_name = u'Field value'
+        verbose_name_plural = u'Fields values'
