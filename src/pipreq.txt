@@ -4,6 +4,10 @@ django-sendfile
 django-mptt
 django-debug-toolbar
 django-extensions
+django-cors-headers
+djangorestframework
+djangorestframework-jwt
+PyJWT
 businesstimedelta
 holidays
 user_agents
