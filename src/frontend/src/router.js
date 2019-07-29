@@ -1,68 +1,26 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import DefaultLayout from './layouts/Default.vue'
+
 import Home from './views/Home.vue'
-import About from './views/About.vue'
-import UserLogin from './views/user/Login'
 
 Vue.use(Router)
 
 export default new Router({
+    base: process.env.BASE_URL,
     routes: [
         {
             path: '/',
-            component: DefaultLayout,
-            children: [
-                {
-                    path: '',
-                    name: 'home',
-                    component: Home
-                },
-                {
-                    path: '/about',
-                    name: 'about',
-                    component: About
-                },
-                /*
-                {
-                    path: '/user/profile',
-                    component: User,
-                    name: 'user-profile',
-                    meta: {requiresAuth: true}
-                },*/
-                {
-                    path: '/user/login',
-                    component: UserLogin,
-                    name: 'user-login',
-                    meta: {requiresNoAuth: true}
-                },/*
-                {
-                    path: '/user/logout',
-                    component: Logout,
-                    name: 'user-logout',
-                    meta: {requiresAuth: true}
-                },
-                {
-                    path: '/user/register',
-                    component: Register,
-                    name: 'user-register',
-                    meta: {requiresNoAuth: true}
-                },
-                {
-                    path: '/user/password',
-                    component: ChangePassword,
-                    name: 'user-password',
-                    meta: {requiresAuth: true}
-                },
-                {
-                    path: '/user/restore',
-                    component: RestorePassword,
-                    name: 'user-restore',
-                    meta: {requiresNoAuth: true}
-                },*/
-            ],
+            name: 'home',
+            component: Home
         },
-
+        {
+            path: '/about',
+            name: 'about',
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+        }
     ],
     mode: 'history',
     scrollBehavior(to, from, savedPosition) {

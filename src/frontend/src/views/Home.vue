@@ -1,14 +1,13 @@
 <template>
-  <q-page class="flex flex-center">
-    <img alt="Quasar logo" src="../assets/logo.png">
-  </q-page>
+  <HelloWorld />
 </template>
 
-<style>
-</style>
-
 <script>
+import HelloWorld from '../components/HelloWorld';
+
 export default {
-  name: 'PageHome'
-}
+  components: {
+    HelloWorld,
+  },
+};
 </script>

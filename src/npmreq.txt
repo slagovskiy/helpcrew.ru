@@ -1,0 +1,4 @@
+vue create frontend
+cd frontend
+vue add vuetify
+npm install --save @fortawesome/fontawesome-free axios debounce moment vue-axios vue-lazyload vue-moment vuelidate
