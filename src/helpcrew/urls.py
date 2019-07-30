@@ -33,7 +33,7 @@ urlpatterns = [
     url('^api/v1/user/restore/', APIUserRestore.as_view()),
     url('^api/v1/user/register/', APIUserRegister.as_view()),
     url('^api/v1/user/avatar/', APIUploadAvatar.as_view()),
-    url('^api/v1/user/', APIUser.as_view()),
+    url('^api/v1/user/profile/', APIUser.as_view()),
 ]
 
 if DEBUG:

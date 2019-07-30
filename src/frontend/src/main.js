@@ -9,7 +9,7 @@ import VueMoment from 'vue-moment'
 
 import App from './App.vue'
 import router from './router'
-import store from './store'
+import store from './store/index'
 
 import '@fortawesome/fontawesome-free/css/all.css'
 
@@ -25,8 +25,26 @@ Vue.config.productionTip = false
 
 
 new Vue({
-  router,
-  store,
-  vuetify,
-  render: h => h(App)
+    router,
+    store,
+    vuetify,
+    render: h => h(App),
+    created() {
+        router.beforeEach((to, from, next) => {
+            if (to.matched.some(record => record.meta.requiresAuth)) {
+                if (!this.$store.getters.isAuthenticated) {
+                    next({
+                        path: this.$router.resolve({name: 'user-login'}).href,
+                        query: {redirect: to.fullPath}
+                    })
+                } else {
+                    next()
+                }
+            } else {
+                next()
+            }
+        })
+
+        this.$store.dispatch('autoLogin')
+    }
 }).$mount('#app')

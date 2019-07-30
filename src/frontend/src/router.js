@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Home from './views/Home.vue'
-
 Vue.use(Router)
 
 export default new Router({
@@ -10,17 +8,46 @@ export default new Router({
     routes: [
         {
             path: '/',
+            component: () => import('./views/Home'),
             name: 'home',
-            component: Home
+            meta: {requiresAuth: false}
         },
         {
-            path: '/about',
-            name: 'about',
-            // route level code-splitting
-            // this generates a separate chunk (about.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
-            component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-        }
+            path: '/user/profile',
+            component: () => import('./views/user/Profile'),
+            name: 'user-profile',
+            meta: {requiresAuth: true}
+        },
+        {
+            path: '/user/login',
+            component: () => import('./views/user/Login'),
+            name: 'user-login',
+            meta: {requiresAuth: false}
+        },
+        {
+            path: '/user/logout',
+            component: () => import('./views/user/Logout'),
+            name: 'user-logout',
+            meta: {requiresAuth: false}
+        },
+        {
+            path: '/user/restore',
+            component: () => import('./views/user/Restore'),
+            name: 'user-restore',
+            meta: {requiresAuth: false}
+        },
+        {
+            path: '/user/register',
+            component: () => import('./views/user/Register'),
+            name: 'user-register',
+            meta: {requiresAuth: false}
+        },
+        {
+            path: '/user/password',
+            component: () => import('./views/user/Password'),
+            name: 'user-password',
+            meta: {requiresAuth: true}
+        },
     ],
     mode: 'history',
     scrollBehavior(to, from, savedPosition) {

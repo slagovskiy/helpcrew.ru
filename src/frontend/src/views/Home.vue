@@ -1,13 +1,18 @@
 <template>
-  <HelloWorld />
+    <v-container fluid fill-height>
+        <v-layout>
+            <v-flex>
+            </v-flex>
+        </v-layout>
+    </v-container>
 </template>
 
 <script>
-import HelloWorld from '../components/HelloWorld';
-
-export default {
-  components: {
-    HelloWorld,
-  },
-};
+    export default {
+        name: "Home"
+    }
 </script>
+
+<style scoped>
+
+</style>

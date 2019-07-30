@@ -5,6 +5,8 @@ from django.db import models
 import uuid
 import os
 
+from ..settings import SERVER
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
@@ -94,6 +96,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     avatar_preview.short_description = 'Avatar preview'
     avatar_preview.allow_tags = True
+
+    def url(self):
+        return SERVER + self.avatar.url
 
     def get_full_name(self):
         return self.email

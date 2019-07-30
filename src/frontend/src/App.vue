@@ -5,22 +5,27 @@
                 app
         >
             <v-list dense>
-                <v-list-item>
-                    <v-list-item-action>
-                        <v-icon>fa-home</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Home</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                    <v-list-item-action>
-                        <v-icon>fa-user</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Contact</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
+                <template
+                        v-for="item in mainMenu"
+                >
+                    <template v-if="item.title.includes('---')">
+                        <v-divider v-bind:key="item.title"></v-divider>
+                    </template>
+                    <template v-else>
+                        <v-list-item
+                                v-bind:key="item.title"
+                                v-bind:to="item.link"
+                                v-if="item.auth === isAuthenticated"
+                        >
+                            <v-list-item-action>
+                                <v-icon>{{item.icon}}</v-icon>
+                            </v-list-item-action>
+                            <v-list-item-content>
+                                <v-list-item-title>{{item.title}}</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </template>
+                </template>
             </v-list>
         </v-navigation-drawer>
 
@@ -31,6 +36,18 @@
         >
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-toolbar-title>Help crew</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-title v-if="user.email">
+                <v-avatar size="36px" class="toolbar-avatar">
+                    <img
+                            v-if="user.avatar"
+                            v-bind:src="user.url"
+                            v-bind:alt="user.email"
+                    >
+                </v-avatar>
+                {{user.email}}
+            </v-toolbar-title>
+            <v-toolbar-title v-else><v-icon left>fa-poo</v-icon>Guest</v-toolbar-title>
         </v-app-bar>
 
         <v-content>
@@ -38,11 +55,9 @@
                     fluid
                     fill-height
             >
-                <v-layout
-                        align-center
-                        justify-center
-                >
+                <v-layout>
                     <v-flex>
+                        <app-message-snakbar></app-message-snakbar>
                         <router-view></router-view>
                     </v-flex>
                 </v-layout>
@@ -67,12 +82,32 @@
 </template>
 
 <script>
+    import userMixin from './mixins/user'
+    import globalMixin from './mixins/global'
+    import appMessageSnakbar from './components/MessageSnakbar.vue'
+
     export default {
-        props: {
-            source: String,
+        components: {
+            appMessageSnakbar: appMessageSnakbar
         },
+        mixins: [userMixin, globalMixin],
         data: () => ({
             drawer: null,
         }),
+        computed: {
+            mainMenu() {
+                return this.$store.getters.mainMenu
+            }
+        }
     }
 </script>
+
+<style>
+    .v-btn {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+    .cursor {
+        cursor: pointer;
+    }
+</style>
