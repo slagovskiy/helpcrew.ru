@@ -35,7 +35,7 @@
                 dark
         >
             <v-app-bar-nav-icon v-on:click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-            <v-img right src="@/assets/hc_logo_white.png" max-width="239"></v-img>
+            <v-img right src="@/assets/hc_logo_white.png" max-width="303"></v-img>
             <v-spacer></v-spacer>
             <v-toolbar-title v-if="user.email">
                 <v-avatar size="36px" class="toolbar-avatar">
