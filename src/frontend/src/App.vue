@@ -15,7 +15,7 @@
                         <v-list-item
                                 v-bind:key="item.title"
                                 v-bind:to="item.link"
-                                v-if="item.auth === isAuthenticated"
+                                v-if="item.auth === isAuthenticated || item.auth == -1"
                         >
                             <v-list-item-action>
                                 <v-icon>{{item.icon}}</v-icon>
@@ -34,8 +34,8 @@
                 color="primary"
                 dark
         >
-            <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-            <v-toolbar-title>Help crew</v-toolbar-title>
+            <v-app-bar-nav-icon v-on:click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+            <v-img right src="@/assets/hc_logo_white.png" max-width="239"></v-img>
             <v-spacer></v-spacer>
             <v-toolbar-title v-if="user.email">
                 <v-avatar size="36px" class="toolbar-avatar">

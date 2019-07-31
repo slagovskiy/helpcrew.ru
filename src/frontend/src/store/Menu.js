@@ -7,7 +7,7 @@ export default {
                 icon: 'fa-home',
                 title: 'Home',
                 link: router.resolve({name: 'home'}).href,
-                auth: false
+                auth: -1
             },
             {
                 title: '---0',
@@ -25,7 +25,7 @@ export default {
                 auth: false
             },
             {
-                icon: 'fa-key',
+                icon: 'far fa-user',
                 title: 'Profile',
                 link: router.resolve({name: 'user-profile'}).href,
                 auth: true
