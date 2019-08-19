@@ -37,6 +37,12 @@ export default new Router({
             meta: {requiresAuth: false}
         },
         {
+            path: '/user/restore2',
+            component: () => import('./views/user/Restore2'),
+            name: 'user-restore2',
+            meta: {requiresAuth: false}
+        },
+        {
             path: '/user/register',
             component: () => import('./views/user/Register'),
             name: 'user-register',

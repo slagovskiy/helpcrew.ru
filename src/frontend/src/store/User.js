@@ -129,11 +129,27 @@ export default {
                 payload
             )
                 .then(() => {
-                    commit('setMessage', 'A temporary password has been sent to your email.')
+                    commit('setMessage', 'The instruction was sent to you by e-mail.')
                     commit('setLoading', false)
                 })
                 .catch(() => {
-                    commit('setError', 'Error sending temporary password.')
+                    commit('setError', 'User not found.')
+                    commit('setLoading', false)
+                })
+        },
+        restorePassword2: function({commit}, payload) {
+            commit('clearMessages')
+            commit('setLoading', true)
+            return api.http.post(
+                api.userRestore2,
+                payload
+            )
+                .then(() => {
+                    commit('setMessage', 'Password changed successfully.')
+                    commit('setLoading', false)
+                })
+                .catch(() => {
+                    commit('setError', 'Key not found')
                     commit('setLoading', false)
                 })
         },

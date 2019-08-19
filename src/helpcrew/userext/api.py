@@ -1,11 +1,16 @@
 import os
+import uuid
+from datetime import datetime
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.generics import UpdateAPIView
 from rest_framework.parsers import FileUploadParser, MultiPartParser, JSONParser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
+
+from ..taskqueue.utils import add_email
 from .models import User
 from ..settings import UPLOAD_DIR
 from .serializers import UserSerializer, ChangePasswordSerializer, AvatarSerializer, UserInfoSerializer, NewUserSerializer, RestoreUserSerializer
@@ -70,21 +75,48 @@ class APIUserRestore(APIView):
 
     def post(self, request):
         data = JSONParser().parse(request)
-        _user = User.objects.all().filter(email=data['email'])
-        user = RestoreUserSerializer(data=data)
-        if user.is_valid():
-            if _user:
-                return Response({
-                    'status': 'User found.'
-                }, status=status.HTTP_200_OK)
-            else:
-                return Response({
-                    'status': 'User not found.'
-                }, status=status.HTTP_404_NOT_FOUND)
+        user = User.objects.all().filter(email=data['email'])
+        if len(user) > 0:
+            user = user[0]
+            user.password_request_date = datetime.now()
+            user.password_request_token = str(uuid.uuid1())
+            user.save()
+            add_email(
+                msg_to=user.email,
+                subject=u'Восстановление пароля на сайте HelpCrew',
+                body=render_to_string('user/email_restore.html', {'user': user})
+            )
+            return Response({
+                'status': 'User found.'
+            }, status=status.HTTP_200_OK)
         else:
             return Response({
-                'status': 'Wrong email.'
-            }, status=status.HTTP_400_BAD_REQUEST)
+                'status': 'User not found.'
+            }, status=status.HTTP_404_NOT_FOUND)
+
+
+class APIUserRestore2(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request):
+        data = JSONParser().parse(request)
+        user = User.objects.all().filter(password_request_token=data['token'])
+        if user:
+            user.password_request_date = datetime.now()
+            user.password_request_token = str(uuid.uuid1())
+            user.save()
+            add_email(
+                msg_to=user.email,
+                subject=u'Восстановление пароля на сайте HelpCrew',
+                body=render_to_string('user/email_restore.html', {'user': user})
+            )
+            return Response({
+                'status': 'User found.'
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'status': 'User not found.'
+            }, status=status.HTTP_404_NOT_FOUND)
 
 
 class APIChangePassword(UpdateAPIView):

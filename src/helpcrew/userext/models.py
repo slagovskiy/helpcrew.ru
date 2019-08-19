@@ -82,6 +82,18 @@ class User(AbstractBaseUser, PermissionsMixin):
         'is checked',
         default=False
     )
+    password_request_date = models.DateTimeField(
+        'password change request timeout',
+        null=True,
+        blank=True
+    )
+    password_request_token = models.CharField(
+        'password change request token',
+        max_length=40,
+        null=True,
+        blank=True,
+        default=''
+    )
 
     interface_wide_screen = models.BooleanField(
         'wide screen support',

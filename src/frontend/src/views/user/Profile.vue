@@ -58,7 +58,8 @@
                 <v-dialog v-model="dialogAvatar" persistent max-width="350">
                     <v-form ref="formAvatar" enctype="multipart/form-data">
                         <v-card>
-                            <v-card-title class="headline">Select image</v-card-title>
+                            <v-card-title class="headline grey lighten-4">Select image</v-card-title>
+                            <v-divider></v-divider>
                             <v-card-text class="text-md-center">
                                 <img
                                         v-bind:src="imageUrl"
@@ -97,7 +98,8 @@
                 <v-dialog v-model="dialogInfo" persistent max-width="350">
                     <v-form v-model="validInfo" ref="formInfo">
                         <v-card>
-                            <v-card-title class="headline">User info</v-card-title>
+                            <v-card-title class="headline grey lighten-4">User info</v-card-title>
+                            <v-divider></v-divider>
                             <v-card-text class="text-md-center">
                                 <v-text-field
                                         label="First name"

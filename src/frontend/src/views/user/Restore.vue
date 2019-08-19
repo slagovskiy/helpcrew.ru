@@ -52,7 +52,7 @@
                         .then(() => {
                             if(!this.$store.getters.error)
                             {
-                                this.$router.push({name: 'user-login'})
+                                this.$router.push({name: 'user-restore2'})
                             }
                         })
                         .catch(() => {})

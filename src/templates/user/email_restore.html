@@ -1,0 +1,11 @@
+{% extends "email.html" %}
+{% load static %}
+{% load tags %}
+{% block content %}
+    <tr>
+        <td style="padding: 30px 30px 30px 30px;">
+            <h1 style="color: #222222; font-weight: bold; font-size: 24px; margin: 0; padding: 0 0 20px 0; text-align: left; line-height: 1.15;">Смена пароля</h1>
+            <p style="color: #474747; font-weight: normal; font-size: 14px; margin: 0; padding: 0 0 0 0; text-align: left; line-height: 1.5;">Для восстановления пароля пользователя {{ user.email }} используйте ключ {{ user.password_request_token }}</p>
+        </td>
+    </tr>
+{% endblock %}

@@ -15,6 +15,7 @@ const userRegister =  config.BASE_URL + '/api/v1/user/register/'
 const userPassword =  config.BASE_URL + '/api/v1/user/password/'
 const userAvatar =    config.BASE_URL + '/api/v1/user/avatar/'
 const userRestore =   config.BASE_URL + '/api/v1/user/restore/'
+const userRestore2 =   config.BASE_URL + '/api/v1/user/restore2/'
 
 
 export default {
@@ -27,4 +28,5 @@ export default {
     userPassword,
     userAvatar,
     userRestore,
+    userRestore2,
 }
