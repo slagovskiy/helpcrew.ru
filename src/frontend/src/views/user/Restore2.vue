@@ -78,11 +78,13 @@
                 if (this.$refs.form.validate()) {
                     var data = {
                         'token': this.token,
-                        'new_password': this.password
+                        'password': this.password
                     }
                     this.$store.dispatch('restorePassword2', data)
                         .then(() => {
-                            this.$router.push({'name': 'user-login'})
+                            if(!this.$store.getters.error) {
+                                this.$router.push({'name': 'user-login'})
+                            }
                         })
                         .catch(() => {});
                     }

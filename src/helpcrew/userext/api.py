@@ -1,6 +1,6 @@
 import os
 import uuid
-from datetime import datetime
+from django.utils import timezone
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
@@ -78,7 +78,7 @@ class APIUserRestore(APIView):
         user = User.objects.all().filter(email=data['email'])
         if len(user) > 0:
             user = user[0]
-            user.password_request_date = datetime.now()
+            user.password_request_date = timezone.now()
             user.password_request_token = str(uuid.uuid1())
             user.save()
             add_email(
@@ -100,22 +100,28 @@ class APIUserRestore2(APIView):
 
     def post(self, request):
         data = JSONParser().parse(request)
-        user = User.objects.all().filter(password_request_token=data['token'])
-        if user:
-            user.password_request_date = datetime.now()
-            user.password_request_token = str(uuid.uuid1())
-            user.save()
-            add_email(
-                msg_to=user.email,
-                subject=u'Восстановление пароля на сайте HelpCrew',
-                body=render_to_string('user/email_restore.html', {'user': user})
-            )
-            return Response({
-                'status': 'User found.'
-            }, status=status.HTTP_200_OK)
+        if data['token'] != '':
+            user = User.objects.all().filter(password_request_token=data['token'])
+            if len(user) == 1:
+                user = user[0]
+                if (timezone.now()-user.password_request_date).seconds < 60*60*3:
+                    user.set_password(data['password'])
+                    user.password_request_token = ''
+                    user.save()
+                    return Response({
+                        'status': 'User found.'
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        'status': 'Timeout.'
+                    }, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({
+                    'status': 'User not found.'
+                }, status=status.HTTP_404_NOT_FOUND)
         else:
             return Response({
-                'status': 'User not found.'
+                'status': 'Token not found.'
             }, status=status.HTTP_404_NOT_FOUND)
 
 

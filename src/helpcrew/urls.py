@@ -8,7 +8,7 @@ from .media.views import media
 from .views import index, test, go_crew
 
 
-from .userext.api import APIUser, APIChangePassword, APIUploadAvatar, APIUserRegister, APIUserRestore
+from .userext.api import APIUser, APIChangePassword, APIUploadAvatar, APIUserRegister, APIUserRestore, APIUserRestore2
 
 
 urlpatterns = [
@@ -31,6 +31,7 @@ urlpatterns = [
 
     url('^api/v1/user/password/', APIChangePassword.as_view()),
     url('^api/v1/user/restore/', APIUserRestore.as_view()),
+    url('^api/v1/user/restore2/', APIUserRestore2.as_view()),
     url('^api/v1/user/register/', APIUserRegister.as_view()),
     url('^api/v1/user/avatar/', APIUploadAvatar.as_view()),
     url('^api/v1/user/profile/', APIUser.as_view()),
